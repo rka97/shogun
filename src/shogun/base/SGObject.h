@@ -444,7 +444,7 @@ public:
 	 * @param name name of the parameter
 	 * @return object parameter
 	 */
-	CSGObject* get(const std::string& name);
+	CSGObject* get(const std::string& name) const;
 
 #ifndef SWIG
 	/** Typed setter for an object class parameter of a Shogun base class type,
@@ -569,6 +569,26 @@ public:
 			demangled_type<T>().c_str());
 		return nullptr;
 	}
+
+	/** Specializes the object to the specified type.
+	 * Throws exception if the object cannot be specialized.
+	 *
+	 * @return The requested type
+	 */
+	template<class T> T* as() const
+	{
+		auto c = dynamic_cast<T*>(this);
+		if (c)
+			return c;
+
+		SG_SERROR(
+			"Object of type %s cannot be converted to type %s.\n",
+			demangled_type<std::remove_pointer_t<decltype(this)>>().c_str(),
+			demangled_type<T>().c_str());
+		return nullptr;
+	}
+
+
 #ifndef SWIG
 	/**
 	  * Get parameters observable
@@ -588,7 +608,7 @@ public:
 
 protected:
 	template <typename T>
-	CSGObject* get_sgobject_type_dispatcher(const std::string& name)
+	CSGObject* get_sgobject_type_dispatcher(const std::string& name) const
 	{
 		if (has<T*>(name))
 		{

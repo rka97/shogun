@@ -1059,7 +1059,7 @@ CSGObject* CSGObject::create_empty() const
 	return object;
 }
 
-CSGObject* CSGObject::get(const std::string& name)
+CSGObject* CSGObject::get(const std::string& name) const
 {
 	if (auto* result = get_sgobject_type_dispatcher<CDistance>(name))
 		return result;
