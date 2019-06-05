@@ -309,6 +309,14 @@ void SGVector<T>::resize_vector(int32_t n)
 	vlen=n;
 }
 
+template <class T>
+SGVector<T> SGVector<T>::slice(index_t l, index_t h) const
+{
+	ASSERT(l >= 0 && h <= vlen);
+
+	return SGVector<T>(vector, h - l, l);
+}
+
 /** addition operator */
 template<class T>
 SGVector<T> SGVector<T>::operator+ (SGVector<T> x)

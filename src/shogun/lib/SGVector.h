@@ -270,6 +270,37 @@ template<class T> class SGVector : public SGReferencedData
 		 */
 		void resize_vector(int32_t n);
 
+		/** Returns a view of the vector from l inclusive to h exclusive
+		 *
+		 * @param l slice start index (inclusive)
+		 * @param h slice end index (exclusive)
+		 */
+		SGVector<T> slice(index_t l, index_t h) const;
+
+		/** Operator overloading for vector slicing in read-only mode
+		 *
+		 * @param l slice start index (inclusive)
+		 * @param h slice end index (exclusive)
+		 */
+		inline const SGVector<T> operator()(index_t l, index_t h) const
+		{
+			if (h == -1)
+				h = vlen;
+			return slice(l, h);
+		}
+
+		/** Operator overloading for vector slicing in r/w mode
+		 *
+		 * @param l slice start index (inclusive)
+		 * @param h slice end index (exclusive)
+		 */
+		inline SGVector<T> operator()(index_t l, index_t h)
+		{
+			if (h == -1)
+				h = vlen;
+			return slice(l, h);
+		}
+
 		/** Operator overload for vector read only access
 		 *
 		 * @param index dimension to access
