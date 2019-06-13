@@ -55,6 +55,9 @@ void operator delete[](void *p, std::align_val_t al);
 #else
 #define SG_ALIGNED_MALLOC(type, len, al) sg_aligned_malloc<type>(size_t(len), al)
 #endif //TRACE_MEMORY_ALLOCS
+
+#else
+#define SG_ALIGNED_MALLOC(type, len, al) sg_generic_malloc<type>(size_t(len))
 #endif // HAVE_ALIGNED_MALLOC
 
 #ifdef TRACE_MEMORY_ALLOCS
@@ -213,6 +216,11 @@ class MemoryBlock
 };
 void list_memory_allocs();
 #endif
+
+namespace alignment
+{
+	static constexpr index_t container_alignment = 16;
+}
 
 void* get_copy(void* src, size_t len);
 char* get_strdup(const char* str);
