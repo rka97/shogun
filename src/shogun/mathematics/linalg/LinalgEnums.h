@@ -45,7 +45,11 @@ namespace shogun
 		{
 			using type = decltype(T{} + U{});
 		};
-		
+
+		struct likely_slow
+		{
+		};
+
 		/**
 		 * Enum for choosing the algorithm used to calculate SVD.
 		 * The <em>bidiagonal divide and conquer</em> algorithm
