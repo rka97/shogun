@@ -688,8 +688,7 @@ AnyParameter CSGObject::get_parameter(const BaseTag& _tag) const
 AnyParameter CSGObject::get_function(const BaseTag& _tag) const
 {
 	const auto& parameter = self->get(_tag);
-	if (!parameter.get_properties().has_property(
-	        ParameterProperties::RUNFUNCTION))
+	if (!parameter.get_properties().has_property(ParameterProperties::RUNFUNCTION))
 	{
 		SG_ERROR("The parameter %s::%s is not registered as a function, "
 				 "use the get method instead", get_name(), _tag.name().c_str())
