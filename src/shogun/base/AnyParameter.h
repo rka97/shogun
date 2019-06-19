@@ -25,8 +25,7 @@ namespace shogun
 		MODEL = 1u << 2,
 		AUTO = 1u << 10,
 		READONLY = 1u << 11,
-		RUNFUNCTION = 1u << 12,
-		CALLBACKFUNCTION = 1u << 13
+		RUNFUNCTION = 1u << 12
 	};
 
 	static const std::list<std::pair<ParameterProperties, std::string>>
@@ -37,8 +36,7 @@ namespace shogun
 	        {ParameterProperties::MODEL, "MODEL"},
 	        {ParameterProperties::AUTO, "AUTO"},
 	        {ParameterProperties::READONLY, "READONLY"},
-	        {ParameterProperties::RUNFUNCTION, "RUNFUNCTION"},
-	        {ParameterProperties::CALLBACKFUNCTION, "CALLBACKFUNCTION"}};
+	        {ParameterProperties::RUNFUNCTION, "RUNFUNCTION"}};
 
 	enableEnumClassBitmask(ParameterProperties);
 
@@ -153,6 +151,9 @@ namespace shogun
 		void set_value(const Any& value)
 		{
 			m_value = value;
+
+			for (auto& method : m_callback_functions)
+				method();
 		}
 
 		AnyParameterProperties& get_properties()
@@ -168,6 +169,11 @@ namespace shogun
 		std::shared_ptr<params::AutoInit> get_init_function() const
 		{
 			return m_init_function;
+		}
+
+		void add_callback_function(std::function<void()> method)
+		{
+			m_callback_functions.push_back(method);
 		}
 
 		/** Equality operator which compares value but not properties.
@@ -187,6 +193,7 @@ namespace shogun
 		Any m_value;
 		AnyParameterProperties m_properties;
 		std::shared_ptr<params::AutoInit> m_init_function;
+		std::vector<std::function<void()>> m_callback_functions;
 	};
 } // namespace shogun
 

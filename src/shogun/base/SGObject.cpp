@@ -81,6 +81,11 @@ namespace shogun
 			map.at(tag).set_value(value);
 		}
 
+		AnyParameter& at(const BaseTag& tag)
+		{
+			return map.at(tag);
+		}
+
 		AnyParameter get(const BaseTag& tag) const
 		{
 			if(!has(tag))
@@ -680,11 +685,11 @@ AnyParameter CSGObject::get_parameter(const BaseTag& _tag) const
 	return parameter;
 }
 
-AnyParameter CSGObject::get_function(
-    const BaseTag& _tag, const ParameterProperties function_property) const
+AnyParameter CSGObject::get_function(const BaseTag& _tag) const
 {
 	const auto& parameter = self->get(_tag);
-	if (!parameter.get_properties().has_property(function_property))
+	if (!parameter.get_properties().has_property(
+	        ParameterProperties::RUNFUNCTION))
 	{
 		SG_ERROR("The parameter %s::%s is not registered as a function, "
 				 "use the get method instead", get_name(), _tag.name().c_str())
@@ -701,6 +706,19 @@ AnyParameter CSGObject::get_function(
 bool CSGObject::has_parameter(const BaseTag& _tag) const
 {
 	return self->has(_tag);
+}
+
+void CSGObject::add_callback_function(
+    const std::string& name, std::function<void()> function)
+{
+	REQUIRE(function, "Function object is not callable");
+	BaseTag tag(name);
+	REQUIRE(
+	    has_parameter(tag), "There is no parameter called \"%s\" in %s\n",
+	    tag.name().c_str(), get_name());
+
+	auto& param = self->at(tag);
+	param.add_callback_function(function);
 }
 
 void CSGObject::subscribe(ParameterObserver* obs)
