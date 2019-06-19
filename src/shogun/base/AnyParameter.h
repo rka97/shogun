@@ -25,7 +25,8 @@ namespace shogun
 		MODEL = 1u << 2,
 		AUTO = 1u << 10,
 		READONLY = 1u << 11,
-		RUNFUNCTION = 1u << 12
+		RUNFUNCTION = 1u << 12,
+		CALLBACKFUNCTION = 1u << 13
 	};
 
 	static const std::list<std::pair<ParameterProperties, std::string>>
@@ -36,7 +37,8 @@ namespace shogun
 	        {ParameterProperties::MODEL, "MODEL"},
 	        {ParameterProperties::AUTO, "AUTO"},
 	        {ParameterProperties::READONLY, "READONLY"},
-	        {ParameterProperties::RUNFUNCTION, "RUNFUNCTION"}};
+	        {ParameterProperties::RUNFUNCTION, "RUNFUNCTION"},
+	        {ParameterProperties::CALLBACKFUNCTION, "CALLBACKFUNCTION"}};
 
 	enableEnumClassBitmask(ParameterProperties);
 
@@ -93,6 +95,10 @@ namespace shogun
 		void remove_property(const ParameterProperties other)
 		{
 			m_attribute_mask &= ~other;
+		}
+		void add_property(const ParameterProperties other)
+		{
+			m_attribute_mask |= other;
 		}
 		std::string to_string() const
 		{
