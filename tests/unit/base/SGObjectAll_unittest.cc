@@ -84,10 +84,13 @@ TYPED_TEST(SGObjectAll, clone_equals_empty)
 	}
 }
 
+#include <iostream>
 TYPED_TEST(SGObjectAll, serialization_empty_json)
 {
+	sg_io->set_loglevel(EMessageType::MSG_DEBUG);
 	for (auto obj : sg_object_iterator<TypeParam>().ignore(sg_object_all_ignores))
 	{
+		std::cout << "\n\n" << obj->get_name() << "\n\n" << std::flush;
 		SCOPED_TRACE(obj->get_name());
 
 		std::string filename = "shogun-unittest-serialization-json-" +
