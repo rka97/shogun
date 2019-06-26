@@ -151,9 +151,6 @@ namespace shogun
 		void set_value(const Any& value)
 		{
 			m_value = value;
-
-			for (auto& method : m_callback_functions)
-				method();
 		}
 
 		AnyParameterProperties& get_properties()
@@ -171,9 +168,14 @@ namespace shogun
 			return m_init_function;
 		}
 
-		void add_callback_function(std::function<void()> method)
+		void add_callback_function(std::function<void()>&& method)
 		{
-			m_callback_functions.push_back(method);
+			m_callback_functions.push_back(std::move(method));
+		}
+
+		const auto& get_callbacks() const
+		{
+			return m_callback_functions;
 		}
 
 		/** Equality operator which compares value but not properties.
