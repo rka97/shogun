@@ -25,11 +25,13 @@ using namespace std;
 
 CGMM::CGMM() : CDistribution(), m_components(),	m_coefficients()
 {
+	init();
 	register_params();
 }
 
 CGMM::CGMM(int32_t n, ECovType cov_type) : CDistribution(), m_components(), m_coefficients()
 {
+	init();
 	m_coefficients = SGVector<float64_t>(n);
 	m_components = vector<CGaussian*>(n);
 
@@ -114,6 +116,15 @@ bool CGMM::train(CFeatures* data)
 		if (!data->has_property(FP_DOT))
 				SG_ERROR("Specified features are not of type CDotFeatures\n")
 		set_features(data);
+	}
+
+	switch (m_training_algorithm)
+	{
+	case EM:
+		m_log_likelihood = train_em();
+		break;
+	case SMEM:
+		m_log_likelihood = train_smem();
 	}
 
 	return true;
@@ -834,10 +845,22 @@ SGVector<float64_t> CGMM::cluster(SGVector<float64_t> point)
 	return answer;
 }
 
+void CGMM::init()
+{
+	m_training_algorithm = EM;
+	m_log_likelihood = -1;
+}
+
 void CGMM::register_params()
 {
 	this->watch_param(
 	    "components", &m_components,
 	    AnyParameterProperties("Mixture components"));
 	SG_ADD(&m_coefficients, "coefficients", "Mixture coefficients.");
+	SG_ADD_OPTIONS(
+		(machine_int_t*)&m_training_algorithm, "training_algorithm",
+		"GMM Training algorithm", ParameterProperties::NONE,
+		SG_OPTIONS(EM, SMEM));
+	SG_ADD(&m_log_likelihood, "log_likelihood",
+		"Log likelihood of training data", ParameterProperties::READONLY);
 }

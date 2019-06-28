@@ -31,6 +31,7 @@ namespace shogun
 	class CInference;
 	class CLossFunction;
 	class CTokenizer;
+	class CDistribution;
 
 	// type trait to enable certain methods only for shogun base types
 	template <class T>
@@ -54,7 +55,8 @@ namespace shogun
 	                    std::is_same<CMeanFunction, T>::value ||
 	                    std::is_same<CLossFunction, T>::value ||
 	                    std::is_same<CTokenizer, T>::value ||
-	                    std::is_same<CEvaluationResult, T>::value>
+	                    std::is_same<CEvaluationResult, T>::value ||
+						std::is_same<CDistribution, T>::value>
 	{
 	};
 

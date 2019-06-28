@@ -1252,6 +1252,7 @@ _FACTORIES = ["distance",
               "gp_mean",
               "gp_likelihood",
               "loss",
+              "distribution"
      ]
 
 def _internal_factory_wrapper(object_name, new_name, docstring=None):

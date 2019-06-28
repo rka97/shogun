@@ -8,7 +8,7 @@ Features features_train = features(f_feats_train)
 
 #![create_gmm_instance]
 int num_components = 3
-GMM gmm(num_components)
+Distribution gmm = distribution("GMM", components=num_components)
 #![create_gmm_instance]
 
 #![add_observer]
@@ -18,7 +18,8 @@ gmm.subscribe(obs)
 
 #![train_sample]
 gmm.put("features", features_train)
-gmm.train_em()
+gmm.put("training_algorithm", enum GMMAlgorithm.EM)
+gmm.train()
 RealVector output = gmm.sample()
 #![train_sample]
 
@@ -26,7 +27,8 @@ RealVector output = gmm.sample()
 gmm.unsubscribe(obs)
 ParameterObserver obs_smem = parameter_observer("ParameterObserverLogger")
 gmm.subscribe(obs_smem)
-gmm.train_smem()
+gmm.put("training_algorithm", enum GMMAlgorithm.SMEM)
+gmm.train()
 #![training_smem]
 
 #![extract_coeff]

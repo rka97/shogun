@@ -17,6 +17,13 @@
 
 namespace shogun
 {
+enum GMMAlgorithm : machine_int_t
+{
+	// Expectation maximization algorithm
+	EM = 1,
+	// Split-merge expectation maximiation algorithm
+	SMEM = 2
+};
 /** @brief Gaussian Mixture Model interface.
  *
  * Takes input of number of Gaussians to fit and a covariance type to use.
@@ -214,6 +221,10 @@ class CGMM : public CDistribution
 		virtual const char* get_name() const { return "GMM"; }
 
 	private:
+		/** Initializes class member variables
+		*/
+		void init();
+
 		/** 1NN assignment initialization
 		 *
 		 * @param init_means initial means
@@ -242,6 +253,10 @@ class CGMM : public CDistribution
 		std::vector<CGaussian*> m_components;
 		/** Mixture coefficients */
 		SGVector<float64_t> m_coefficients;
+		/** Training algorithm */
+		GMMAlgorithm m_training_algorithm;
+		/** log likelihood of training data */
+		float64_t m_log_likelihood;
 };
 }
 #endif //_GMM_H__
