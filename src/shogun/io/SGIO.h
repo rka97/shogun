@@ -22,7 +22,6 @@
 #include <type_traits>
 
 #include <spdlog/spdlog.h>
-#include <spdlog/fmt/bundled/printf.h>
 
 #ifndef _WIN32
 #include <unistd.h>
@@ -62,7 +61,6 @@ enum EMessageLocation
 };
 
 #define NUM_LOG_LEVELS 7
-#define FBUFSIZE 4096
 
 #ifdef DARWIN
 #include <Availability.h>
@@ -267,6 +265,11 @@ class SGIO
 			return syntax_highlight;
 		}
 
+		/** format a message
+		 * @param fmt format string
+		 */
+		std::string format(const char* fmt, ...) const;
+
 		/** format and print a message
 		 * @param prio message priority
 		 * @param loc source code location
@@ -286,6 +289,15 @@ class SGIO
 		{
 			message(prio, spdlog::source_loc{}, msg, args...);
 		}
+
+		/** print a message with the print function decided by priority
+		 *
+		 * @param prio message priority
+		 * @param msg message
+		 */
+		void print(
+		    EMessageType prio, const spdlog::source_loc& loc,
+		    const std::string& msg) const;
 
 		/** format and print a message, and then throw an exception
 		 * @tparam ExceptionType type of the exception to throw
@@ -318,17 +330,17 @@ class SGIO
 		inline void not_implemented(const spdlog::source_loc& loc={}) const
 		{
 			error<ShogunException>(
-			    MSG_ERROR, loc,
-			    "Sorry, not yet implemented .\n");
+			    MSG_ERROR, loc, "Sorry, not yet implemented .\n");
 		}
 
 		/** print error message 'Only available with GPL parts.' */
 		inline void gpl_only(const spdlog::source_loc& loc={}) const
 		{
 			error<ShogunException>(
-			    MSG_ERROR, loc, "This feature is only "
-			                                     "available if Shogun is built "
-			                                     "with GPL codes.\n");
+			    MSG_ERROR, loc,
+			    "This feature is only "
+			    "available if Shogun is built "
+			    "with GPL codes.\n");
 		}
 
 		/** print warning message 'function deprecated' */
@@ -337,6 +349,12 @@ class SGIO
 			message(MSG_WARN, loc,
 					"This function is deprecated and will be removed soon.\n");
 		}
+
+		/** redirects stdout to another sink */
+		void redirect_stdout(std::shared_ptr<spdlog::sinks::sink> sink);
+
+		/** redirects stderr to another sink */
+		void redirect_stderr(std::shared_ptr<spdlog::sinks::sink> sink);
 
 		/** skip leading spaces
 		 *
@@ -377,7 +395,7 @@ class SGIO
 		 * @param location location info (none, function, ...)
 		 *
 		 */
-		void set_location_info(EMessageLocation location)
+		inline void set_location_info(EMessageLocation location)
 		{
 			location_info = location;
 			update_pattern();
@@ -469,9 +487,9 @@ class SGIO
 		inline const char* get_name() { return "SGIO"; }
 
 	protected:
+		/** Updates log pattern */
 		void update_pattern();
 
-	protected:
 		/** if progress bar shall be shown */
 		bool show_progress;
 		/** if each print function should append filename and linenumber of
@@ -481,36 +499,21 @@ class SGIO
 		bool syntax_highlight;
 
 	private:
-		std::shared_ptr<spdlog::logger> logger;
+		class RedirectSink;
+		std::shared_ptr<RedirectSink> io_sink;
+		std::shared_ptr<spdlog::logger> io_logger;
 		RefCount* m_refcount;
 };
-
-namespace sgio_traits
-{
-	template <typename T>
-	constexpr static inline auto cast_pointer_to_void(const T& t)
-	{
-		if constexpr (std::is_pointer<T>::value)
-			return (void *) t;
-		else if constexpr (std::is_array<T>::value)
-			return &t[0];
-		else
-			return t;
-	}
-}
 
 template <typename... Args>
 void SGIO::message(EMessageType prio, const spdlog::source_loc& loc, const char* msg, const Args&... args) const
 {
-	// A solution to format using printf style
-	// This is not optimal because it enforces formatting at call site
-	// and the priority is checked twice
-	const auto _prio = static_cast<spdlog::level::level_enum>(prio);
-	if (logger->should_log(_prio))
+	// Format using printf style
+	// Forces formatting at call-site, and misses out on the features of fmtlib!
+	if (io_logger->should_log(static_cast<spdlog::level::level_enum>(prio)))
 	{
-		std::string msg_formatted =
-			fmt::sprintf(msg, sgio_traits::cast_pointer_to_void(args)...);
-		logger->log(loc, _prio, msg_formatted);
+		std::string formatted_msg = format(msg, args...);
+		print(prio, loc, formatted_msg.c_str());
 	}
 }
 
