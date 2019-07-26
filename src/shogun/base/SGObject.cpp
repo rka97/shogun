@@ -68,7 +68,7 @@ namespace shogun
 		{
 			if (has(tag))
 			{
-				SG_SERROR("Can not register %s twice", tag.name().c_str())
+				SG_ERROR("Can not register %s twice", tag.name().c_str())
 			}
 			map[tag] = parameter;
 		}
@@ -77,7 +77,7 @@ namespace shogun
 		{
 			if (!has(tag))
 			{
-				SG_SERROR(
+				SG_ERROR(
 				    "Can not update unregistered parameter %s",
 				    tag.name().c_str())
 			}
@@ -226,24 +226,22 @@ CSGObject::CSGObject() : self(), param_obs_list()
 	set_global_objects();
 	m_refcount = new RefCount(0);
 
-	SG_SGCDEBUG("SGObject created (%p)\n", this)
+	SG_GCDEBUG("SGObject created (%p)\n", this)
 }
 
 CSGObject::CSGObject(const CSGObject& orig)
-    : self(), param_obs_list(), io(orig.io)
+    : self(), param_obs_list()
 {
 	init();
-	set_global_objects();
 	m_refcount = new RefCount(0);
 
-	SG_SGCDEBUG("SGObject copied (%p)\n", this)
+	SG_GCDEBUG("SGObject copied (%p)\n", this)
 }
 
 CSGObject::~CSGObject()
 {
-	SG_SGCDEBUG("SGObject destroyed (%p)\n", this)
+	SG_GCDEBUG("SGObject destroyed (%p)\n", this)
 
-	unset_global_objects();
 	delete m_parameters;
 	delete m_model_selection_parameters;
 	delete m_gradient_parameters;
@@ -256,14 +254,14 @@ CSGObject::~CSGObject()
 int32_t CSGObject::ref()
 {
 	int32_t count = m_refcount->ref();
-	SG_SGCDEBUG("ref() refcount %ld obj %s (%p) increased\n", count, this->get_name(), this)
+	SG_GCDEBUG("ref() refcount %ld obj %s (%p) increased\n", count, this->get_name(), this)
 	return m_refcount->ref_count();
 }
 
 int32_t CSGObject::ref_count()
 {
 	int32_t count = m_refcount->ref_count();
-	SG_SGCDEBUG("ref_count(): refcount %d, obj %s (%p)\n", count, this->get_name(), this)
+	SG_GCDEBUG("ref_count(): refcount %d, obj %s (%p)\n", count, this->get_name(), this)
 	return m_refcount->ref_count();
 }
 
@@ -272,13 +270,13 @@ int32_t CSGObject::unref()
 	int32_t count = m_refcount->unref();
 	if (count<=0)
 	{
-		SG_SGCDEBUG("unref() refcount %ld, obj %s (%p) destroying\n", count, this->get_name(), this)
+		SG_GCDEBUG("unref() refcount %ld, obj %s (%p) destroying\n", count, this->get_name(), this)
 		delete this;
 		return 0;
 	}
 	else
 	{
-		SG_SGCDEBUG("unref() refcount %ld obj %s (%p) decreased\n", count, this->get_name(), this)
+		SG_GCDEBUG("unref() refcount %ld obj %s (%p) decreased\n", count, this->get_name(), this)
 		return m_refcount->ref_count();
 	}
 }
@@ -293,17 +291,6 @@ CSGObject * CSGObject::deep_copy() const
 {
 	SG_NOTIMPLEMENTED
 	return NULL;
-}
-
-void CSGObject::set_global_objects()
-{
-	io = env()->io();
-	SG_REF(io);
-}
-
-void CSGObject::unset_global_objects()
-{
-	SG_UNREF(io);
 }
 
 void CSGObject::update_parameter_hash() const
@@ -405,7 +392,7 @@ std::string CSGObject::get_description(const std::string& name) const
 	}
 	else
 	{
-		SG_SERROR(
+		SG_ERROR(
 		    "There is no parameter called '%s' in %s", name.c_str(),
 		    this->get_name());
 		return "";
@@ -537,13 +524,13 @@ CSGObject* CSGObject::clone(ParameterProperties pp) const
 
 		if (!own.cloneable())
 		{
-			SG_SDEBUG(
+			SG_DEBUG(
 			    "Skipping clone of %s::%s of type %s.\n", this->get_name(),
 			    tag.name().c_str(), own.type().c_str());
 			continue;
 		}
 
-		SG_SDEBUG(
+		SG_DEBUG(
 			"Cloning parameter %s::%s of type %s.\n", this->get_name(),
 			tag.name().c_str(), own.type().c_str());
 
@@ -792,7 +779,7 @@ bool CSGObject::equals(const CSGObject* other) const
 
 		if (!own.visitable())
 		{
-			SG_SDEBUG(
+			SG_DEBUG(
 			    "Skipping comparison of %s::%s of type %s as it is "
 			    "non-visitable.\n",
 			    this->get_name(), tag.name().c_str(), own.type().c_str());
@@ -801,12 +788,12 @@ bool CSGObject::equals(const CSGObject* other) const
 
 		const Any& given = other->get_parameter(tag).get_value();
 
-		SG_SDEBUG(
+		SG_DEBUG(
 		    "Comparing parameter %s::%s of type %s.\n", this->get_name(),
 		    tag.name().c_str(), own.type().c_str());
 		if (own != given)
 		{
-			if (io->get_loglevel() <= MSG_DEBUG)
+			if (env()->io()->get_loglevel() <= MSG_DEBUG)
 			{
 				std::stringstream ss;
 				std::unique_ptr<AnyVisitor> visitor(new ToStringVisitor(&ss));
@@ -819,14 +806,14 @@ bool CSGObject::equals(const CSGObject* other) const
 				   << "::" << tag.name() << "=";
 				given.visit(visitor.get());
 
-				SG_SDEBUG("%s\n", ss.str().c_str());
+				SG_DEBUG("%s\n", ss.str().c_str());
 			}
 
 			return false;
 		}
 	}
 
-	SG_SDEBUG("All parameters of %s equal.\n", this->get_name());
+	SG_DEBUG("All parameters of %s equal.\n", this->get_name());
 	return true;
 }
 

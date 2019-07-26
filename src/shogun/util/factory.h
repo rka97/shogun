@@ -119,7 +119,7 @@ namespace shogun
 			result = new CDenseFeatures<uint16_t>();
 			break;
 		default:
-			SG_SNOTIMPLEMENTED
+			SG_NOTIMPLEMENTED
 		}
 		result->load(file);
 		return result;
@@ -142,7 +142,7 @@ namespace shogun
 			break;
 		}
 		default:
-			SG_SNOTIMPLEMENTED
+			SG_NOTIMPLEMENTED
 		}
 
 		return nullptr;
@@ -191,7 +191,7 @@ namespace shogun
 			return result;
 		}
 		default:
-			SG_SNOTIMPLEMENTED
+			SG_NOTIMPLEMENTED
 		}
 
 		return nullptr;
@@ -211,7 +211,7 @@ namespace shogun
 			return new CDenseSubsetFeatures<float64_t>(base_features->as<CDenseFeatures<float64_t>>(), indices);
 			break;
 		default:
-			SG_SNOTIMPLEMENTED
+			SG_NOTIMPLEMENTED
 		}
 
 		return nullptr;
@@ -268,7 +268,7 @@ namespace shogun
 		    result,
 		    "Cannot load labels from %s(\"%s\") as any of dense labels.\n",
 		    file->get_name(), file->get_filename());
-		SG_SINFO(
+		SG_INFO(
 		    "Loaded labels from %s(\"%s\") as %s\n", file->get_name(),
 		    file->get_filename(), result->get_name())
 
@@ -286,7 +286,7 @@ namespace shogun
 		try_labels<CRegressionLabels>(result, labels);
 		REQUIRE(
 		    result, "Cannot interpret given labels as any of dense labels.\n");
-		SG_SINFO("Interpreted labels as %s\n", result->get_name())
+		SG_INFO("Interpreted labels as %s\n", result->get_name())
 		return result;
 	}
 

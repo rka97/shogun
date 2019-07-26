@@ -1808,13 +1808,13 @@ TParameter::delete_cont()
 		index_t old_length = m_datatype.m_length_y ? *m_datatype.m_length_y : 0;
 		switch (m_datatype.m_ctype) {
 		case CT_NDARRAY:
-			SG_SNOTIMPLEMENTED
+			SG_NOTIMPLEMENTED
 			break;
 		case CT_MATRIX: case CT_SGMATRIX:
 			old_length *= *m_datatype.m_length_x; break;
 		case CT_SCALAR: case CT_VECTOR: case CT_SGVECTOR: break;
 		case CT_UNDEFINED: default:
-			SG_SERROR("Implementation error: undefined container type\n");
+			SG_ERROR("Implementation error: undefined container type\n");
 			break;
 		}
 
@@ -1860,7 +1860,7 @@ TParameter::delete_cont()
 				break;
 			}
 			case PT_UNDEFINED: default:
-				SG_SERROR("Implementation error: undefined primitive type\n");
+				SG_ERROR("Implementation error: undefined primitive type\n");
 				break;
 			}
 			break;
@@ -1902,16 +1902,16 @@ TParameter::delete_cont()
 			case PT_FLOATMAX:
 				SG_FREE(*(SGString<floatmax_t>**) m_parameter); break;
 			case PT_COMPLEX128:
-				SG_SERROR("TParameter::delete_cont(): Parameters of strings"
+				SG_ERROR("TParameter::delete_cont(): Parameters of strings"
 						" of complex128_t are not supported");
 				break;
 			case PT_SGOBJECT:
-				SG_SERROR("TParameter::delete_cont(): Implementation "
+				SG_ERROR("TParameter::delete_cont(): Implementation "
 						 "error: Could not delete "
 						 "String<SGSerializable*>");
 				break;
 			case PT_UNDEFINED: default:
-				SG_SERROR("Implementation error: undefined primitive type\n");
+				SG_ERROR("Implementation error: undefined primitive type\n");
 				break;
 			}
 			break;
@@ -1952,17 +1952,17 @@ TParameter::delete_cont()
 			case PT_COMPLEX128:
 				SG_FREE(*(SGSparseVector<complex128_t>**) m_parameter); break;
 			case PT_SGOBJECT:
-				SG_SERROR("TParameter::delete_cont(): Implementation "
+				SG_ERROR("TParameter::delete_cont(): Implementation "
 						 "error: Could not delete "
 						 "Sparse<SGSerializable*>");
 				break;
 			case PT_UNDEFINED: default:
-				SG_SERROR("Implementation error: undefined primitive type\n");
+				SG_ERROR("Implementation error: undefined primitive type\n");
 				break;
 			}
 			break;
 		case ST_UNDEFINED: default:
-			SG_SERROR("Implementation error: undefined structure type\n");
+			SG_ERROR("Implementation error: undefined structure type\n");
 			break;
 		} /* switch (m_datatype.m_stype)  */
 	} /* if (*(void**) m_parameter != NULL)  */
@@ -1975,7 +1975,7 @@ TParameter::new_cont(SGVector<index_t> dims)
 {
 	char* s=SG_MALLOC(char, 200);
 	m_datatype.to_string(s, 200);
-	SG_SDEBUG("entering TParameter::new_cont for \"%s\" of type %s\n",
+	SG_DEBUG("entering TParameter::new_cont for \"%s\" of type %s\n",
 			s, m_name ? m_name : "(nil)");
 	SG_FREE(s);
 	delete_cont();
@@ -2033,7 +2033,7 @@ TParameter::new_cont(SGVector<index_t> dims)
 				= SG_CALLOC(CSGObject*, new_length);
 			break;
 		case PT_UNDEFINED: default:
-			SG_SERROR("Implementation error: undefined primitive type\n");
+			SG_ERROR("Implementation error: undefined primitive type\n");
 			break;
 		}
 		break;
@@ -2079,17 +2079,17 @@ TParameter::new_cont(SGVector<index_t> dims)
 			*(SGString<floatmax_t>**) m_parameter
 				= SG_MALLOC(SGString<floatmax_t>, new_length); break;
 		case PT_COMPLEX128:
-			SG_SERROR("TParameter::new_cont(): Implementation "
+			SG_ERROR("TParameter::new_cont(): Implementation "
 					 "error: Could not allocate "
 					 "String<complex128>");
 			break;
 		case PT_SGOBJECT:
-			SG_SERROR("TParameter::new_cont(): Implementation "
+			SG_ERROR("TParameter::new_cont(): Implementation "
 					 "error: Could not allocate "
 					 "String<SGSerializable*>");
 			break;
 		case PT_UNDEFINED: default:
-			SG_SERROR("Implementation error: undefined primitive type\n");
+			SG_ERROR("Implementation error: undefined primitive type\n");
 			break;
 		}
 		memset(*(void**) m_parameter, 0, new_length
@@ -2141,23 +2141,23 @@ TParameter::new_cont(SGVector<index_t> dims)
 			*(SGSparseVector<complex128_t>**) m_parameter
 				= SG_MALLOC(SGSparseVector<complex128_t>, new_length); break;
 		case PT_SGOBJECT:
-			SG_SERROR("TParameter::new_cont(): Implementation "
+			SG_ERROR("TParameter::new_cont(): Implementation "
 					 "error: Could not allocate "
 					 "Sparse<SGSerializable*>");
 			break;
 		case PT_UNDEFINED: default:
-			SG_SERROR("Implementation error: undefined primitive type\n");
+			SG_ERROR("Implementation error: undefined primitive type\n");
 			break;
 		}
 		break;
 	case ST_UNDEFINED: default:
-		SG_SERROR("Implementation error: undefined structure type\n");
+		SG_ERROR("Implementation error: undefined structure type\n");
 		break;
 	} /* switch (m_datatype.m_stype)  */
 
 	s=SG_MALLOC(char, 200);
 	m_datatype.to_string(s, 200);
-	SG_SDEBUG("leaving TParameter::new_cont for \"%s\" of type %s\n",
+	SG_DEBUG("leaving TParameter::new_cont for \"%s\" of type %s\n",
 			s, m_name ? m_name : "(nil)");
 	SG_FREE(s);
 }
@@ -2183,7 +2183,7 @@ TParameter::new_sgserial(CSGObject** param,
 			strcat(buf, ">");
 		}
 
-		SG_SWARNING("TParameter::new_sgserial(): "
+		SG_WARNING("TParameter::new_sgserial(): "
 				   "Class `C%s%s' was not listed during compiling Shogun"
 				   " :( ...  Can not construct it for `%s%s'!",
 				   sgserializable_name, buf, prefix, m_name);
@@ -2202,7 +2202,7 @@ void TParameter::get_incremental_hash(
 	switch (m_datatype.m_ctype)
 	{
 	case CT_NDARRAY:
-		SG_SNOTIMPLEMENTED
+		SG_NOTIMPLEMENTED
 		break;
 	case CT_SCALAR:
 	{
@@ -2225,7 +2225,7 @@ void TParameter::get_incremental_hash(
 
 		if (*(void**) m_parameter == NULL && len_real_y != 0)
 		{
-			SG_SWARNING("Inconsistency between data structure and "
+			SG_WARNING("Inconsistency between data structure and "
 					"len_y during hashing `%s'!  Continuing with "
 					"len_y=0.\n",
 					m_name);
@@ -2235,7 +2235,7 @@ void TParameter::get_incremental_hash(
 		switch (m_datatype.m_ctype)
 		{
 		case CT_NDARRAY:
-			SG_SNOTIMPLEMENTED
+			SG_NOTIMPLEMENTED
 			break;
 		case CT_VECTOR: case CT_SGVECTOR:
 			len_real_x = 1;
@@ -2245,7 +2245,7 @@ void TParameter::get_incremental_hash(
 
 			if (*(void**) m_parameter == NULL && len_real_x != 0)
 			{
-				SG_SWARNING("Inconsistency between data structure and "
+				SG_WARNING("Inconsistency between data structure and "
 						"len_x during hashing %s'!  Continuing "
 						"with len_x=0.\n",
 						m_name);
@@ -2259,7 +2259,7 @@ void TParameter::get_incremental_hash(
 
 		case CT_SCALAR: break;
 		case CT_UNDEFINED: default:
-			SG_SERROR("Implementation error: undefined container type\n");
+			SG_ERROR("Implementation error: undefined container type\n");
 			break;
 		}
 		uint32_t size = (len_real_x*len_real_y)*m_datatype.sizeof_stype();
@@ -2273,7 +2273,7 @@ void TParameter::get_incremental_hash(
 		break;
 	}
 	case CT_UNDEFINED: default:
-		SG_SERROR("Implementation error: undefined container type\n");
+		SG_ERROR("Implementation error: undefined container type\n");
 		break;
 	}
 }
@@ -2303,13 +2303,13 @@ Parameter::add_type(const TSGDataType* type, void* param,
 					 const char* name, const char* description)
 {
 	if (name == NULL || *name == '\0')
-		SG_SERROR("FATAL: Parameter::add_type(): `name' is empty!\n")
+		SG_ERROR("FATAL: Parameter::add_type(): `name' is empty!\n")
 
 	for (size_t i=0; i<strlen(name); ++i)
 	{
 		if (!std::isalnum(name[i]) && name[i]!='_' && name[i]!='.')
 		{
-			SG_SERROR("Character %d of parameter with name \"%s\" is illegal "
+			SG_ERROR("Character %d of parameter with name \"%s\" is illegal "
 					"(only alnum or underscore is allowed)\n",
 					i, name);
 		}
@@ -2317,7 +2317,7 @@ Parameter::add_type(const TSGDataType* type, void* param,
 
 	for (int32_t i=0; i<get_num_parameters(); i++)
 		if (strcmp(m_params.get_element(i)->m_name, name) == 0)
-			SG_SERROR("FATAL: Parameter::add_type(): "
+			SG_ERROR("FATAL: Parameter::add_type(): "
 					 "Double parameter `%s'!\n", name);
 
 	m_params.append_element(
@@ -2354,7 +2354,7 @@ void Parameter::set_from_parameters(Parameter* params)
 					char* own_type=SG_MALLOC(char, l);
 					current->m_datatype.to_string(given_type, l);
 					own->m_datatype.to_string(own_type, l);
-					SG_SERROR("given parameter \"%s\" has a different type (%s)"
+					SG_ERROR("given parameter \"%s\" has a different type (%s)"
 							" than existing one (%s)\n", current->m_name,
 							given_type, own_type);
 					SG_FREE(given_type);
@@ -2367,7 +2367,7 @@ void Parameter::set_from_parameters(Parameter* params)
 
 		if (!own)
 		{
-			SG_SERROR("parameter with name %s does not exist\n",
+			SG_ERROR("parameter with name %s does not exist\n",
 					current->m_name);
 		}
 
@@ -2406,7 +2406,7 @@ void Parameter::set_from_parameters(Parameter* params)
 				}
 			}
 			else
-				SG_SERROR("primitive type PT_SGOBJECT occurred with structure "
+				SG_ERROR("primitive type PT_SGOBJECT occurred with structure "
 						"type other than ST_NONE");
 		}
 
@@ -2448,7 +2448,7 @@ void Parameter::set_from_parameters(Parameter* params)
 				source=*((CSGObject**) current->m_parameter);
 				break;
 			default:
-				SG_SNOTIMPLEMENTED
+				SG_NOTIMPLEMENTED
 				break;
 			}
 		}
