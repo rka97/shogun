@@ -459,7 +459,7 @@ template<class ST> void CStringFeatures<ST>::load_ascii_file(char* fname, bool r
 		features=SG_MALLOC(SGString<ST>, num_vectors);
 
 		auto pb2 =
-			PRange<int>(range(num_vectors), *this->io, "LOADING: ", UTF8, []() {
+			PRange<int>(range(num_vectors), *env()->io(), "LOADING: ", UTF8, []() {
 				return true;
 			});
 		rewind(f);
@@ -621,7 +621,7 @@ template<class ST> bool CStringFeatures<ST>::load_fasta_file(const char* fname, 
 						c=(ST) 'A';
 
 					if (uint64_t(idx)>=len)
-						SG_ERROR("idx=%d j=%d fasta_len=%d, spanned_lines=%d str='%.*s'\n", idx, j, fasta_len, spanned_lines, idx, str)
+						SG_ERROR("idx=%d j=%d fasta_len=%d, spanned_lines=%d str='%.*s'\n", idx, j, fasta_len, spanned_lines, idx, (char*)str)
 					str[idx++]=c;
 				}
 				max_len=CMath::max(max_len, strings[i].slen);
