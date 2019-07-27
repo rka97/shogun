@@ -952,7 +952,7 @@ bool CTrie<Trie>::compare_traverse(
 		for (int32_t q=0; q<4; q++)
 			if (fabs(TreeMem[node].child_weights[q]-other.TreeMem[other_node].child_weights[q])>1e-5)
 			{
-				SG_DEBUG("CTrie::compare: TreeMem[{}].child_weights[{}]=%e!=other.TreeMem[{}].child_weights[{}]=%e\n", node, q,TreeMem[node].child_weights[q], other_node,q,other.TreeMem[other_node].child_weights[q])
+				SG_DEBUG("CTrie::compare: TreeMem[{}].child_weights[{}]={:e}!=other.TreeMem[{}].child_weights[{}]={:e}\n", node, q,TreeMem[node].child_weights[q], other_node,q,other.TreeMem[other_node].child_weights[q])
 				SG_DEBUG(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n")
 				display_node(node) ;
 				SG_DEBUG("============================================================\n")

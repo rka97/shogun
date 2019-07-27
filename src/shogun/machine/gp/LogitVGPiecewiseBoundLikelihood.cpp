@@ -211,7 +211,7 @@ SGVector<float64_t> CLogitVGPiecewiseBoundLikelihood::get_variational_expection(
 	//ex0 = ch-cl;
 	const Map<MatrixXd> & eigen_ex0 = eigen_cdf_diff;
 
-	//%ex1= v.*(pl-ph) + m.*(ch-cl);
+	//{:e}x1= v.*(pl-ph) + m.*(ch-cl);
 	MatrixXd eigen_ex1 = ((eigen_pl - eigen_ph).array().rowwise()*eigen_s2.array().transpose()
 		+ eigen_cdf_diff.array().rowwise()*eigen_mu.array().transpose()).matrix();
 

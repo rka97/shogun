@@ -63,7 +63,7 @@ float64_t CFKFeatures::deriv_a(float64_t a, int32_t dimension) const
 			  pn=exp(neg->model_probability(i)) ;
 			  p=a*pp+(1-a)*pn ;
 			  float64_t d2=(pp-pn)/p ;
-			  fprintf(stderr, "d1=%e  d2=%e,  d1-d2=%e\n",d1,d2) ;*/
+			  fprintf(stderr, "d1={:e}  d2={:e},  d1-d2={:e}\n",d1,d2) ;*/
 		} ;
 	} else
 	{

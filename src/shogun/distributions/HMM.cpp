@@ -1235,7 +1235,7 @@ float64_t CHMM::best_path(int32_t dimension)
 
 			if (best<-CMath::INFTY/2)
 			{
-				SG_DEBUG("worst case at {}: %e:%e\n", t, best, worst)
+				SG_DEBUG("worst case at {}: {:e}:{:e}\n", t, best, worst)
 				worst=best ;
 			} ;
 #endif
@@ -2258,7 +2258,7 @@ void CHMM::output_model(bool verbose)
 	float64_t checksum;
 
 	//generic info
-	SG_INFO("log(Pr[O|model])=%e, #states: {}, #observationssymbols: {}, #observations: {}x{}\n",
+	SG_INFO("log(Pr[O|model])={:e}, #states: {}, #observationssymbols: {}, #observations: {}x{}\n",
 			(float64_t)((p_observations) ? model_probability() : -CMath::INFTY),
 			N, M, ((p_observations) ? p_observations->get_max_vector_length() : 0), ((p_observations) ? p_observations->get_num_vectors() : 0));
 
@@ -2343,7 +2343,7 @@ void CHMM::output_model_defined(bool verbose)
 		return ;
 
 	//generic info
-	SG_INFO("log(Pr[O|model])=%e, #states: {}, #observationssymbols: {}, #observations: {}x{}\n",
+	SG_INFO("log(Pr[O|model])={:e}, #states: {}, #observationssymbols: {}, #observations: {}x{}\n",
 			(float64_t)((p_observations) ? model_probability() : -CMath::INFTY),
 			N, M, ((p_observations) ? p_observations->get_max_vector_length() : 0), ((p_observations) ? p_observations->get_num_vectors() : 0));
 
@@ -3651,14 +3651,14 @@ bool CHMM::load_definitions(FILE* file, bool verbose, bool _initialize)
 										break;
 									}
 									if ((dvalue>1.0) || (dvalue<0.0))
-										SG_ERROR("invalid value for const_a_val({}): %e\n",(int)i/2-1,dvalue)
+										SG_ERROR("invalid value for const_a_val({}): {:e}\n",(int)i/2-1,dvalue)
 								}
 								else
 									model->set_const_a_val((int32_t)i/2 - 1, 1.0);
 
 #ifdef USE_HMMDEBUG
 							if (verbose)
-								SG_ERROR("const_a({},{})=%e\n", model->get_const_a((int32_t)i/2-1,0),model->get_const_a((int32_t)i/2-1,1),model->get_const_a_val((int32_t)i/2-1))
+								SG_ERROR("const_a({},{})={:e}\n", model->get_const_a((int32_t)i/2-1,0),model->get_const_a((int32_t)i/2-1,1),model->get_const_a_val((int32_t)i/2-1))
 #endif
 							close_bracket(file);
 						}
@@ -3722,7 +3722,7 @@ bool CHMM::load_definitions(FILE* file, bool verbose, bool _initialize)
 											break;
 										} ;
 										if ((dvalue>1.0) || (dvalue<0.0))
-											SG_ERROR("invalid value for const_b_val({},1): %e\n",i/2-1,dvalue)
+											SG_ERROR("invalid value for const_b_val({},1): {:e}\n",i/2-1,dvalue)
 									}
 									else
 									{
@@ -3749,7 +3749,7 @@ bool CHMM::load_definitions(FILE* file, bool verbose, bool _initialize)
 								SG_ERROR("invalid value for const_b({},1): {}\n",i/2-1, combine)
 #ifdef USE_HMMDEBUG
 							if (verbose && !finished)
-								SG_ERROR("const_b({},{})=%e\n", model->get_const_b((int32_t)i/2-1,0),model->get_const_b((int32_t)i/2-1,1),model->get_const_b_val((int32_t)i/2-1))
+								SG_ERROR("const_b({},{})={:e}\n", model->get_const_b((int32_t)i/2-1,0),model->get_const_b((int32_t)i/2-1,1),model->get_const_b_val((int32_t)i/2-1))
 #endif
 						}
 						close_bracket(file);
@@ -3813,7 +3813,7 @@ bool CHMM::load_definitions(FILE* file, bool verbose, bool _initialize)
 										break;
 									}
 									if ((dvalue>1) || (dvalue<0))
-										SG_ERROR("invalid value for const_p_val({}): %e\n",i,dvalue)
+										SG_ERROR("invalid value for const_p_val({}): {:e}\n",i,dvalue)
 								}
 								else
 									model->set_const_p_val(i++, 1.0);
@@ -3822,7 +3822,7 @@ bool CHMM::load_definitions(FILE* file, bool verbose, bool _initialize)
 
 #ifdef USE_HMMDEBUG
 							if (verbose)
-								SG_DEBUG("const_p({})=%e\n", model->get_const_p(i-1),model->get_const_p_val(i-1))
+								SG_DEBUG("const_p({})={:e}\n", model->get_const_p(i-1),model->get_const_p_val(i-1))
 #endif
 						}
 						if (verbose)
@@ -3884,7 +3884,7 @@ bool CHMM::load_definitions(FILE* file, bool verbose, bool _initialize)
 										break;
 									}
 									if ((dvalue>1) || (dvalue<0))
-										SG_ERROR("invalid value for const_q_val({}): %e\n",i,(double) dvalue)
+										SG_ERROR("invalid value for const_q_val({}): {:e}\n",i,(double) dvalue)
 								}
 								else
 									model->set_const_q_val(i++, 1.0);
@@ -3892,7 +3892,7 @@ bool CHMM::load_definitions(FILE* file, bool verbose, bool _initialize)
 							close_bracket(file);
 #ifdef USE_HMMDEBUG
 							if (verbose)
-								SG_DEBUG("const_q({})=%e\n", model->get_const_q(i-1),model->get_const_q_val(i-1))
+								SG_DEBUG("const_q({})={:e}\n", model->get_const_q(i-1),model->get_const_q_val(i-1))
 #endif
 						}
 						if (verbose)
@@ -3993,13 +3993,13 @@ bool CHMM::save_model(FILE* file)
 		{
 			if (i<N-1) {
 				if (CMath::is_finite(get_p(i)))
-					fprintf(file, "%e,", (double)get_p(i));
+					fprintf(file, "{:e},", (double)get_p(i));
 				else
 					fprintf(file, "{},", NAN_REPLACEMENT);
 			}
 			else {
 				if (CMath::is_finite(get_p(i)))
-					fprintf(file, "%e", (double)get_p(i));
+					fprintf(file, "{:e}", (double)get_p(i));
 				else
 					fprintf(file, "{}", NAN_REPLACEMENT);
 			}
@@ -4010,13 +4010,13 @@ bool CHMM::save_model(FILE* file)
 		{
 			if (i<N-1) {
 				if (CMath::is_finite(get_q(i)))
-					fprintf(file, "%e,", (double)get_q(i));
+					fprintf(file, "{:e},", (double)get_q(i));
 				else
 					fprintf(file, "{},", NAN_REPLACEMENT);
 			}
 			else {
 				if (CMath::is_finite(get_q(i)))
-					fprintf(file, "%e", (double)get_q(i));
+					fprintf(file, "{:e}", (double)get_q(i));
 				else
 					fprintf(file, "{}", NAN_REPLACEMENT);
 			}
@@ -4031,13 +4031,13 @@ bool CHMM::save_model(FILE* file)
 			{
 				if (j<N-1) {
 					if (CMath::is_finite(get_a(i,j)))
-						fprintf(file, "%e,", (double)get_a(i,j));
+						fprintf(file, "{:e},", (double)get_a(i,j));
 					else
 						fprintf(file, "{},", NAN_REPLACEMENT);
 				}
 				else {
 					if (CMath::is_finite(get_a(i,j)))
-						fprintf(file, "%e];\n", (double)get_a(i,j));
+						fprintf(file, "{:e}];\n", (double)get_a(i,j));
 					else
 						fprintf(file, "{}];\n", NAN_REPLACEMENT);
 				}
@@ -4054,13 +4054,13 @@ bool CHMM::save_model(FILE* file)
 			{
 				if (j<M-1) {
 					if (CMath::is_finite(get_b(i,j)))
-						fprintf(file, "%e,",  (double)get_b(i,j));
+						fprintf(file, "{:e},",  (double)get_b(i,j));
 					else
 						fprintf(file, "{},", NAN_REPLACEMENT);
 				}
 				else {
 					if (CMath::is_finite(get_b(i,j)))
-						fprintf(file, "%e];\n", (double)get_b(i,j));
+						fprintf(file, "{:e}];\n", (double)get_b(i,j));
 					else
 						fprintf(file, "{}];\n", NAN_REPLACEMENT);
 				}
@@ -4096,7 +4096,7 @@ bool CHMM::save_path(FILE* file)
 	      if (dim%100==0)
 		SG_PRINT("{}..", dim)
 	      float64_t prob = best_path(dim);
-	      fprintf(file,"{}. path probability:%e\nstate sequence:\n", dim, prob);
+	      fprintf(file,"{}. path probability:{:e}\nstate sequence:\n", dim, prob);
 	      for (int32_t i=0; i<p_observations->get_vector_length(dim)-1; i++)
 		fprintf(file,"{} ", PATH(dim)[i]);
 	      fprintf(file,"{}", PATH(dim)[p_observations->get_vector_length(dim)-1]);
@@ -4136,7 +4136,7 @@ bool CHMM::save_likelihood(FILE* file)
 
 		fprintf(file, "P=[");
 		for (int32_t dim=0; dim<p_observations->get_num_vectors(); dim++)
-			fprintf(file, "%e ", (double) model_probability(dim));
+			fprintf(file, "{:e} ", (double) model_probability(dim));
 
 		fprintf(file,"];");
 		result=true;
@@ -4273,19 +4273,19 @@ bool CHMM::save_path_derivatives(FILE* logfile)
 
 		//derivates dlogp,dlogq
 		for (i=0; i<N; i++)
-			fprintf(logfile,"%e, ", (double) path_derivative_p(i,dim) );
+			fprintf(logfile,"{:e}, ", (double) path_derivative_p(i,dim) );
 
 		for (i=0; i<N; i++)
-			fprintf(logfile,"%e, ", (double) path_derivative_q(i,dim) );
+			fprintf(logfile,"{:e}, ", (double) path_derivative_q(i,dim) );
 
 		//derivates dloga,dlogb
 		for (i=0; i<N; i++)
 			for (j=0; j<N; j++)
-				fprintf(logfile, "%e,", (double) path_derivative_a(i,j,dim) );
+				fprintf(logfile, "{:e},", (double) path_derivative_a(i,j,dim) );
 
 		for (i=0; i<N; i++)
 			for (j=0; j<M; j++)
-				fprintf(logfile, "%e,", (double) path_derivative_b(i,j,dim) );
+				fprintf(logfile, "{:e},", (double) path_derivative_b(i,j,dim) );
 
 		fseek(logfile,ftell(logfile)-1,SEEK_SET);
 		fprintf(logfile, " ];\n");
@@ -4522,19 +4522,19 @@ bool CHMM::save_model_derivatives(FILE* file)
 
 			//derivates log(dp),log(dq)
 			for (i=0; i<N; i++)
-				fprintf(file,"%e, ", (double) model_derivative_p(i, dim) );		//log (dp)
+				fprintf(file,"{:e}, ", (double) model_derivative_p(i, dim) );		//log (dp)
 
 			for (i=0; i<N; i++)
-				fprintf(file,"%e, ", (double) model_derivative_q(i, dim) );	//log (dq)
+				fprintf(file,"{:e}, ", (double) model_derivative_q(i, dim) );	//log (dq)
 
 			//derivates log(da),log(db)
 			for (i=0; i<N; i++)
 				for (j=0; j<N; j++)
-					fprintf(file, "%e,", (double) model_derivative_a(i,j,dim) );
+					fprintf(file, "{:e},", (double) model_derivative_a(i,j,dim) );
 
 			for (i=0; i<N; i++)
 				for (j=0; j<M; j++)
-					fprintf(file, "%e,", (double) model_derivative_b(i,j,dim) );
+					fprintf(file, "{:e},", (double) model_derivative_b(i,j,dim) );
 
 			fseek(file,ftell(file)-1,SEEK_SET);
 			fprintf(file, " ];\n");
@@ -4581,7 +4581,7 @@ bool CHMM::check_model_derivatives_combined()
 		deriv_calc+=exp(model_derivative_a(i, j, dim)+
 		prod_prob-model_probability(dim)) ;
 
-		SG_DEBUG("da({},{}) = %e:%e\t ({:1.5f}%%)\n", i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+		SG_DEBUG("da({},{}) = {:e}:{:e}\t ({:1.5f}%%)\n", i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 		} ;
 		} ;*/
 	//derivates log(db)
@@ -4609,10 +4609,10 @@ bool CHMM::check_model_derivatives_combined()
 			{
 				deriv_calc+=exp(model_derivative_b(i, j, dim)-model_probability(dim)) ;
 				if (j==1)
-					SG_INFO("deriv_calc[{}]=%e\n",dim,deriv_calc)
+					SG_INFO("deriv_calc[{}]={:e}\n",dim,deriv_calc)
 			} ;
 
-			SG_ERROR("b({},{})=%e  db({},{}) = %e:%e\t ({:1.5f}%%)\n", i,j,exp(old_b),i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+			SG_ERROR("b({},{})={:e}  db({},{}) = {:e}:{:e}\t ({:1.5f}%%)\n", i,j,exp(old_b),i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 		} ;
 	} ;
 	return true ;
@@ -4647,7 +4647,7 @@ bool CHMM::check_model_derivatives()
 				invalidate_model() ;
 				float64_t deriv_calc=exp(model_derivative_a(i, j, dim)) ;
 
-				SG_DEBUG("da({},{}) = %e:%e\t ({:1.5f}%%)\n", i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+				SG_DEBUG("da({},{}) = {:e}:{:e}\t ({:1.5f}%%)\n", i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 				invalidate_model() ;
 			} ;
 		} ;
@@ -4671,7 +4671,7 @@ bool CHMM::check_model_derivatives()
 				invalidate_model() ;
 				float64_t deriv_calc=exp(model_derivative_b(i, j, dim));
 
-				SG_DEBUG("db({},{}) = %e:%e\t ({:1.5f}%%)\n", i,j, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/(deriv_calc))
+				SG_DEBUG("db({},{}) = {:e}:{:e}\t ({:1.5f}%%)\n", i,j, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/(deriv_calc))
 			} ;
 		} ;
 
@@ -4694,7 +4694,7 @@ bool CHMM::check_model_derivatives()
 			float64_t deriv_calc=exp(model_derivative_p(i, dim));
 
 			//if (fabs(deriv_calc_old-deriv)>1e-4)
-			SG_DEBUG("dp({}) = %e:%e\t ({:1.5f}%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+			SG_DEBUG("dp({}) = {:e}:{:e}\t ({:1.5f}%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 		} ;
 		for (i=0; i<N; i++)
 		{
@@ -4715,7 +4715,7 @@ bool CHMM::check_model_derivatives()
 			float64_t deriv_calc=exp(model_derivative_q(i, dim));
 
 			//if (fabs(deriv_calc_old-deriv)>1e-4)
-			SG_DEBUG("dq({}) = %e:%e\t ({:1.5f}%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+			SG_DEBUG("dq({}) = {:e}:{:e}\t ({:1.5f}%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 		} ;
 #endif
 	}
@@ -4752,7 +4752,7 @@ bool CHMM::check_path_derivatives()
 				invalidate_model() ;
 				float64_t deriv_calc=path_derivative_a(i, j, dim) ;
 
-				SG_DEBUG("da({},{}) = %e:%e\t ({:1.5f}%%)\n", i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+				SG_DEBUG("da({},{}) = {:e}:{:e}\t ({:1.5f}%%)\n", i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 			} ;
 		} ;
 		for (i=0; i<N; i++)
@@ -4775,7 +4775,7 @@ bool CHMM::check_path_derivatives()
 				invalidate_model() ;
 				float64_t deriv_calc=path_derivative_b(i, j, dim);
 
-				SG_DEBUG("db({},{}) = %e:%e\t ({:1.5f}%%)\n", i,j, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/(deriv_calc))
+				SG_DEBUG("db({},{}) = {:e}:{:e}\t ({:1.5f}%%)\n", i,j, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/(deriv_calc))
 			} ;
 		} ;
 
@@ -4797,7 +4797,7 @@ bool CHMM::check_path_derivatives()
 			float64_t deriv_calc=path_derivative_p(i, dim);
 
 			//if (fabs(deriv_calc_old-deriv)>1e-4)
-			SG_DEBUG("dp({}) = %e:%e\t ({:1.5f}%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+			SG_DEBUG("dp({}) = {:e}:{:e}\t ({:1.5f}%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 		} ;
 		for (i=0; i<N; i++)
 		{
@@ -4818,7 +4818,7 @@ bool CHMM::check_path_derivatives()
 			float64_t deriv_calc=path_derivative_q(i, dim);
 
 			//if (fabs(deriv_calc_old-deriv)>1e-4)
-			SG_DEBUG("dq({}) = %e:%e\t ({:1.5f}%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+			SG_DEBUG("dq({}) = {:e}:{:e}\t ({:1.5f}%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 		} ;
 	}
 	return result;

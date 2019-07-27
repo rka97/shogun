@@ -988,7 +988,7 @@ class CHMM : public RandomMixin<CDistribution>
 		{
 #ifdef HMM_DEBUG
 			if (offset>=N)
-				SG_DEBUG("index out of range in set_q({},%e) [{}]\n", offset,value,N)
+				SG_DEBUG("index out of range in set_q({},{:e}) [{}]\n", offset,value,N)
 #endif
 			end_state_distribution_q[offset]=value;
 		}
@@ -1086,7 +1086,7 @@ class CHMM : public RandomMixin<CDistribution>
 		{
 #ifdef HMM_DEBUG
 			if (offset>=N)
-				SG_DEBUG("index out of range in %e=get_q({}) [{}]\n", end_state_distribution_q[offset],offset,N)
+				SG_DEBUG("index out of range in {:e}=get_q({}) [{}]\n", end_state_distribution_q[offset],offset,N)
 #endif
 			return end_state_distribution_q[offset];
 		}

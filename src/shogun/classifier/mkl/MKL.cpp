@@ -649,17 +649,17 @@ float64_t CMKL::compute_optimal_betas_elasticnet(
 	{
 		SG_PRINT("MKL-direct: p = {:.3f}\n", 1.0 )
 		SG_PRINT("MKL-direct: nofKernelsGood = {}\n", nofKernelsGood )
-		SG_PRINT("MKL-direct: Z = %e\n", Z )
-		SG_PRINT("MKL-direct: eps = %e\n", epsRegul )
+		SG_PRINT("MKL-direct: Z = {:e}\n", Z )
+		SG_PRINT("MKL-direct: eps = {:e}\n", epsRegul )
 		for( p=0; p<num_kernels; ++p )
 		{
 			const float64_t t = CMath::pow( beta_local[p] - beta[p], 2.0 );
-			SG_PRINT("MKL-direct: t[%3d] = %e  ( diff = %e = %e - %e )\n", p, t, beta_local[p]-beta[p], beta_local[p], beta[p] )
+			SG_PRINT("MKL-direct: t[%3d] = {:e}  ( diff = {:e} = {:e} - {:e} )\n", p, t, beta_local[p]-beta[p], beta_local[p], beta[p] )
 		}
-		SG_PRINT("MKL-direct: preR = %e\n", preR )
-		SG_PRINT("MKL-direct: preR/p = %e\n", preR )
-		SG_PRINT("MKL-direct: sqrt(preR/p) = %e\n", std::sqrt(preR))
-		SG_PRINT("MKL-direct: R = %e\n", R )
+		SG_PRINT("MKL-direct: preR = {:e}\n", preR )
+		SG_PRINT("MKL-direct: preR/p = {:e}\n", preR )
+		SG_PRINT("MKL-direct: sqrt(preR/p) = {:e}\n", std::sqrt(preR))
+		SG_PRINT("MKL-direct: R = {:e}\n", R )
 		SG_ERROR("Assertion R >= 0 failed!\n" )
 	}
 
@@ -852,7 +852,7 @@ float64_t CMKL::compute_optimal_betas_directly(
 	nofKernelsGood = num_kernels;
 	for( p=0; p<num_kernels; ++p )
 	{
-		//SG_PRINT("MKL-direct:  sumw[%3d] = %e  ( oldbeta = %e )\n", p, sumw[p], old_beta[p] )
+		//SG_PRINT("MKL-direct:  sumw[%3d] = {:e}  ( oldbeta = {:e} )\n", p, sumw[p], old_beta[p] )
 		if( sumw[p] >= 0.0 && old_beta[p] >= 0.0 )
 		{
 			beta[p] = sumw[p] * old_beta[p]*old_beta[p] / mkl_norm;
@@ -886,17 +886,17 @@ float64_t CMKL::compute_optimal_betas_directly(
 	{
 		SG_PRINT("MKL-direct: p = {:.3f}\n", mkl_norm )
 		SG_PRINT("MKL-direct: nofKernelsGood = {}\n", nofKernelsGood )
-		SG_PRINT("MKL-direct: Z = %e\n", Z )
-		SG_PRINT("MKL-direct: eps = %e\n", epsRegul )
+		SG_PRINT("MKL-direct: Z = {:e}\n", Z )
+		SG_PRINT("MKL-direct: eps = {:e}\n", epsRegul )
 		for( p=0; p<num_kernels; ++p )
 		{
 			const float64_t t = CMath::pow( old_beta[p] - beta[p], 2.0 );
-			SG_PRINT("MKL-direct: t[%3d] = %e  ( diff = %e = %e - %e )\n", p, t, old_beta[p]-beta[p], old_beta[p], beta[p] )
+			SG_PRINT("MKL-direct: t[%3d] = {:e}  ( diff = {:e} = {:e} - {:e} )\n", p, t, old_beta[p]-beta[p], old_beta[p], beta[p] )
 		}
-		SG_PRINT("MKL-direct: preR = %e\n", preR )
-		SG_PRINT("MKL-direct: preR/p = %e\n", preR/mkl_norm )
-		SG_PRINT("MKL-direct: sqrt(preR/p) = %e\n", std::sqrt(preR / mkl_norm))
-		SG_PRINT("MKL-direct: R = %e\n", R )
+		SG_PRINT("MKL-direct: preR = {:e}\n", preR )
+		SG_PRINT("MKL-direct: preR/p = {:e}\n", preR/mkl_norm )
+		SG_PRINT("MKL-direct: sqrt(preR/p) = {:e}\n", std::sqrt(preR / mkl_norm))
+		SG_PRINT("MKL-direct: R = {:e}\n", R )
 		SG_ERROR("Assertion R >= 0 failed!\n" )
 	}
 
@@ -970,7 +970,7 @@ float64_t CMKL::compute_optimal_betas_newton(float64_t* beta,
 	Z = CMath::pow( Z, -1.0/mkl_norm );
 	if( !( fabs(Z-1.0) <= epsGamma ) )
 	{
-		SG_WARNING("old_beta not normalized (diff=%e);  forcing normalization.  ", Z-1.0 )
+		SG_WARNING("old_beta not normalized (diff={:e});  forcing normalization.  ", Z-1.0 )
 		for( p=0; p<num_kernels; ++p )
 		{
 			beta[p] *= Z;
@@ -987,7 +987,7 @@ float64_t CMKL::compute_optimal_betas_newton(float64_t* beta,
 		if ( !( sumw[p] >= 0 ) )
 		{
 			if( !( sumw[p] >= -epsWsq ) )
-				SG_WARNING("sumw[{}] = %e;  treated as 0.  ", p, sumw[p] )
+				SG_WARNING("sumw[{}] = {:e};  treated as 0.  ", p, sumw[p] )
 			// should better recompute sumw[] !!!
 		}
 		else
@@ -1001,7 +1001,7 @@ float64_t CMKL::compute_optimal_betas_newton(float64_t* beta,
 	ASSERT( gamma > -1e-9 )
 	if( !( gamma > epsGamma ) )
 	{
-		SG_WARNING("bad gamma: %e;  set to %e.  ", gamma, epsGamma )
+		SG_WARNING("bad gamma: {:e};  set to {:e}.  ", gamma, epsGamma )
 		// should better recompute sumw[] !!!
 		gamma = epsGamma;
 	}
@@ -1016,8 +1016,8 @@ float64_t CMKL::compute_optimal_betas_newton(float64_t* beta,
 		//obj += gamma/mkl_norm * CMath::pow( beta[p], mkl_norm );
 	}
 	if( !( obj >= 0.0 ) )
-		SG_WARNING("negative objective: %e.  ", obj )
-	//SG_PRINT("OBJ = %e.  \n", obj )
+		SG_WARNING("negative objective: {:e}.  ", obj )
+	//SG_PRINT("OBJ = {:e}.  \n", obj )
 
 
 	// === perform Newton steps
@@ -1042,10 +1042,10 @@ float64_t CMKL::compute_optimal_betas_newton(float64_t* beta,
 				newtDir[p] = ( t1 == 0.0 ) ? 0.0 : ( t1 / t2 );
 			// newtStep += newtDir[p] * grad[p];
 			ASSERT( newtDir[p] == newtDir[p] )
-			//SG_PRINT("newtDir[{}] = {:6.3f} = %e / %e \n", p, newtDir[p], t1, t2 )
+			//SG_PRINT("newtDir[{}] = {:6.3f} = {:e} / {:e} \n", p, newtDir[p], t1, t2 )
 		}
 		//CMath::display_vector( newtDir, num_kernels, "newton direction  " );
-		//SG_PRINT("Newton step size = %e\n", Z )
+		//SG_PRINT("Newton step size = {:e}\n", Z )
 
 		// --- line search
 		stepSize = 1.0;
@@ -1080,7 +1080,7 @@ float64_t CMKL::compute_optimal_betas_newton(float64_t* beta,
 				newtBeta[p] *= Z;
 				if( newtBeta[p] > 1.0 )
 				{
-					//SG_WARNING("beta[{}] = %e;  set to 1.  ", p, beta[p] )
+					//SG_WARNING("beta[{}] = {:e};  set to 1.  ", p, beta[p] )
 					newtBeta[p] = 1.0;
 				}
 				ASSERT( 0.0 <= newtBeta[p] && newtBeta[p] <= 1.0 )
@@ -1091,7 +1091,7 @@ float64_t CMKL::compute_optimal_betas_newton(float64_t* beta,
 			newtObj = 0.0;
 			for( p=0; p<num_kernels; ++p )
 				newtObj += sumw[p] * old_beta[p]*old_beta[p] / newtBeta[p];
-			//SG_PRINT("step = {:.8f}:  obj = %e -> %e.  \n", stepSize, obj, newtObj )
+			//SG_PRINT("step = {:.8f}:  obj = {:e} -> {:e}.  \n", stepSize, obj, newtObj )
 			if ( newtObj < obj - epsNewt*stepSize*obj )
 			{
 				for( p=0; p<num_kernels; ++p )
