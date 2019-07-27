@@ -123,7 +123,7 @@ void COnlineLibLinear::stop_train()
 
 	SG_INFO("Objective value = {}\n", v/2)
 	SG_INFO("nSV = {}\n", nSV)
-	SG_INFO("gap = %g\n", gap)
+	SG_INFO("gap = {:g}\n", gap)
 }
 
 void COnlineLibLinear::train_one(SGVector<float32_t> ex, float64_t label)

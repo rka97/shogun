@@ -177,7 +177,7 @@ std::string Histogram::ToString() const {
   for (size_t b = 0; b < buckets_.size(); b++) {
     if (buckets_[b] <= 0.0) continue;
     sum += buckets_[b];
-    snprintf(buf, sizeof(buf), "[ %10.2g, %10.2g ) {:7.0f} {:7.3f}%% {:7.3f}%% ",
+    snprintf(buf, sizeof(buf), "[ {:10.2g}, {:10.2g} ) {:7.0f} {:7.3f}%% {:7.3f}%% ",
              ((b == 0) ? -DBL_MAX : bucket_limits_[b - 1]),  // left
              bucket_limits_[b],                              // right
              buckets_[b],                                    // count

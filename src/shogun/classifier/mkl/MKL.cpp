@@ -379,7 +379,7 @@ bool CMKL::train_machine(CFeatures* data)
 			mkl_block_norm<=2)
 	{
 		mkl_norm=mkl_block_norm/(2-mkl_block_norm);
-		SG_WARNING("Switching to ST_DIRECT method with mkl_norm=%g\n", mkl_norm)
+		SG_WARNING("Switching to ST_DIRECT method with mkl_norm={:g}\n", mkl_norm)
 		set_solver_type(ST_DIRECT);
 	}
 

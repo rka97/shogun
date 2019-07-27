@@ -398,10 +398,10 @@ bool CCCSOSVM::train_machine(CFeatures* data)
 				- new_constraint.dense_dot(1.0, w_b.vector, w_b.vlen, 0));
 
 		for (index_t j = 0; j < size_active; j++)
-			SG_DEBUG("alpha[{}]: %.8g, cut_error[{}]: %.8g\n", j, alpha[j], j, cut_error[j])
-		SG_DEBUG("sigma_k: %.8g\n", sigma_k)
-		SG_DEBUG("alphasum: %.8g\n", alphasum)
-		SG_DEBUG("g^T d: %.8g\n", gTd)
+			SG_DEBUG("alpha[{}]: {:.8g}, cut_error[{}]: {:.8g}\n", j, alpha[j], j, cut_error[j])
+		SG_DEBUG("sigma_k: {:.8g}\n", sigma_k)
+		SG_DEBUG("alphasum: {:.8g}\n", alphasum)
+		SG_DEBUG("g^T d: {:.8g}\n", gTd)
 
 		/* update cleanup information */
 		for (index_t j = 0; j < size_active; j++)

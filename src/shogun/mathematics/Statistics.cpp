@@ -243,12 +243,12 @@ float64_t CStatistics::fishers_exact_test_for_2x3_table(
 #ifdef DEBUG_FISHER_TABLE
 	SG_PRINT("counter={}\n", counter)
 	SG_PRINT("dim1={}\n", dim1)
-	SG_PRINT("l=%g...%g\n", CMath::max(0.0,m[0]-m[4]-0), CMath::min(m[0]-0, m[3]))
-	SG_PRINT("n=%g\n", n)
+	SG_PRINT("l={:g}...{:g}\n", CMath::max(0.0,m[0]-m[4]-0), CMath::min(m[0]-0, m[3]))
+	SG_PRINT("n={:g}\n", n)
 	SG_PRINT("prob_table_log=%.18Lg\n", prob_table_log)
-	SG_PRINT("log_denomf=%.18g\n", log_denomf)
+	SG_PRINT("log_denomf={:.18g}\n", log_denomf)
 	SG_PRINT("log_denom=%.18Lg\n", log_denom)
-	SG_PRINT("log_nom=%.18g\n", log_nom)
+	SG_PRINT("log_nom={:.18g}\n", log_nom)
 	display_vector(m, m_len, "marginals");
 	display_vector(x, 2*3*counter, "x");
 #endif // DEBUG_FISHER_TABLE
@@ -280,8 +280,8 @@ float64_t CStatistics::fishers_exact_test_for_2x3_table(
 	}
 
 #ifdef DEBUG_FISHER_TABLE
-	SG_PRINT("nonrand_p=%.18g\n", nonrand_p)
-	SG_PRINT("exp_nonrand_p=%.18g\n", std::exp(nonrand_p))
+	SG_PRINT("nonrand_p={:.18g}\n", nonrand_p)
+	SG_PRINT("exp_nonrand_p={:.18g}\n", std::exp(nonrand_p))
 #endif // DEBUG_FISHER_TABLE
 	nonrand_p = std::exp(nonrand_p);
 

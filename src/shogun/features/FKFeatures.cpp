@@ -116,7 +116,7 @@ float64_t CFKFeatures::set_opt_a(float64_t a)
 	}
 
 	weight_a=a;
-	SG_INFO("setting opt_a: %g\n", a)
+	SG_INFO("setting opt_a: {:g}\n", a)
 	return a;
 }
 

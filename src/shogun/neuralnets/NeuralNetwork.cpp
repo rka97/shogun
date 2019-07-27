@@ -327,7 +327,7 @@ bool CNeuralNetwork::train_gradient_descent(SGMatrix<float64_t> inputs,
 				SGVector<float64_t> layer_gradients = get_section(gradients, k);
 				if (layer_gradients.vlen > 0)
 				{
-					SG_INFO("Layer {} ({}), Max Gradient: %g, Mean Gradient: %g.\n", k,get_layer(k)->get_name(),
+					SG_INFO("Layer {} ({}), Max Gradient: {:g}, Mean Gradient: {:g}.\n", k,get_layer(k)->get_name(),
 						CMath::max(layer_gradients.vector, layer_gradients.vlen),
 						SGVector<float64_t>::sum(layer_gradients.vector, layer_gradients.vlen)/layer_gradients.vlen);
 				}
@@ -440,7 +440,7 @@ int CNeuralNetwork::lbfgs_progress(void* instance,
 		SGVector<float64_t> layer_gradients = network->get_section(grad_vector, i);
 		if (layer_gradients.vlen > 0)
 		{
-			SG_INFO("Layer {} ({}), Max Gradient: %g, Mean Gradient: %g.\n", i, network->get_layer(i)->get_name(),
+			SG_INFO("Layer {} ({}), Max Gradient: {:g}, Mean Gradient: {:g}.\n", i, network->get_layer(i)->get_name(),
 				CMath::max(layer_gradients.vector, layer_gradients.vlen),
 				SGVector<float64_t>::sum(layer_gradients.vector, layer_gradients.vlen)/layer_gradients.vlen);
 		}
