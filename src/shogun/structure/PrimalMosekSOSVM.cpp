@@ -95,7 +95,7 @@ bool CPrimalMosekSOSVM::train_machine(CFeatures* data)
 	if (ub.vlen == M)
 		set_upper_bounds(ub);
 
-	SG_DEBUG("Regularization used in PrimalMosekSOSVM equal to %.2f.\n", m_regularization);
+	SG_DEBUG("Regularization used in PrimalMosekSOSVM equal to {:.2f}.\n", m_regularization);
 
 	// Input terms of the problem that do not change between iterations
 	REQUIRE(mosek->init_sosvm(M, N, num_aux, num_aux_con, C, m_lb, m_ub, A, b) == MSK_RES_OK,
@@ -207,7 +207,7 @@ bool CPrimalMosekSOSVM::train_machine(CFeatures* data)
 				m_slacks[i-M-num_aux] = sol[i];
 		}
 
-		SG_DEBUG("QP solved. The primal objective value is %.4f.\n", mosek->get_primal_objective_value());
+		SG_DEBUG("QP solved. The primal objective value is {:.4f}.\n", mosek->get_primal_objective_value());
 
 		++iteration;
 

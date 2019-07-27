@@ -515,10 +515,10 @@ void CSVMLight::svm_learn()
 				misclassified++;
 		}
 
-		SG_INFO("Optimization finished ({} misclassified, maxdiff=%.8f).\n",
+		SG_INFO("Optimization finished ({} misclassified, maxdiff={:.8f}).\n",
 				misclassified,maxdiff);
 
-		SG_INFO("obj = %.16f, rho = %.16f\n",get_objective(),model->b)
+		SG_INFO("obj = {:.16f}, rho = {:.16f}\n",get_objective(),model->b)
 		if (maxdiff>epsilon)
 			SG_WARNING("maximum violation ({}) exceeds svm_epsilon ({}) due to numerical difficulties\n", maxdiff, epsilon)
 
@@ -843,7 +843,7 @@ int32_t CSVMLight::optimize_to_convergence(int32_t* docs, int32_t* label, int32_
 									   docs,aicache,
 									   maxdiff);
 		  reactivated=true;
-		  SG_DEBUG("done reactivating inactive examples (maxdiff:%8f eps_crit:%8f orig_eps:%8f)\n", *maxdiff, learn_parm->epsilon_crit, epsilon_crit_org)
+		  SG_DEBUG("done reactivating inactive examples (maxdiff:{:8f} eps_crit:{:8f} orig_eps:{:8f})\n", *maxdiff, learn_parm->epsilon_crit, epsilon_crit_org)
 		  /* Update to new active variables. */
 		  activenum=compute_index(shrink_state->active,totdoc,active2dnum);
 		  inactivenum=totdoc-activenum;
@@ -878,7 +878,7 @@ int32_t CSVMLight::optimize_to_convergence(int32_t* docs, int32_t* label, int32_
 		  learn_parm->epsilon_crit=epsilon_crit_org;
 
 	  if(verbosity>=2) {
-		  SG_INFO(" => ({} SV (incl. {} SV at u-bound), max violation=%.5f)\n",
+		  SG_INFO(" => ({} SV (incl. {} SV at u-bound), max violation={:.5f})\n",
 					   supvecnum,model->at_upper_bound,(*maxdiff));
 
 	  }

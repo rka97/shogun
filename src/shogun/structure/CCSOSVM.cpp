@@ -75,13 +75,13 @@ int32_t CCCSOSVM::mosek_qp_optimize(float64_t** G, float64_t* delta, float64_t* 
 	/* DEBUG */
 	/*
 	 for (int32_t i=0;i<k;i++)
-		 printf("delta: %.4f\n", delta[i]);
+		 printf("delta: {:.4f}\n", delta[i]);
 
 	 printf("G:\n");
 	 for (int32_t i=0;i<k;i++)
 	 {
 		 for (int32_t j=0;j<k;j++)
-		 	printf("%.4f ", G[i][j]);
+		 	printf("{:.4f} ", G[i][j]);
 		 printf("\n");
 	 }
 	 fflush(stdout);
@@ -147,7 +147,7 @@ int32_t CCCSOSVM::mosek_qp_optimize(float64_t** G, float64_t* delta, float64_t* 
 	/*
 	 printf("t: {}\n", t);
 	 for (int32_t i=0;i<t;i++) {
-	 printf("qsubi: {}, qsubj: {}, qval: %.4f\n", qsubi[i], qsubj[i], qval[i]);
+	 printf("qsubi: {}, qsubj: {}, qval: {:.4f}\n", qsubi[i], qsubj[i], qval[i]);
 	 }
 	 fflush(stdout);
 	 */
@@ -418,7 +418,7 @@ bool CCCSOSVM::train_machine(CFeatures* data)
 		/* print primal objective */
 		primal_obj = 0.5*linalg::dot(m_w, m_w)+m_C*value;
 
-		SG_DEBUG("ITER PRIMAL_OBJ %.4f\n", primal_obj)
+		SG_DEBUG("ITER PRIMAL_OBJ {:.4f}\n", primal_obj)
 
 		temp_var = linalg::dot(w_b, w_b);
 		proximal_term = 0.0;
@@ -432,15 +432,15 @@ bool CCCSOSVM::train_machine(CFeatures* data)
 
 		primal_lower_bound = CMath::max(primal_lower_bound, reg_master_obj - 0.5*rho*(1+rho)*proximal_term);
 
-		SG_DEBUG("ITER REG_MASTER_OBJ: %.4f\n", reg_master_obj)
-		SG_DEBUG("ITER EXPECTED_DESCENT: %.4f\n", expected_descent)
-		SG_DEBUG("ITER PRIMLA_OBJ_B: %.4f\n", primal_obj_b)
-		SG_DEBUG("ITER RHO: %.4f\n", rho)
-		SG_DEBUG("ITER ||w-w_b||^2: %.4f\n", proximal_term)
-		SG_DEBUG("ITER PRIMAL_LOWER_BOUND: %.4f\n", primal_lower_bound)
-		SG_DEBUG("ITER V_K: %.4f\n", v_k)
-		SG_DEBUG("ITER margin: %.4f\n", margin)
-		SG_DEBUG("ITER psi*-psi: %.4f\n", value-margin)
+		SG_DEBUG("ITER REG_MASTER_OBJ: {:.4f}\n", reg_master_obj)
+		SG_DEBUG("ITER EXPECTED_DESCENT: {:.4f}\n", expected_descent)
+		SG_DEBUG("ITER PRIMLA_OBJ_B: {:.4f}\n", primal_obj_b)
+		SG_DEBUG("ITER RHO: {:.4f}\n", rho)
+		SG_DEBUG("ITER ||w-w_b||^2: {:.4f}\n", proximal_term)
+		SG_DEBUG("ITER PRIMAL_LOWER_BOUND: {:.4f}\n", primal_lower_bound)
+		SG_DEBUG("ITER V_K: {:.4f}\n", v_k)
+		SG_DEBUG("ITER margin: {:.4f}\n", margin)
+		SG_DEBUG("ITER psi*-psi: {:.4f}\n", value-margin)
 
 		obj_difference = primal_obj - primal_obj_b;
 

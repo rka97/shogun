@@ -2273,7 +2273,7 @@ void CHMM::output_model(bool verbose)
 			{
 				checksum= CMath::logarithmic_sum(checksum, get_a(i,j));
 
-				SG_INFO("a(%02i,%02i)=%1.4f ",i,j, (float32_t) exp(get_a(i,j)))
+				SG_INFO("a(%02i,%02i)={:1.4f} ",i,j, (float32_t) exp(get_a(i,j)))
 
 				if (j % 4 == 3)
 					SG_PRINT("\n")
@@ -2290,7 +2290,7 @@ void CHMM::output_model(bool verbose)
 		for (i=0; i<N; i++)
 		{
 			checksum= CMath::logarithmic_sum(checksum, get_p(i));
-			SG_INFO("p(%02i)=%1.4f ",i, (float32_t) exp(get_p(i)))
+			SG_INFO("p(%02i)={:1.4f} ",i, (float32_t) exp(get_p(i)))
 			if (i % 4 == 3)
 				SG_PRINT("\n")
 		}
@@ -2305,7 +2305,7 @@ void CHMM::output_model(bool verbose)
 		for (i=0; i<N; i++)
 		{
 			checksum= CMath::logarithmic_sum(checksum, get_q(i));
-			SG_INFO("q(%02i)=%1.4f ",i, (float32_t) exp(get_q(i)))
+			SG_INFO("q(%02i)={:1.4f} ",i, (float32_t) exp(get_q(i)))
 			if (i % 4 == 3)
 				SG_INFO("\n")
 		}
@@ -2322,7 +2322,7 @@ void CHMM::output_model(bool verbose)
 			for (j=0; j<M; j++)
 			{
 				checksum=CMath::logarithmic_sum(checksum, get_b(i,j));
-				SG_INFO("b(%02i,%02i)=%1.4f ",i,j, (float32_t) exp(get_b(i,j)))
+				SG_INFO("b(%02i,%02i)={:1.4f} ",i,j, (float32_t) exp(get_b(i,j)))
 				if (j % 4 == 3)
 					SG_PRINT("\n")
 			}
@@ -2363,7 +2363,7 @@ void CHMM::output_model_defined(bool verbose)
 				SG_PRINT("\n")
 			}
 
-			SG_INFO("a(%02i,%02i)=%1.4f ",model->get_learn_a(i,0), model->get_learn_a(i,1), (float32_t) exp(get_a(model->get_learn_a(i,0), model->get_learn_a(i,1))))
+			SG_INFO("a(%02i,%02i)={:1.4f} ",model->get_learn_a(i,0), model->get_learn_a(i,1), (float32_t) exp(get_a(model->get_learn_a(i,0), model->get_learn_a(i,1))))
 			i++;
 		}
 
@@ -2379,7 +2379,7 @@ void CHMM::output_model_defined(bool verbose)
 				SG_PRINT("\n")
 			}
 
-			SG_INFO("b(%02i,%02i)=%1.4f ",model->get_learn_b(i,0),model->get_learn_b(i,1), (float32_t) exp(get_b(model->get_learn_b(i,0),model->get_learn_b(i,1))))
+			SG_INFO("b(%02i,%02i)={:1.4f} ",model->get_learn_b(i,0),model->get_learn_b(i,1), (float32_t) exp(get_b(model->get_learn_b(i,0),model->get_learn_b(i,1))))
 			i++;
 		}
 
@@ -4581,7 +4581,7 @@ bool CHMM::check_model_derivatives_combined()
 		deriv_calc+=exp(model_derivative_a(i, j, dim)+
 		prod_prob-model_probability(dim)) ;
 
-		SG_DEBUG("da(%i,%i) = %e:%e\t (%1.5f%%)\n", i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+		SG_DEBUG("da(%i,%i) = %e:%e\t ({:1.5f}%%)\n", i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 		} ;
 		} ;*/
 	//derivates log(db)
@@ -4612,7 +4612,7 @@ bool CHMM::check_model_derivatives_combined()
 					SG_INFO("deriv_calc[%i]=%e\n",dim,deriv_calc)
 			} ;
 
-			SG_ERROR("b(%i,%i)=%e  db(%i,%i) = %e:%e\t (%1.5f%%)\n", i,j,exp(old_b),i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+			SG_ERROR("b(%i,%i)=%e  db(%i,%i) = %e:%e\t ({:1.5f}%%)\n", i,j,exp(old_b),i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 		} ;
 	} ;
 	return true ;
@@ -4647,7 +4647,7 @@ bool CHMM::check_model_derivatives()
 				invalidate_model() ;
 				float64_t deriv_calc=exp(model_derivative_a(i, j, dim)) ;
 
-				SG_DEBUG("da(%i,%i) = %e:%e\t (%1.5f%%)\n", i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+				SG_DEBUG("da(%i,%i) = %e:%e\t ({:1.5f}%%)\n", i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 				invalidate_model() ;
 			} ;
 		} ;
@@ -4671,7 +4671,7 @@ bool CHMM::check_model_derivatives()
 				invalidate_model() ;
 				float64_t deriv_calc=exp(model_derivative_b(i, j, dim));
 
-				SG_DEBUG("db(%i,%i) = %e:%e\t (%1.5f%%)\n", i,j, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/(deriv_calc))
+				SG_DEBUG("db(%i,%i) = %e:%e\t ({:1.5f}%%)\n", i,j, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/(deriv_calc))
 			} ;
 		} ;
 
@@ -4694,7 +4694,7 @@ bool CHMM::check_model_derivatives()
 			float64_t deriv_calc=exp(model_derivative_p(i, dim));
 
 			//if (fabs(deriv_calc_old-deriv)>1e-4)
-			SG_DEBUG("dp(%i) = %e:%e\t (%1.5f%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+			SG_DEBUG("dp(%i) = %e:%e\t ({:1.5f}%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 		} ;
 		for (i=0; i<N; i++)
 		{
@@ -4715,7 +4715,7 @@ bool CHMM::check_model_derivatives()
 			float64_t deriv_calc=exp(model_derivative_q(i, dim));
 
 			//if (fabs(deriv_calc_old-deriv)>1e-4)
-			SG_DEBUG("dq(%i) = %e:%e\t (%1.5f%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+			SG_DEBUG("dq(%i) = %e:%e\t ({:1.5f}%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 		} ;
 #endif
 	}
@@ -4752,7 +4752,7 @@ bool CHMM::check_path_derivatives()
 				invalidate_model() ;
 				float64_t deriv_calc=path_derivative_a(i, j, dim) ;
 
-				SG_DEBUG("da(%i,%i) = %e:%e\t (%1.5f%%)\n", i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+				SG_DEBUG("da(%i,%i) = %e:%e\t ({:1.5f}%%)\n", i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 			} ;
 		} ;
 		for (i=0; i<N; i++)
@@ -4775,7 +4775,7 @@ bool CHMM::check_path_derivatives()
 				invalidate_model() ;
 				float64_t deriv_calc=path_derivative_b(i, j, dim);
 
-				SG_DEBUG("db(%i,%i) = %e:%e\t (%1.5f%%)\n", i,j, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/(deriv_calc))
+				SG_DEBUG("db(%i,%i) = %e:%e\t ({:1.5f}%%)\n", i,j, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/(deriv_calc))
 			} ;
 		} ;
 
@@ -4797,7 +4797,7 @@ bool CHMM::check_path_derivatives()
 			float64_t deriv_calc=path_derivative_p(i, dim);
 
 			//if (fabs(deriv_calc_old-deriv)>1e-4)
-			SG_DEBUG("dp(%i) = %e:%e\t (%1.5f%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+			SG_DEBUG("dp(%i) = %e:%e\t ({:1.5f}%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 		} ;
 		for (i=0; i<N; i++)
 		{
@@ -4818,7 +4818,7 @@ bool CHMM::check_path_derivatives()
 			float64_t deriv_calc=path_derivative_q(i, dim);
 
 			//if (fabs(deriv_calc_old-deriv)>1e-4)
-			SG_DEBUG("dq(%i) = %e:%e\t (%1.5f%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+			SG_DEBUG("dq(%i) = %e:%e\t ({:1.5f}%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 		} ;
 	}
 	return result;
@@ -5389,7 +5389,7 @@ void CHMM::set_observations(CStringFeatures<uint16_t>* obs, CHMM* lambda)
 		{
 			this->reused_caches=false;
 #ifdef USE_HMMPARALLEL_STRUCTURES
-			SG_INFO("allocating mem for path-table of size %.2f Megabytes ({}*{}) each:\n", ((float32_t)max_T)*N*sizeof(T_STATES)/(1024*1024), max_T, N)
+			SG_INFO("allocating mem for path-table of size {:.2f} Megabytes ({}*{}) each:\n", ((float32_t)max_T)*N*sizeof(T_STATES)/(1024*1024), max_T, N)
 			for (int32_t i=0; i<env()->get_num_threads(); i++)
 			{
 				if ((states_per_observation_psi[i]=SG_MALLOC(T_STATES,max_T*N))!=NULL)
@@ -5399,7 +5399,7 @@ void CHMM::set_observations(CStringFeatures<uint16_t>* obs, CHMM* lambda)
 				path[i]=SG_MALLOC(T_STATES, max_T);
 			}
 #else // no USE_HMMPARALLEL_STRUCTURES
-			SG_INFO("allocating mem of size %.2f Megabytes ({}*{}) for path-table ....", ((float32_t)max_T)*N*sizeof(T_STATES)/(1024*1024), max_T, N)
+			SG_INFO("allocating mem of size {:.2f} Megabytes ({}*{}) for path-table ....", ((float32_t)max_T)*N*sizeof(T_STATES)/(1024*1024), max_T, N)
 			if ((states_per_observation_psi=SG_MALLOC(T_STATES,max_T*N)) != NULL)
 				SG_DONE()
 			else
@@ -5408,7 +5408,7 @@ void CHMM::set_observations(CStringFeatures<uint16_t>* obs, CHMM* lambda)
 			path=SG_MALLOC(T_STATES, max_T);
 #endif // USE_HMMPARALLEL_STRUCTURES
 #ifdef USE_HMMCACHE
-			SG_INFO("allocating mem for caches each of size %.2f Megabytes ({}*{}) ....\n", ((float32_t)max_T)*N*sizeof(T_ALPHA_BETA_TABLE)/(1024*1024), max_T, N)
+			SG_INFO("allocating mem for caches each of size {:.2f} Megabytes ({}*{}) ....\n", ((float32_t)max_T)*N*sizeof(T_ALPHA_BETA_TABLE)/(1024*1024), max_T, N)
 
 #ifdef USE_HMMPARALLEL_STRUCTURES
 			for (int32_t i=0; i<env()->get_num_threads(); i++)

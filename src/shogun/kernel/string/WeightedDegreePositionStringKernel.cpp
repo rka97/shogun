@@ -1578,7 +1578,7 @@ char* CWeightedDegreePositionStringKernel::compute_consensus(
 	//	for (int32_t i=0; i<n; i++)
 	//	{
 	//		ConsensusEntry e= table[t]->get_element(i);
-	//		SG_PRINT("table[{},{}]: str:0%0llx sc:%+f bt:{}\n",t,i, e.string,e.score,e.bt)
+	//		SG_PRINT("table[{},{}]: str:0%0llx sc:{:+f} bt:{}\n",t,i, e.string,e.score,e.bt)
 	//	}
 	//}
 

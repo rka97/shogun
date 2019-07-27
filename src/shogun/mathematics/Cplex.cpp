@@ -163,7 +163,7 @@ bool CCplex::setup_subgradientlpm_QP(
 					cmatval[offs]=-val*vec.features[j].entry;
 					offs++;
 					ASSERT(offs<cmatsize)
-					//SG_PRINT("vec[{}]=%10.10f\n", j, vec.features[j].entry)
+					//SG_PRINT("vec[{}]={:10.10f}\n", j, vec.features[j].entry)
 				}
 
 				if (use_bias)

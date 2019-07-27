@@ -46,7 +46,7 @@ float64_t CTime::cur_runtime_diff_sec(bool verbose)
 {
 	float64_t diff_s = ((float64_t)(clock() - start_runtime)) / CLOCKS_PER_SEC;
 	if (verbose)
-		SG_PRINT("%2.1f seconds\n", diff_s)
+		SG_PRINT("{:2.1f} seconds\n", diff_s)
 
 	return diff_s;
 }
@@ -65,7 +65,7 @@ float64_t CTime::cur_time_diff(bool verbose)
 {
 	float64_t diff_s = get_curtime()-start_time;
 	if (verbose)
-		SG_PRINT("%2.1f seconds\n", diff_s)
+		SG_PRINT("{:2.1f} seconds\n", diff_s)
 
 	return diff_s;
 }
@@ -74,7 +74,7 @@ float64_t CTime::time_diff_sec(bool verbose)
 {
 	float64_t diff_s = stop_time - start_time;
 	if (verbose)
-		SG_PRINT("%2.1f seconds\n", diff_s)
+		SG_PRINT("{:2.1f} seconds\n", diff_s)
 
 	return diff_s;
 }

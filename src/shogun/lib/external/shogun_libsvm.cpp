@@ -1524,7 +1524,7 @@ float64_t Solver_NUMC::compute_primal(const schar* p_y, float64_t* p_alpha, floa
 
 	float64_t primal=0.5*quad- nr_class*rho+xi*mu;
 
-	//SG_PRINT("primal=%10.10f\n", primal)
+	//SG_PRINT("primal={:10.10f}\n", primal)
 
 	SG_FREE(y);
 	SG_FREE(alpha);
@@ -2024,7 +2024,7 @@ static void solve_nu_multiclass_svc(const svm_problem *prob,
 	{
 		SG_DEBUG("Computing biases and primal objective\n")
 		float64_t primal = s.compute_primal(y, alpha, model->rho, model->normwcw);
-		SG_INFO("Primal = %10.10f\n", primal)
+		SG_INFO("Primal = {:10.10f}\n", primal)
 	}
 
 	for (int32_t i=0; i<nr_class; i++)
@@ -2194,7 +2194,7 @@ decision_function svm_train_one(
 			break;
 	}
 
-	SG_INFO("obj = %.16f, rho = %.16f\n",si.obj,si.rho)
+	SG_INFO("obj = {:.16f}, rho = {:.16f}\n",si.obj,si.rho)
 
 	// output SVs
 	if (param->svm_type != ONE_CLASS)
@@ -2338,7 +2338,7 @@ svm_model *svm_train(const svm_problem *prob, const svm_parameter *param)
 	{
 		Solver::SolutionInfo si;
 		solve_nu_multiclass_svc(prob,param,&si,model);
-		SG_INFO("obj = %.16f, rho = %.16f\n",si.obj,si.rho)
+		SG_INFO("obj = {:.16f}, rho = {:.16f}\n",si.obj,si.rho)
 	}
 	else
 	{

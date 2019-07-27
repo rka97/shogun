@@ -407,7 +407,7 @@ finalbeta=oldweights;
 	const float64_t R = std::sqrt(preR / pnorm) * epsRegul;
 	if( !( R >= 0 ) )
 	{
-		SG_PRINT("MKL-direct: p = %.3f\n", pnorm )
+		SG_PRINT("MKL-direct: p = {:.3f}\n", pnorm )
 		SG_PRINT("MKL-direct: nofKernelsGood = {}\n", nofKernelsGood )
 		SG_PRINT("MKL-direct: Z = %e\n", Z )
 		SG_PRINT("MKL-direct: eps = %e\n", epsRegul )

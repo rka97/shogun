@@ -165,10 +165,10 @@ double Histogram::StandardDeviation() const {
 std::string Histogram::ToString() const {
   std::string r;
   char buf[200];
-  snprintf(buf, sizeof(buf), "Count: %.0f  Average: %.4f  StdDev: %.2f\n", num_,
+  snprintf(buf, sizeof(buf), "Count: {:.0f}  Average: {:.4f}  StdDev: {:.2f}\n", num_,
            Average(), StandardDeviation());
   r.append(buf);
-  snprintf(buf, sizeof(buf), "Min: %.4f  Median: %.4f  Max: %.4f\n",
+  snprintf(buf, sizeof(buf), "Min: {:.4f}  Median: {:.4f}  Max: {:.4f}\n",
            (num_ == 0.0 ? 0.0 : min_), Median(), max_);
   r.append(buf);
   r.append("------------------------------------------------------\n");
@@ -177,7 +177,7 @@ std::string Histogram::ToString() const {
   for (size_t b = 0; b < buckets_.size(); b++) {
     if (buckets_[b] <= 0.0) continue;
     sum += buckets_[b];
-    snprintf(buf, sizeof(buf), "[ %10.2g, %10.2g ) %7.0f %7.3f%% %7.3f%% ",
+    snprintf(buf, sizeof(buf), "[ %10.2g, %10.2g ) {:7.0f} {:7.3f}%% {:7.3f}%% ",
              ((b == 0) ? -DBL_MAX : bucket_limits_[b - 1]),  // left
              bucket_limits_[b],                              // right
              buckets_[b],                                    // count

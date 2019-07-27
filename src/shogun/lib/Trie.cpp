@@ -226,7 +226,7 @@ void CTrie<POIMTrie>::POIMs_calc_SLR_helper2(
 
   // --- add w and return results
   const float64_t w0 = node->weight;
-  //SG_PRINT("  d={}, node={}, dS=%.3f, w=%.3f\n", depth, nodeIdx, node->S, w0 )
+  //SG_PRINT("  d={}, node={}, dS={:.3f}, w={:.3f}\n", depth, nodeIdx, node->S, w0 )
   node->S += w0;
   node->L += w0;
   node->R += w0;
@@ -293,7 +293,7 @@ void CTrie<POIMTrie>::POIMs_add_SLR_helper2(
 	const float64_t valS, const float64_t valL, const float64_t valR,
 	const int32_t debug)
 {
-	//SG_PRINT("i={}, d={}, y={}:  w=%.3f \n", i, k, y, valW )
+	//SG_PRINT("i={}, d={}, y={}:  w={:.3f} \n", i, k, y, valW )
 	const int32_t nk = nofsKmers[ k ];
 	ASSERT(1<=k && k<=K)
 	ASSERT(0<=y && y<nk)

@@ -562,7 +562,7 @@ template <class T> class CDynamicArray :public CSGObject
 				{
 					SG_PRINT("element({},:,{}) = [ ",i, k)
 					for (int32_t j=0; j<dim2_size; j++)
-						SG_PRINT("%1.1f,", (float32_t) element(i,j,k))
+						SG_PRINT("{:1.1f},", (float32_t) element(i,j,k))
 					SG_PRINT(" ]\n")
 				}
 		}

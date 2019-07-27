@@ -193,7 +193,7 @@ float64_t* CTOPFeatures::set_feature_matrix()
 	ASSERT(pos->get_observations())
 
 	num_vectors=pos->get_observations()->get_num_vectors();
-	SG_INFO("allocating top feature cache of size %.2fM\n", sizeof(float64_t)*num_features*num_vectors/1024.0/1024.0)
+	SG_INFO("allocating top feature cache of size {:.2f}M\n", sizeof(float64_t)*num_features*num_vectors/1024.0/1024.0)
 	feature_matrix = SGMatrix<float64_t>(num_features,num_vectors);
 	if (!feature_matrix.matrix)
 	{

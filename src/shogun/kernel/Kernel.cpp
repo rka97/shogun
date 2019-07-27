@@ -666,7 +666,7 @@ void CKernel::remove_rhs()
 
 void CKernel::list_kernel()
 {
-	SG_INFO("{} - \"{}\" weight=%1.2f OPT:{}", fmt::ptr(this), get_name(),
+	SG_INFO("{} - \"{}\" weight={:1.2f} OPT:{}", fmt::ptr(this), get_name(),
 			get_combined_kernel_weight(),
 			get_optimization_type()==FASTBUTMEMHUNGRY ? "FASTBUTMEMHUNGRY" :
 			"SLOWBUTMEMEFFICIENT");

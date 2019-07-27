@@ -489,7 +489,7 @@ void CMosek::display_problem()
 			float64_t qij;
 			m_rescode = MSK_getqobjij(m_task, i, j, &qij);
 			if ( qij != 0.0 )
-				SG_PRINT("({},{})\t%.2f\n", i, j, qij)
+				SG_PRINT("({},{})\t{:.2f}\n", i, j, qij)
 		}
 	}
 	SG_PRINT("\n")
@@ -507,7 +507,7 @@ void CMosek::display_problem()
 			float64_t aij;
 			m_rescode = MSK_getaij(m_task, i, j, &aij);
 			if ( aij != 0.0 )
-				SG_PRINT("({},{})\t%.2f\n", i, j, aij)
+				SG_PRINT("({},{})\t{:.2f}\n", i, j, aij)
 		}
 	}
 	SG_PRINT("\n")
@@ -519,7 +519,7 @@ void CMosek::display_problem()
 		float64_t bl, bu;
 		m_rescode = MSK_getbound(m_task, MSK_ACC_CON, i, &bk, &bl, &bu);
 
-		SG_PRINT("%6.2f %6.2f\n", bl, bu)
+		SG_PRINT("{:6.2f} {:6.2f}\n", bl, bu)
 	}
 
 	SG_PRINT("\nVariable Bounds, vectors lb and ub:\n")
@@ -529,7 +529,7 @@ void CMosek::display_problem()
 		float64_t bl, bu;
 		m_rescode = MSK_getbound(m_task, MSK_ACC_VAR, i, &bk, &bl, &bu);
 
-		SG_PRINT("%6.2f %6.2f\n", bl, bu)
+		SG_PRINT("{:6.2f} {:6.2f}\n", bl, bu)
 	}
 	SG_PRINT("\n")
 }

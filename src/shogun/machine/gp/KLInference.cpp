@@ -192,13 +192,13 @@ void CKLInference::update()
 
 void CKLInference::set_noise_factor(float64_t noise_factor)
 {
-	REQUIRE(noise_factor>=0, "The noise_factor %.20f should be non-negative\n", noise_factor);
+	REQUIRE(noise_factor>=0, "The noise_factor {:.20f} should be non-negative\n", noise_factor);
 	m_noise_factor=noise_factor;
 }
 
 void CKLInference::set_min_coeff_kernel(float64_t min_coeff_kernel)
 {
-	REQUIRE(min_coeff_kernel>=0, "The min_coeff_kernel %.20f should be non-negative\n", min_coeff_kernel);
+	REQUIRE(min_coeff_kernel>=0, "The min_coeff_kernel {:.20f} should be non-negative\n", min_coeff_kernel);
 	m_min_coeff_kernel=min_coeff_kernel;
 }
 
@@ -235,8 +235,8 @@ Eigen::LDLT<Eigen::MatrixXd> CKLInference::update_init_helper()
 	while (Kernel_D.minCoeff()<=m_min_coeff_kernel)
 	{
 		if (m_max_attempt>0 && attempt_count>m_max_attempt)
-			SG_ERROR("The Kernel matrix is highly non-positive definite since the min_coeff_kernel is less than %.20f",
-				" even when adding %.20f noise to the diagonal elements at max {} attempts\n",
+			SG_ERROR("The Kernel matrix is highly non-positive definite since the min_coeff_kernel is less than {:.20f}",
+				" even when adding {:.20f} noise to the diagonal elements at max {} attempts\n",
 				m_min_coeff_kernel, noise_factor, m_max_attempt);
 		attempt_count++;
 		float64_t pre_noise_factor=noise_factor;

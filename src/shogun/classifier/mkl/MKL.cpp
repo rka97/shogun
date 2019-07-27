@@ -647,7 +647,7 @@ float64_t CMKL::compute_optimal_betas_elasticnet(
 	const float64_t R = std::sqrt(preR) * epsRegul;
 	if( !( R >= 0 ) )
 	{
-		SG_PRINT("MKL-direct: p = %.3f\n", 1.0 )
+		SG_PRINT("MKL-direct: p = {:.3f}\n", 1.0 )
 		SG_PRINT("MKL-direct: nofKernelsGood = {}\n", nofKernelsGood )
 		SG_PRINT("MKL-direct: Z = %e\n", Z )
 		SG_PRINT("MKL-direct: eps = %e\n", epsRegul )
@@ -884,7 +884,7 @@ float64_t CMKL::compute_optimal_betas_directly(
 	const float64_t R = std::sqrt(preR / mkl_norm) * epsRegul;
 	if( !( R >= 0 ) )
 	{
-		SG_PRINT("MKL-direct: p = %.3f\n", mkl_norm )
+		SG_PRINT("MKL-direct: p = {:.3f}\n", mkl_norm )
 		SG_PRINT("MKL-direct: nofKernelsGood = {}\n", nofKernelsGood )
 		SG_PRINT("MKL-direct: Z = %e\n", Z )
 		SG_PRINT("MKL-direct: eps = %e\n", epsRegul )
@@ -1042,7 +1042,7 @@ float64_t CMKL::compute_optimal_betas_newton(float64_t* beta,
 				newtDir[p] = ( t1 == 0.0 ) ? 0.0 : ( t1 / t2 );
 			// newtStep += newtDir[p] * grad[p];
 			ASSERT( newtDir[p] == newtDir[p] )
-			//SG_PRINT("newtDir[{}] = %6.3f = %e / %e \n", p, newtDir[p], t1, t2 )
+			//SG_PRINT("newtDir[{}] = {:6.3f} = %e / %e \n", p, newtDir[p], t1, t2 )
 		}
 		//CMath::display_vector( newtDir, num_kernels, "newton direction  " );
 		//SG_PRINT("Newton step size = %e\n", Z )
@@ -1091,7 +1091,7 @@ float64_t CMKL::compute_optimal_betas_newton(float64_t* beta,
 			newtObj = 0.0;
 			for( p=0; p<num_kernels; ++p )
 				newtObj += sumw[p] * old_beta[p]*old_beta[p] / newtBeta[p];
-			//SG_PRINT("step = %.8f:  obj = %e -> %e.  \n", stepSize, obj, newtObj )
+			//SG_PRINT("step = {:.8f}:  obj = %e -> %e.  \n", stepSize, obj, newtObj )
 			if ( newtObj < obj - epsNewt*stepSize*obj )
 			{
 				for( p=0; p<num_kernels; ++p )

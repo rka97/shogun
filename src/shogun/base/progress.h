@@ -242,13 +242,13 @@ namespace shogun
 					m_io.message(MSG_MESSAGEONLY, "", "", -1, " ");
 				}
 			}
-			m_io.message(MSG_MESSAGEONLY, "", "", -1, "| %.2f\%", v);
+			m_io.message(MSG_MESSAGEONLY, "", "", -1, "| {:.2f}\%", v);
 
 			if (estimate > 120)
 			{
 				snprintf(
 				    str, sizeof(str),
-				    "   %%1.1f minutes remaining  %%1.1f minutes total\r");
+				    "   %{:1.1f} minutes remaining  %{:1.1f} minutes total\r");
 				m_io.message(
 				    MSG_MESSAGEONLY, "", "", -1, str, estimate / 60,
 				    total_estimate / 60);
@@ -257,7 +257,7 @@ namespace shogun
 			{
 				snprintf(
 				    str, sizeof(str),
-				    "   %%1.1f seconds remaining  %%1.1f seconds total\r");
+				    "   %{:1.1f} seconds remaining  %{:1.1f} seconds total\r");
 				m_io.message(
 				    MSG_MESSAGEONLY, "", "", -1, str, estimate, total_estimate);
 			}
@@ -342,13 +342,13 @@ namespace shogun
 					m_io.message(MSG_MESSAGEONLY, "", "", -1, " ");
 				}
 			}
-			m_io.message(MSG_MESSAGEONLY, "", "", -1, "| %.2f\%", current_val);
+			m_io.message(MSG_MESSAGEONLY, "", "", -1, "| {:.2f}\%", current_val);
 
 			if (estimate > 120)
 			{
 				snprintf(
 				    str, sizeof(str),
-				    "   %%1.1f minutes remaining  %%1.1f minutes total\r");
+				    "   %{:1.1f} minutes remaining  %{:1.1f} minutes total\r");
 				m_io.message(
 				    MSG_MESSAGEONLY, "", "", -1, str, estimate / 60,
 				    total_estimate / 60);
@@ -357,7 +357,7 @@ namespace shogun
 			{
 				snprintf(
 				    str, sizeof(str),
-				    "   %%1.1f seconds remaining  %%1.1f seconds total\r");
+				    "   %{:1.1f} seconds remaining  %{:1.1f} seconds total\r");
 				m_io.message(
 				    MSG_MESSAGEONLY, "", "", -1, str, estimate, total_estimate);
 			}

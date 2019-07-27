@@ -987,7 +987,7 @@ void CDynProg::compute_nbest_paths(int32_t max_num_signals, bool use_orf,
 		SG_DEBUG("m_N:%i, m_seq_len:%i, max_num_signals:%i\n",m_N, m_seq_len, max_num_signals)
 
 		//for (int32_t i=0;i<m_N*m_seq_len*max_num_signals;i++)
-      //   SG_PRINT("(%i)%0.2f ",i,seq_array[i])
+      //   SG_PRINT("(%i){:0.2f} ",i,seq_array[i])
 
 		CDynamicObjectArray PEN((CSGObject**) Plif_matrix, m_N, m_N, false, false) ; // 2d, CPlifBase*
 
@@ -1263,7 +1263,7 @@ void CDynProg::compute_nbest_paths(int32_t max_num_signals, bool use_orf,
 	      SG_DEBUG("calling compute_nbest_paths: m_seq_len=%i, m_N=%i,
 	      lookback=%i nbest=%i\n",
 	      m_seq_len, m_N, max_look_back, nbest) ;
-	      SG_DEBUG("allocating %1.2fMB of memory\n",
+	      SG_DEBUG("allocating {:1.2f}MB of memory\n",
 	      mem_use) ;
 	      }*/
 	    ASSERT(nbest < 32000)
@@ -1464,7 +1464,7 @@ void CDynProg::compute_nbest_paths(int32_t max_num_signals, bool use_orf,
 						int32_t orf_from = m_orf_info.element(ii,0) ;
 						int32_t orf_to   = m_orf_info.element(j,1) ;
 						if((orf_from!=-1)!=(orf_to!=-1))
-							SG_DEBUG("j=%i  ii=%i  orf_from=%i orf_to=%i p=%1.2f\n", j, ii, orf_from, orf_to, elem_val[i])
+							SG_DEBUG("j=%i  ii=%i  orf_from=%i orf_to=%i p={:1.2f}\n", j, ii, orf_from, orf_to, elem_val[i])
 						ASSERT((orf_from!=-1)==(orf_to!=-1))
 
 						int32_t orf_target = -1 ;
@@ -1632,7 +1632,7 @@ void CDynProg::compute_nbest_paths(int32_t max_num_signals, bool use_orf,
 						int32_t orf_from = m_orf_info.element(ii,0) ;
 						int32_t orf_to   = m_orf_info.element(j,1) ;
 						if((orf_from!=-1)!=(orf_to!=-1))
-							SG_DEBUG("j=%i  ii=%i  orf_from=%i orf_to=%i p=%1.2f\n", j, ii, orf_from, orf_to, elem_val[i])
+							SG_DEBUG("j=%i  ii=%i  orf_from=%i orf_to=%i p={:1.2f}\n", j, ii, orf_from, orf_to, elem_val[i])
 						ASSERT((orf_from!=-1)==(orf_to!=-1))
 
 						int32_t orf_target = -1 ;
@@ -1809,7 +1809,7 @@ void CDynProg::compute_nbest_paths(int32_t max_num_signals, bool use_orf,
 #ifdef DYNPROG_DEBUG
 									if (m_pos[t]==10108 ||m_pos[t]==12802 ||m_pos[t]== 12561)
 									{
-										SG_PRINT("Part2: %i,%i,%i: val=%1.6f  pen_val_3p*0.5=%1.6f (t=%i, ts=%i, ts-1=%i, ts+1=%i) scores=%1.6f (pen=%1.6f,prev=%1.6f,elem=%1.6f,loss=%1.1f), positions=%i,%i,%i,  loss=%1.1f/%1.1f (%i,%i)\n",
+										SG_PRINT("Part2: %i,%i,%i: val={:1.6f}  pen_val_3p*0.5={:1.6f} (t=%i, ts=%i, ts-1=%i, ts+1=%i) scores={:1.6f} (pen={:1.6f},prev={:1.6f},elem={:1.6f},loss={:1.1f}), positions=%i,%i,%i,  loss={:1.1f}/{:1.1f} (%i,%i)\n",
 												 m_pos[t], j, ii, -mval, 0.5*pen_val_3p, m_pos[t], m_pos[ts], m_pos[ts-1], m_pos[ts+1],
 												 long_transition_content_scores.get_element(ii, j),
 												 long_transition_content_scores_pen.get_element(ii, j),
@@ -1819,12 +1819,12 @@ void CDynProg::compute_nbest_paths(int32_t max_num_signals, bool use_orf,
 												 m_pos[long_transition_content_start_position.get_element(ii,j)],
 												 m_pos[long_transition_content_end_position.get_element(ii,j)],
 												 m_pos[long_transition_content_start.get_element(ii,j)], segment_loss_part2, segment_loss_total, long_transition_content_start_position.get_element(ii,j), t) ;
-										SG_PRINT("fixedtempvv_: %1.6f, from_state:%i from_pos:%i\n ",-fixedtempvv_, (fixedtempii_%m_N), m_pos[(fixedtempii_-(fixedtempii_%(m_N*nbest)))/(m_N*nbest)] )
+										SG_PRINT("fixedtempvv_: {:1.6f}, from_state:%i from_pos:%i\n ",-fixedtempvv_, (fixedtempii_%m_N), m_pos[(fixedtempii_-(fixedtempii_%(m_N*nbest)))/(m_N*nbest)] )
 									}
 
 									if (fabs(segment_loss_part2+long_transition_content_scores_loss.get_element(ii, j) - segment_loss_total)>1e-3)
 									{
-										SG_ERROR("LOSS: total=%1.1f (%i-%i)  part1=%1.1f/%1.1f (%i-%i)  part2=%1.1f (%i-%i)  sum=%1.1f  diff=%1.1f\n",
+										SG_ERROR("LOSS: total={:1.1f} (%i-%i)  part1={:1.1f}/{:1.1f} (%i-%i)  part2={:1.1f} (%i-%i)  sum={:1.1f}  diff={:1.1f}\n",
 												 segment_loss_total, m_pos[long_transition_content_start_position.get_element(ii,j)], m_pos[t],
 												 long_transition_content_scores_loss.get_element(ii, j), segment_loss_part1, m_pos[long_transition_content_start_position.get_element(ii,j)], m_pos[long_transition_content_end_position.get_element(ii,j)],
 												 segment_loss_part2, m_pos[long_transition_content_end_position.get_element(ii,j)], m_pos[t],
@@ -1843,7 +1843,7 @@ void CDynProg::compute_nbest_paths(int32_t max_num_signals, bool use_orf,
 								{
 									/* then the long transition is better than the short one => replace it */
 									int32_t fromtjk =  fixedtempii_ ;
-									/*SG_PRINT("%i,%i: Long transition (%1.5f=-(%1.5f+%1.5f+%1.5f+%1.5f), %i) to m_pos %i better than short transition (%1.5f,%i) to m_pos %i \n",
+									/*SG_PRINT("%i,%i: Long transition ({:1.5f}=-({:1.5f}+{:1.5f}+{:1.5f}+{:1.5f}), %i) to m_pos %i better than short transition ({:1.5f},%i) to m_pos %i \n",
 									  m_pos[t], j,
 									  mval, pen_val_3p*0.5, long_transition_content_scores_pen.get_element(ii, j), long_transition_content_scores_elem.get_element(ii, j), long_transition_content_scores_prev.get_element(ii, j), ii,
 									  m_pos[long_transition_content_position.get_element(ii, j)],
@@ -1972,7 +1972,7 @@ void CDynProg::compute_nbest_paths(int32_t max_num_signals, bool use_orf,
 		MyTime2.stop() ;
 
 		//if (is_big)
-		SG_PRINT("Timing:  orf=%1.2f s \n Segment_init=%1.2f s Segment_pos=%1.2f s  Segment_extend=%1.2f s Segment_clean=%1.2f s\nsvm_init=%1.2f s  svm_pos=%1.2f  svm_clean=%1.2f\n  content_svm_values_time=%1.2f  content_plifs_time=%1.2f\ninner_loop_max_time=%1.2f inner_loop=%1.2f long_transition_time=%1.2f\n total=%1.2f\n", orf_time, segment_init_time, segment_pos_time, segment_extend_time, segment_clean_time, svm_init_time, svm_pos_time, svm_clean_time, content_svm_values_time, content_plifs_time, inner_loop_max_time, inner_loop_time, long_transition_time, MyTime2.time_diff_sec())
+		SG_PRINT("Timing:  orf={:1.2f} s \n Segment_init={:1.2f} s Segment_pos={:1.2f} s  Segment_extend={:1.2f} s Segment_clean={:1.2f} s\nsvm_init={:1.2f} s  svm_pos={:1.2f}  svm_clean={:1.2f}\n  content_svm_values_time={:1.2f}  content_plifs_time={:1.2f}\ninner_loop_max_time={:1.2f} inner_loop={:1.2f} long_transition_time={:1.2f}\n total={:1.2f}\n", orf_time, segment_init_time, segment_pos_time, segment_extend_time, segment_clean_time, svm_init_time, svm_pos_time, svm_clean_time, content_svm_values_time, content_plifs_time, inner_loop_max_time, inner_loop_time, long_transition_time, MyTime2.time_diff_sec())
 #endif
 
 		SG_FREE(fixedtempvv);
@@ -2160,7 +2160,7 @@ void CDynProg::best_path_trans_deriv(
 #ifdef DYNPROG_DEBUG
 				SG_PRINT("part1: pos1: %i  pos2: %i   pos3: %i  \nsvm_value_part1: ", m_pos[from_pos], m_pos[from_pos_thresh], m_pos[from_pos_thresh+1])
 				for (int32_t s=0; s<m_num_lin_feat_plifs_cum[m_num_raw_data]+m_num_intron_plifs; s++)
-					SG_PRINT("%1.4f  ", svm_value_part1[s])
+					SG_PRINT("{:1.4f}  ", svm_value_part1[s])
 				SG_PRINT("\n")
 #endif
 
@@ -2175,7 +2175,7 @@ void CDynProg::best_path_trans_deriv(
 #ifdef DYNPROG_DEBUG
 				SG_PRINT("part2: pos1: %i  pos2: %i   pos3: %i  \nsvm_value_part2: ", m_pos[to_pos], m_pos[to_pos_thresh], m_pos[to_pos_thresh+1])
 				for (int32_t s=0; s<m_num_lin_feat_plifs_cum[m_num_raw_data]+m_num_intron_plifs; s++)
-					SG_PRINT("%1.4f  ", svm_value_part2[s])
+					SG_PRINT("{:1.4f}  ", svm_value_part2[s])
 				SG_PRINT("\n")
 #endif
 			}
@@ -2198,7 +2198,7 @@ void CDynProg::best_path_trans_deriv(
 #ifdef DYNPROG_DEBUG
 				SG_PRINT("part2: pos1: %i  pos2: %i   \nsvm_values: ", m_pos[from_pos], m_pos[to_pos])
 				for (int32_t s=0; s<m_num_lin_feat_plifs_cum[m_num_raw_data]+m_num_intron_plifs; s++)
-					SG_PRINT("%1.4f  ", svm_value[s])
+					SG_PRINT("{:1.4f}  ", svm_value[s])
 				SG_PRINT("\n")
 #endif
 			}
@@ -2217,7 +2217,7 @@ void CDynProg::best_path_trans_deriv(
 				nscore = ((CPlifBase*) PEN.element(to_state, from_state))->lookup_penalty(m_pos[to_pos]-m_pos[from_pos], svm_value) ;
 
 			if (false)//(nscore<-1e9)
-					SG_PRINT("is_long_transition=%i  (from_pos=%i (%i), to_pos=%i (%i)=> %1.5f\n",
+					SG_PRINT("is_long_transition=%i  (from_pos=%i (%i), to_pos=%i (%i)=> {:1.5f}\n",
 						is_long_transition, m_pos[from_pos], from_state, m_pos[to_pos], to_state, nscore) ;
 
 			my_scores[i] += nscore ;
@@ -2240,7 +2240,7 @@ void CDynProg::best_path_trans_deriv(
 				for (int kk=0; kk<i; kk++)
 					sum_score += my_scores[i] ;
 
-				SG_PRINT("is_long_transition=%i  (from_pos=%i (%i), to_pos=%i (%i)=> %1.5f, %1.5f --- 1: %1.6f (%i-%i)  2: %1.6f (%i-%i) \n",
+				SG_PRINT("is_long_transition=%i  (from_pos=%i (%i), to_pos=%i (%i)=> {:1.5f}, {:1.5f} --- 1: {:1.6f} (%i-%i)  2: {:1.6f} (%i-%i) \n",
 						is_long_transition, m_pos[from_pos], from_state, m_pos[to_pos], to_state,
 						nscore, sum_score,
 						PEN.element(to_state, from_state)->lookup_penalty(m_pos[from_pos_thresh]-m_pos[from_pos], svm_value_part1)*0.5, m_pos[from_pos], m_pos[from_pos_thresh],
@@ -2317,13 +2317,13 @@ void CDynProg::best_path_trans_deriv(
 		SG_DEBUG("%i. scores[i]={}\n", i, my_scores[i])
 #endif
 
-		//SG_DEBUG("emmission penalty skipped: to_state=%i to_pos=%i value=%1.2f score=%1.2f\n", to_state, to_pos, seq_input.element(to_state, to_pos), 0.0)
+		//SG_DEBUG("emmission penalty skipped: to_state=%i to_pos=%i value={:1.2f} score={:1.2f}\n", to_state, to_pos, seq_input.element(to_state, to_pos), 0.0)
 		for (int32_t k=0; k<max_num_signals; k++)
 		{
 			if ((PEN_state_signals.element(to_state,k)==NULL)&&(k==0))
 			{
 #ifdef DYNPROG_DEBUG
-				SG_DEBUG("%i. emmission penalty: to_state=%i to_pos=%i score=%1.2f (no signal plif)\n", i, to_state, to_pos, seq_input.element(to_state, to_pos, k))
+				SG_DEBUG("%i. emmission penalty: to_state=%i to_pos=%i score={:1.2f} (no signal plif)\n", i, to_state, to_pos, seq_input.element(to_state, to_pos, k))
 #endif
 				my_scores[i] += seq_input.element(to_state, to_pos, k) ;
 				//if (seq_input.element(to_state, to_pos, k) !=0)
@@ -2337,12 +2337,12 @@ void CDynProg::best_path_trans_deriv(
 #ifdef DYNPROG_DEBUG
 				if (false)//(nscore<-1e9)
 				{
-					SG_PRINT("is_long_transition=%i  (from_pos=%i (%i), from_state=%i, to_pos=%i (%i) to_state=%i=> %1.5f, dim3:%i, seq_input.element(to_state, to_pos, k): %1.4f\n",
+					SG_PRINT("is_long_transition=%i  (from_pos=%i (%i), from_state=%i, to_pos=%i (%i) to_state=%i=> {:1.5f}, dim3:%i, seq_input.element(to_state, to_pos, k): {:1.4f}\n",
 						is_long_transition, m_pos[from_pos], from_pos, from_state, m_pos[to_pos], to_pos, to_state, nscore, k, seq_input.element(to_state, to_pos, k)) ;
 					for (int x=0; x<23; x++)
 					{
 						for (int i=-10; i<10; i++)
-							SG_PRINT("%1.4f\t", seq_input.element(x, to_pos+i, k))
+							SG_PRINT("{:1.4f}\t", seq_input.element(x, to_pos+i, k))
 						SG_PRINT("\n")
 					}
 
@@ -2355,9 +2355,9 @@ void CDynProg::best_path_trans_deriv(
 				//PEN_state_signals.element(to_state, k)->get_used_svms(&num_current_svms, svm_ids);
 				//SG_PRINT("\n")
 				//if (nscore != 0)
-				//SG_PRINT("%i. emmission penalty: to_state=%i to_pos=%i value=%1.2f score=%1.2f k=%i\n", i, to_state, to_pos, seq_input.element(to_state, to_pos, k), nscore, k)
+				//SG_PRINT("%i. emmission penalty: to_state=%i to_pos=%i value={:1.2f} score={:1.2f} k=%i\n", i, to_state, to_pos, seq_input.element(to_state, to_pos, k), nscore, k)
 #ifdef DYNPROG_DEBUG
-				SG_DEBUG("%i. emmission penalty: to_state=%i to_pos=%i value=%1.2f score=%1.2f k=%i\n", i, to_state, to_pos, seq_input.element(to_state, to_pos, k), nscore, k)
+				SG_DEBUG("%i. emmission penalty: to_state=%i to_pos=%i value={:1.2f} score={:1.2f} k=%i\n", i, to_state, to_pos, seq_input.element(to_state, to_pos, k), nscore, k)
 #endif
 				((CPlifBase*) PEN_state_signals.element(to_state,k))->penalty_add_derivative(seq_input.element(to_state, to_pos, k), svm_value, 1) ; // this should be ok for long_transitions (svm_value does not matter)
 			} else

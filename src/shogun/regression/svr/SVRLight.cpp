@@ -294,8 +294,8 @@ void CSVRLight::svr_learn()
 	if(verbosity>=1) {
 		SG_DONE()
 		SG_INFO("({} iterations)\n",iterations)
-		SG_INFO("Optimization finished (maxdiff=%.8f).\n",maxdiff)
-		SG_INFO("obj = %.16f, rho = %.16f\n",get_objective(),model->b)
+		SG_INFO("Optimization finished (maxdiff={:.8f}).\n",maxdiff)
+		SG_INFO("obj = {:.16f}, rho = {:.16f}\n",get_objective(),model->b)
 
 		upsupvecnum=0;
 

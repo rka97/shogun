@@ -168,11 +168,11 @@ float64_t CPlif::lookup_penalty_svm(
 		ret = (penalties[idx]*(d_value-limits[idx-1]) + penalties[idx-1]*
 			   (limits[idx]-d_value)) / (limits[idx]-limits[idx-1]) ;
 #ifdef PLIF_DEBUG
-		SG_PRINT("  -> (%1.3f*%1.3f, %1.3f*%1.3f)", (d_value-limits[idx-1])/(limits[idx]-limits[idx-1]), penalties[idx], (limits[idx]-d_value)/(limits[idx]-limits[idx-1]), penalties[idx-1])
+		SG_PRINT("  -> ({:1.3f}*{:1.3f}, {:1.3f}*{:1.3f})", (d_value-limits[idx-1])/(limits[idx]-limits[idx-1]), penalties[idx], (limits[idx]-d_value)/(limits[idx]-limits[idx-1]), penalties[idx-1])
 #endif
 	}
 #ifdef PLIF_DEBUG
-		SG_PRINT("  -> ret=%1.3f\n", ret)
+		SG_PRINT("  -> ret={:1.3f}\n", ret)
 #endif
 
 	return ret ;
@@ -240,7 +240,7 @@ float64_t CPlif::lookup_penalty(float64_t p_value, float64_t* svm_values) const
 	}
 
 #ifdef PLIF_DEBUG
-	SG_PRINT("  -> value = %1.4f ", d_value)
+	SG_PRINT("  -> value = {:1.4f} ", d_value)
 #endif
 
 	int32_t idx = 0 ;
@@ -264,13 +264,13 @@ float64_t CPlif::lookup_penalty(float64_t p_value, float64_t* svm_values) const
 		ret = (penalties[idx]*(d_value-limits[idx-1]) + penalties[idx-1]*
 			   (limits[idx]-d_value)) / (limits[idx]-limits[idx-1]) ;
 #ifdef PLIF_DEBUG
-		SG_PRINT("  -> (%1.3f*%1.3f, %1.3f*%1.3f) ", (d_value-limits[idx-1])/(limits[idx]-limits[idx-1]), penalties[idx], (limits[idx]-d_value)/(limits[idx]-limits[idx-1]), penalties[idx-1])
+		SG_PRINT("  -> ({:1.3f}*{:1.3f}, {:1.3f}*{:1.3f}) ", (d_value-limits[idx-1])/(limits[idx]-limits[idx-1]), penalties[idx], (limits[idx]-d_value)/(limits[idx]-limits[idx-1]), penalties[idx-1])
 #endif
 	}
 	//if (p_value>=30 && p_value<150)
-	//SG_PRINT("{} %i(%i) -> %1.2f\n", PEN->name, p_value, idx, ret)
+	//SG_PRINT("{} %i(%i) -> {:1.2f}\n", PEN->name, p_value, idx, ret)
 #ifdef PLIF_DEBUG
-	SG_PRINT("  -> ret=%1.3f\n", ret)
+	SG_PRINT("  -> ret={:1.3f}\n", ret)
 #endif
 
 	return ret ;

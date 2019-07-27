@@ -278,8 +278,8 @@ float64_t CLocalAlignmentStringKernel::LAkernelcompute(
 
 			/* State RX */
 			logX[curpos]=LOGP(-m_opening+logM[frompos], -m_extension+logX[frompos]);
-			/*      printf("%.5f\n",logX[curpos]);*/
-			/*      printf("%.5f\n",logX_B[curpos]);*/
+			/*      printf("{:.5f}\n",logX[curpos]);*/
+			/*      printf("{:.5f}\n",logX_B[curpos]);*/
 			/* State RX2 */
 			logX2[curpos]=LOGP(logM[frompos], logX2[frompos]);
 
@@ -306,7 +306,7 @@ float64_t CLocalAlignmentStringKernel::LAkernelcompute(
 			logM[curpos]=LOGP(aux, aux2)+scaled_blosum[BINDEX(aaX[i-1], aaY[j-1])];
 
 			/*
-			printf("i={} , j={}\nM=%.5f\nX=%.5f\nY=%.5f\nX2=%.5f\nY2=%.5f\n",i,j,logM[curpos],logX[curpos],logY[curpos],logX2[curpos],logY2[curpos]);
+			printf("i={} , j={}\nM={:.5f}\nX={:.5f}\nY={:.5f}\nX2={:.5f}\nY2={:.5f}\n",i,j,logM[curpos],logX[curpos],logY[curpos],logX2[curpos],logY2[curpos]);
 			*/
 
 		}  /* end of j=1:nY loop */

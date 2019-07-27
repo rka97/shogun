@@ -219,7 +219,7 @@ float64_t* CFKFeatures::set_feature_matrix()
 	num_vectors=pos->get_observations()->get_num_vectors();
 	ASSERT(num_vectors)
 
-	SG_INFO("allocating FK feature cache of size %.2fM\n", sizeof(float64_t)*num_features*num_vectors/1024.0/1024.0)
+	SG_INFO("allocating FK feature cache of size {:.2f}M\n", sizeof(float64_t)*num_features*num_vectors/1024.0/1024.0)
 	free_feature_matrix();
 	feature_matrix=SGMatrix<float64_t>(num_features,num_vectors);
 

@@ -93,7 +93,7 @@ float64_t* CRealFileFeatures::load_feature_matrix()
 	fseek(working_file, filepos, SEEK_SET);
 	free_feature_matrix();
 
-	SG_INFO("allocating feature matrix of size %.2fM\n", sizeof(double)*num_features*num_vectors/1024.0/1024.0)
+	SG_INFO("allocating feature matrix of size {:.2f}M\n", sizeof(double)*num_features*num_vectors/1024.0/1024.0)
 	free_feature_matrix();
 	feature_matrix=SGMatrix<float64_t>(num_features,num_vectors);
 

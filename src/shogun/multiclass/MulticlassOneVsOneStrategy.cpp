@@ -279,7 +279,7 @@ void CMulticlassOneVsOneStrategy::rescale_heuris_hastie(SGVector<float64_t> outp
 			prev_outputs[i] -= new_outputs[i];
 
 		gap = SGVector<float64_t>::qsq(prev_outputs.vector, prev_outputs.vlen, 2);
-		SG_DEBUG("[Hastie's heuristic] gap = %.12f\n", gap);
+		SG_DEBUG("[Hastie's heuristic] gap = {:.12f}\n", gap);
 	}
 
 	for (int32_t i=0; i<new_outputs.vlen; i++)

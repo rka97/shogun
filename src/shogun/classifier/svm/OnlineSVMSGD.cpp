@@ -142,7 +142,7 @@ bool COnlineSVMSGD::train(CFeatures* data)
 
 	features->end_parser();
 	float64_t wnorm = linalg::dot(m_w, m_w);
-	SG_INFO("Norm: %.6f, Bias: %.6f\n", wnorm, bias)
+	SG_INFO("Norm: {:.6f}, Bias: {:.6f}\n", wnorm, bias)
 
 	return true;
 }
@@ -183,7 +183,7 @@ void COnlineSVMSGD::calibrate(int32_t max_vec_num)
 	// compute weight decay skip
 	skip = (int32_t) ((16 * n * c_dim) / r);
 
-	SG_INFO("using {} examples. skip={}  bscale=%.6f\n", n, skip, bscale)
+	SG_INFO("using {} examples. skip={}  bscale={:.6f}\n", n, skip, bscale)
 
 	SG_FREE(c);
 }

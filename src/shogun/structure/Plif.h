@@ -403,7 +403,7 @@ class CPlif: public CPlifBase
 		 */
 		virtual void list_plif() const
 		{
-			SG_PRINT("CPlif(min_value=%1.2f, max_value=%1.2f, use_svm=%i)\n", min_value, max_value, use_svm)
+			SG_PRINT("CPlif(min_value={:1.2f}, max_value={:1.2f}, use_svm=%i)\n", min_value, max_value, use_svm)
 		}
 
 		/** delete plif struct
