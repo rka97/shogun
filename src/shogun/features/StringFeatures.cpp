@@ -1973,7 +1973,7 @@ bool CStringFeatures<ST>::obtain_from_char_features(CStringFeatures<CT>* sf, int
 		return false;
 	}
 
-	SG_DEBUG("translate: start=%i order=%i gap=%i(size:%i)\n", start, p_order, gap, sizeof(ST))
+	SG_DEBUG("translate: start={} order={} gap={}(size:{})\n", start, p_order, gap, sizeof(ST))
 	for (int32_t line=0; line<num_vectors; line++)
 	{
 		int32_t len=0;

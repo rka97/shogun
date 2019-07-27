@@ -347,7 +347,7 @@ void CParameterCombination::print_tree(int prefix_num) const
 				if (m_param->get_parameter(i)->m_datatype.m_ptype==PT_FLOAT64)
 					SG_PRINT("{} ", *((float64_t*)param))
 				else if (m_param->get_parameter(i)->m_datatype.m_ptype==PT_INT32)
-					SG_PRINT("%i ", *((int32_t*)param))
+					SG_PRINT("{} ", *((int32_t*)param))
 				else if (m_param->get_parameter(i)->m_datatype.m_ptype==PT_BOOL)
 					SG_PRINT("{} ", *((bool*)param ? "true" : "false"))
 				else

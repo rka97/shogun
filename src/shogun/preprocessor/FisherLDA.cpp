@@ -212,7 +212,7 @@ SGMatrix<float64_t> CFisherLDA::apply_to_matrix(SGMatrix<float64_t> matrix)
 	    m_transformation_matrix.matrix, m_transformation_matrix.num_rows,
 	    m_transformation_matrix.num_cols);
 
-	SG_INFO("get Feature matrix: %ix%i\n", num_vectors, num_features)
+	SG_INFO("get Feature matrix: {}x{}\n", num_vectors, num_features)
 
 	Map<MatrixXd> feature_matrix(matrix.matrix, num_features, num_vectors);
 

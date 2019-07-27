@@ -103,7 +103,7 @@ char* CPlif::get_plif_name() const
 	else
 	{
 		char buf[20];
-		sprintf(buf, "plif%i", id);
+		sprintf(buf, "plif{}", id);
 		return get_strdup(buf);
 	}
 }
@@ -156,7 +156,7 @@ float64_t CPlif::lookup_penalty_svm(
 			break ; // assume it is monotonically increasing
 
 #ifdef PLIF_DEBUG
-	SG_PRINT("  -> idx = %i ", idx)
+	SG_PRINT("  -> idx = {} ", idx)
 #endif
 
 	if (idx==0)
@@ -185,7 +185,7 @@ float64_t CPlif::lookup_penalty(int32_t p_value, float64_t* svm_values) const
 
 	if ((p_value<min_value) || (p_value>max_value))
 	{
-		//SG_PRINT("Feature:{}, {}.lookup_penalty(%i): return -inf min_value: {}, max_value: {}\n", name, get_name(), p_value, min_value, max_value)
+		//SG_PRINT("Feature:{}, {}.lookup_penalty({}): return -inf min_value: {}, max_value: {}\n", name, get_name(), p_value, min_value, max_value)
 		return -CMath::INFTY ;
 	}
 	if (!do_calc)
@@ -252,7 +252,7 @@ float64_t CPlif::lookup_penalty(float64_t p_value, float64_t* svm_values) const
 			break ; // assume it is monotonically increasing
 
 #ifdef PLIF_DEBUG
-	SG_PRINT("  -> idx = %i ", idx)
+	SG_PRINT("  -> idx = {} ", idx)
 #endif
 
 	if (idx==0)
@@ -268,7 +268,7 @@ float64_t CPlif::lookup_penalty(float64_t p_value, float64_t* svm_values) const
 #endif
 	}
 	//if (p_value>=30 && p_value<150)
-	//SG_PRINT("{} %i(%i) -> {:1.2f}\n", PEN->name, p_value, idx, ret)
+	//SG_PRINT("{} {}({}) -> {:1.2f}\n", PEN->name, p_value, idx, ret)
 #ifdef PLIF_DEBUG
 	SG_PRINT("  -> ret={:1.3f}\n", ret)
 #endif
@@ -388,7 +388,7 @@ void CPlif::get_used_svms(int32_t* num_svms, int32_t* svm_ids)
 		svm_ids[(*num_svms)] = use_svm;
 		(*num_svms)++;
 	}
-	SG_PRINT("->use_svm:%i plif_id:%i name:{} trans_type:{}  ",use_svm, get_id(), get_name(), get_transform_type())
+	SG_PRINT("->use_svm:{} plif_id:{} name:{} trans_type:{}  ",use_svm, get_id(), get_name(), get_transform_type())
 }
 
 bool CPlif::get_do_calc()

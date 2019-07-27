@@ -640,7 +640,7 @@ bool CAlphabet::check_alphabet_size(bool print_error)
 		if (print_error)
 		{
 			print_histogram();
-			fprintf(stderr, "get_num_bits_in_histogram()=%i > get_num_bits()=%i\n", get_num_bits_in_histogram(), get_num_bits()) ;
+			fprintf(stderr, "get_num_bits_in_histogram()={} > get_num_bits()={}\n", get_num_bits_in_histogram(), get_num_bits()) ;
          SG_ERROR("ALPHABET too small to contain all symbols in histogram\n")
 		}
 		return false;

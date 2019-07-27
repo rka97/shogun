@@ -1431,7 +1431,7 @@ float64_t CMKL::compute_optimal_betas_via_cplex(float64_t* new_beta, const float
 			// have at most max(100,num_active_rows*2) rows, if not, remove one
 			if ( (num_rows-start_row>CMath::max(100,2*num_active_rows)) && (max_idx!=-1))
 			{
-				//SG_INFO("-%i(%i,%i)",max_idx,start_row,num_rows)
+				//SG_INFO("-{}({},{})",max_idx,start_row,num_rows)
 				status = CPXdelrows (self->env, self->lp_cplex, max_idx, max_idx) ;
 				if ( status )
 					SG_ERROR("Failed to remove an old row.\n")

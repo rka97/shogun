@@ -103,10 +103,10 @@ public:
 		REQUIRE(m_num_passes>0, "Must set num passes first\n");
 		REQUIRE(m_num_sgd_passes>=0, "Must set sgd update passes first\n");
 		REQUIRE(interval>0, "Interval ({}) must be positive\n", interval);
-		REQUIRE((m_num_passes-m_num_sgd_passes)%interval==0, "Interval is not valid\n");
-		/* if (m_num_passes-m_num_sgd_passes)%interval!=0, will affect the finaly result if we do the following operations:
+		REQUIRE((m_num_passes-m_num_sgd_passes){}nterval==0, "Interval is not valid\n");
+		/* if (m_num_passes-m_num_sgd_passes){}nterval!=0, will affect the finaly result if we do the following operations:
 		* first do minimization, then save_to_file, and then load_from_file and finaly do minimization.
-		* If we want to get the exact result when (m_num_passes-m_num_sgd_passes)%interval!=0,
+		* If we want to get the exact result when (m_num_passes-m_num_sgd_passes){}nterval!=0,
 		* we should store/restore m_average_gradient and m_previous_variable in save_to_file/load_from_file
 		*/
 		m_svrg_interval=interval;

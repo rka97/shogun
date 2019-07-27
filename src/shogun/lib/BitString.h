@@ -237,7 +237,7 @@ class CBitString : public CSGObject
 
 				for (int i=0; i<8; i++)
 				{
-					//fprintf(stdout, "%i %lx %lx %lx %i\n", i, res, m, b, (int)cnt) ;
+					//fprintf(stdout, "{} %lx %lx %lx {}\n", i, res, m, b, (int)cnt) ;
 					if (m&1)
 						res = res>>8 | ar[b&255][m&255] ;
 					//else

@@ -182,7 +182,7 @@ void CPCA::init_with_evd(const SGMatrix<float64_t>& feature_matrix, int32_t max_
 			}
 			break;
 	};
-	SG_INFO("Reducing from %i to %i features\n", num_features, num_dim)
+	SG_INFO("Reducing from {} to {} features\n", num_features, num_dim)
 
 	m_transformation_matrix = SGMatrix<float64_t>(num_features,num_dim);
 	Map<MatrixXd> transformMatrix(m_transformation_matrix.matrix,
@@ -259,7 +259,7 @@ void CPCA::init_with_svd(const SGMatrix<float64_t> &feature_matrix, int32_t max_
 			}
 			break;
 	};
-	SG_INFO("Reducing from %i to %i features...\n", num_features, num_dim)
+	SG_INFO("Reducing from {} to {} features...\n", num_features, num_dim)
 
 	// right singular vectors form eigenvectors
 	m_transformation_matrix = SGMatrix<float64_t>(num_features, num_dim);

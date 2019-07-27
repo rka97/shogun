@@ -316,7 +316,7 @@ float64_t CGMM::train_smem(int32_t max_iter, int32_t max_cand, float64_t min_cov
 					CGMM* candidate=new CGMM(m_components, m_coefficients, true);
 					seed(candidate);
 					candidate->train(features);
-					candidate->partial_em(split_ind[i], merge_ind[j]/int32_t(m_components.size()), merge_ind[j]%int32_t(m_components.size()), min_cov, max_em_iter, min_change);
+					candidate->partial_em(split_ind[i], merge_ind[j]/int32_t(m_components.size()), merge_ind[j]{}nt32_t(m_components.size()), min_cov, max_em_iter, min_change);
 					float64_t cand_likelihood=candidate->train_em(min_cov, max_em_iter, min_change);
 
 					if (cand_likelihood>cur_likelihood)

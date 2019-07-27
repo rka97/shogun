@@ -665,7 +665,7 @@ void CSGObject::unsubscribe(ParameterObserver* obs)
 	if (it == m_subscriptions.end())
 		SG_ERROR(
 		    "The object {} does not have any registered parameter observer "
-		    "with index %i",
+		    "with index {}",
 		    this->get_name(), index);
 
 	it->second.unsubscribe();

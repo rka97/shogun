@@ -281,8 +281,8 @@ bool CSpectrumRBFKernel::init(CFeatures* l, CFeatures* r)
 
 	CStringKernel<char>::init(l,r);
 
-	SG_DEBUG("lhs_changed: %i\n", lhs_changed)
-	SG_DEBUG("rhs_changed: %i\n", rhs_changed)
+	SG_DEBUG("lhs_changed: {}\n", lhs_changed)
+	SG_DEBUG("rhs_changed: {}\n", rhs_changed)
 
 	CStringFeatures<char>* sf_l=(CStringFeatures<char>*) l;
 	CStringFeatures<char>* sf_r=(CStringFeatures<char>*) r;

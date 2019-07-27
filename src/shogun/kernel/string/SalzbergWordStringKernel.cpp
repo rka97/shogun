@@ -183,7 +183,7 @@ bool CSalzbergWordStringKernel::init(CFeatures* p_l, CFeatures* p_r)
 			if (variance[i]<1e-14) // then it is likely to be numerical inaccuracy
 				variance[i]=1 ;
 
-			//fprintf(stderr, "%i: mean=%1.2e  std=%1.2e\n", i, mean[i], std[i]) ;
+			//fprintf(stderr, "{}: mean=%1.2e  std=%1.2e\n", i, mean[i], std[i]) ;
 			sum_m2_s2 += mean[i]*mean[i]/(variance[i]) ;
 		} ;
 	}
@@ -361,7 +361,7 @@ void CSalzbergWordStringKernel::set_prior_probs_from_labels(CLabels* labels)
 			num_neg++;
 	}
 
-	SG_INFO("priors: pos={:1.3f} (%i)  neg={:1.3f} (%i)\n",
+	SG_INFO("priors: pos={:1.3f} ({})  neg={:1.3f} ({})\n",
 		(float64_t) num_pos/(num_pos+num_neg), num_pos,
 		(float64_t) num_neg/(num_pos+num_neg), num_neg);
 

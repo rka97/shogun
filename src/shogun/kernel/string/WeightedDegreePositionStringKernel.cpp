@@ -177,8 +177,8 @@ bool CWeightedDegreePositionStringKernel::init(CFeatures* l, CFeatures* r)
 
 	CStringKernel<char>::init(l,r);
 
-	SG_DEBUG("lhs_changed: %i\n", lhs_changed)
-	SG_DEBUG("rhs_changed: %i\n", rhs_changed)
+	SG_DEBUG("lhs_changed: {}\n", lhs_changed)
+	SG_DEBUG("rhs_changed: {}\n", rhs_changed)
 
 	CStringFeatures<char>* sf_l=(CStringFeatures<char>*) l;
 	CStringFeatures<char>* sf_r=(CStringFeatures<char>*) r;
@@ -920,7 +920,7 @@ void CWeightedDegreePositionStringKernel::set_position_weights(SGVector<float64_
 		seq_length=pws.vlen;
 
 	if (seq_length!=pws.vlen)
-		SG_ERROR("seq_length = %i, position_weights_length=%i\n", seq_length, pws.vlen)
+		SG_ERROR("seq_length = {}, position_weights_length={}\n", seq_length, pws.vlen)
 
 	SG_FREE(position_weights);
 	position_weights=SG_MALLOC(float64_t, pws.vlen);
@@ -945,7 +945,7 @@ bool CWeightedDegreePositionStringKernel::set_position_weights_lhs(float64_t* pw
 
 	if (seq_length!=len)
 	{
-		SG_ERROR("seq_length = %i, position_weights_length=%i\n", seq_length, len)
+		SG_ERROR("seq_length = {}, position_weights_length={}\n", seq_length, len)
 		return false;
 	}
 
@@ -974,7 +974,7 @@ bool CWeightedDegreePositionStringKernel::set_position_weights_rhs(
 
 	if (seq_length!=len)
 	{
-		SG_ERROR("seq_length = %i, position_weights_length=%i\n", seq_length, len)
+		SG_ERROR("seq_length = {}, position_weights_length={}\n", seq_length, len)
 		return false;
 	}
 

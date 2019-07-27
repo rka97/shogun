@@ -271,10 +271,10 @@ void CPlifMatrix::set_plif_state_signal_matrix(
 	int32_t *plif_id_matrix, int32_t m, int32_t max_num_signals)
 {
 	if (m!=m_num_plifs)
-		SG_ERROR("plif_state_signal_matrix size does not match previous info %i!=%i\n", m, m_num_plifs)
+		SG_ERROR("plif_state_signal_matrix size does not match previous info {}!={}\n", m, m_num_plifs)
 
 	/*if (m_seq.get_dim3() != max_num_signals)
-		SG_ERROR("size(plif_state_signal_matrix,2) does not match with size(m_seq,3): %i!=%i\nSorry, Soeren... interface changed\n", m_seq.get_dim3(), max_num_signals)
+		SG_ERROR("size(plif_state_signal_matrix,2) does not match with size(m_seq,3): {}!={}\nSorry, Soeren... interface changed\n", m_seq.get_dim3(), max_num_signals)
 
 	CArray2<int32_t> id_matrix(plif_id_matrix, m_num_plifs, max_num_signals, false, false) ;
 	m_PEN_state_signals.resize_array(m_num_plifs, max_num_signals) ;

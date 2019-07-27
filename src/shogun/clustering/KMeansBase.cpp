@@ -142,10 +142,10 @@ void CKMeansBase::initialize_training(CFeatures* data)
 	    "Distance's features type ({}) should be of type REAL ({})\n")
 	REQUIRE(
 	    max_iter > 0,
-	    "The number of iterations provided (%i) must be greater than 0\n",
+	    "The number of iterations provided ({}) must be greater than 0\n",
 	    max_iter)
 	REQUIRE(
-	    k > 0, "The number of clusters provided (%i) must be greater than 0\n",
+	    k > 0, "The number of clusters provided ({}) must be greater than 0\n",
 	    k)
 
 	if (data)

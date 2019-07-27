@@ -60,7 +60,7 @@ void CLinearTimeMMD::set_num_blocks_per_burst(index_t num_blocks_per_burst)
 		auto N=data_mgr.num_samples_at(0);
 		for (auto i=2; i<N; ++i)
 		{
-			if (N%i==0)
+			if (N{}==0)
 			{
 				min_blocksize=i*2;
 				break;

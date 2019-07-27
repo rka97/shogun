@@ -121,17 +121,17 @@ bool CSVRLight::train_machine(CFeatures* data)
 		kernel->clear_normal();
 
 	// output some info
-	SG_DEBUG("qpsize = %i\n", learn_parm->svm_maxqpsize)
+	SG_DEBUG("qpsize = {}\n", learn_parm->svm_maxqpsize)
 	SG_DEBUG("epsilon = %1.1e\n", learn_parm->epsilon_crit)
-	SG_DEBUG("kernel->has_property(KP_LINADD) = %i\n", kernel->has_property(KP_LINADD))
-	SG_DEBUG("kernel->has_property(KP_KERNCOMBINATION) = %i\n", kernel->has_property(KP_KERNCOMBINATION))
-	SG_DEBUG("get_linadd_enabled() = %i\n", get_linadd_enabled())
-	SG_DEBUG("kernel->get_num_subkernels() = %i\n", kernel->get_num_subkernels())
+	SG_DEBUG("kernel->has_property(KP_LINADD) = {}\n", kernel->has_property(KP_LINADD))
+	SG_DEBUG("kernel->has_property(KP_KERNCOMBINATION) = {}\n", kernel->has_property(KP_KERNCOMBINATION))
+	SG_DEBUG("get_linadd_enabled() = {}\n", get_linadd_enabled())
+	SG_DEBUG("kernel->get_num_subkernels() = {}\n", kernel->get_num_subkernels())
 
 	use_kernel_cache = !((kernel->get_kernel_type() == K_CUSTOM) ||
 						 (get_linadd_enabled() && kernel->has_property(KP_LINADD)));
 
-	SG_DEBUG("use_kernel_cache = %i\n", use_kernel_cache)
+	SG_DEBUG("use_kernel_cache = {}\n", use_kernel_cache)
 
 	// train the svm
 	svr_learn();

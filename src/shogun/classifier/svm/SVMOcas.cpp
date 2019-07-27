@@ -52,7 +52,7 @@ CSVMOcas::~CSVMOcas()
 bool CSVMOcas::train_machine(CFeatures* data)
 {
 	SG_INFO("C={}, epsilon={}, bufsize={}\n", get_C1(), get_epsilon(), bufsize)
-	SG_DEBUG("use_bias = %i\n", get_bias_enabled())
+	SG_DEBUG("use_bias = {}\n", get_bias_enabled())
 
 	ASSERT(m_labels)
 	ASSERT(m_labels->get_label_type() == LT_BINARY)

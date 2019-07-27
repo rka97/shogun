@@ -172,7 +172,7 @@ void CKMeans::Lloyd_KMeans(SGMatrix<float64_t> centers, int32_t num_centers)
 		observe<SGMatrix<float64_t>>(iter, "mus");
 
 		if (iter%(max_iter/10) == 0)
-			SG_INFO("Iteration[{}/{}]: Assignment of %i patterns changed.\n", iter, max_iter, changed)
+			SG_INFO("Iteration[{}/{}]: Assignment of {} patterns changed.\n", iter, max_iter, changed)
 	}
 	distance->reset_precompute();
 	distance->replace_rhs(rhs_cache);

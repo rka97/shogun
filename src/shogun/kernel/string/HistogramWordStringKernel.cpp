@@ -205,7 +205,7 @@ bool CHistogramWordStringKernel::init(CFeatures* p_l, CFeatures* p_r)
 			if (variance[i]<1e-14) // then it is likely to be numerical inaccuracy
 				variance[i]=1 ;
 
-			//fprintf(stderr, "%i: mean=%1.2e  std=%1.2e\n", i, mean[i], std[i]) ;
+			//fprintf(stderr, "{}: mean=%1.2e  std=%1.2e\n", i, mean[i], std[i]) ;
 			sum_m2_s2 += mean[i]*mean[i]/(variance[i]) ;
 		} ;
 	}
