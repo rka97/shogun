@@ -4581,7 +4581,7 @@ bool CHMM::check_model_derivatives_combined()
 		deriv_calc+=exp(model_derivative_a(i, j, dim)+
 		prod_prob-model_probability(dim)) ;
 
-		SG_DEBUG("da({},{}) = {:e}:{:e}\t ({:1.5f}%%)\n", i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+		SG_DEBUG("da({},{}) = {:e}:{:e}\t ({:1.5f}%)\n", i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 		} ;
 		} ;*/
 	//derivates log(db)
@@ -4612,7 +4612,7 @@ bool CHMM::check_model_derivatives_combined()
 					SG_INFO("deriv_calc[{}]={:e}\n",dim,deriv_calc)
 			} ;
 
-			SG_ERROR("b({},{})={:e}  db({},{}) = {:e}:{:e}\t ({:1.5f}%%)\n", i,j,exp(old_b),i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+			SG_ERROR("b({},{})={:e}  db({},{}) = {:e}:{:e}\t ({:1.5f}%)\n", i,j,exp(old_b),i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 		} ;
 	} ;
 	return true ;
@@ -4647,7 +4647,7 @@ bool CHMM::check_model_derivatives()
 				invalidate_model() ;
 				float64_t deriv_calc=exp(model_derivative_a(i, j, dim)) ;
 
-				SG_DEBUG("da({},{}) = {:e}:{:e}\t ({:1.5f}%%)\n", i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+				SG_DEBUG("da({},{}) = {:e}:{:e}\t ({:1.5f}%)\n", i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 				invalidate_model() ;
 			} ;
 		} ;
@@ -4671,7 +4671,7 @@ bool CHMM::check_model_derivatives()
 				invalidate_model() ;
 				float64_t deriv_calc=exp(model_derivative_b(i, j, dim));
 
-				SG_DEBUG("db({},{}) = {:e}:{:e}\t ({:1.5f}%%)\n", i,j, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/(deriv_calc))
+				SG_DEBUG("db({},{}) = {:e}:{:e}\t ({:1.5f}%)\n", i,j, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/(deriv_calc))
 			} ;
 		} ;
 
@@ -4694,7 +4694,7 @@ bool CHMM::check_model_derivatives()
 			float64_t deriv_calc=exp(model_derivative_p(i, dim));
 
 			//if (fabs(deriv_calc_old-deriv)>1e-4)
-			SG_DEBUG("dp({}) = {:e}:{:e}\t ({:1.5f}%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+			SG_DEBUG("dp({}) = {:e}:{:e}\t ({:1.5f}%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 		} ;
 		for (i=0; i<N; i++)
 		{
@@ -4715,7 +4715,7 @@ bool CHMM::check_model_derivatives()
 			float64_t deriv_calc=exp(model_derivative_q(i, dim));
 
 			//if (fabs(deriv_calc_old-deriv)>1e-4)
-			SG_DEBUG("dq({}) = {:e}:{:e}\t ({:1.5f}%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+			SG_DEBUG("dq({}) = {:e}:{:e}\t ({:1.5f}%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 		} ;
 #endif
 	}
@@ -4752,7 +4752,7 @@ bool CHMM::check_path_derivatives()
 				invalidate_model() ;
 				float64_t deriv_calc=path_derivative_a(i, j, dim) ;
 
-				SG_DEBUG("da({},{}) = {:e}:{:e}\t ({:1.5f}%%)\n", i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+				SG_DEBUG("da({},{}) = {:e}:{:e}\t ({:1.5f}%)\n", i,j, deriv_calc,  deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 			} ;
 		} ;
 		for (i=0; i<N; i++)
@@ -4775,7 +4775,7 @@ bool CHMM::check_path_derivatives()
 				invalidate_model() ;
 				float64_t deriv_calc=path_derivative_b(i, j, dim);
 
-				SG_DEBUG("db({},{}) = {:e}:{:e}\t ({:1.5f}%%)\n", i,j, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/(deriv_calc))
+				SG_DEBUG("db({},{}) = {:e}:{:e}\t ({:1.5f}%)\n", i,j, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/(deriv_calc))
 			} ;
 		} ;
 
@@ -4797,7 +4797,7 @@ bool CHMM::check_path_derivatives()
 			float64_t deriv_calc=path_derivative_p(i, dim);
 
 			//if (fabs(deriv_calc_old-deriv)>1e-4)
-			SG_DEBUG("dp({}) = {:e}:{:e}\t ({:1.5f}%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+			SG_DEBUG("dp({}) = {:e}:{:e}\t ({:1.5f}%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 		} ;
 		for (i=0; i<N; i++)
 		{
@@ -4818,7 +4818,7 @@ bool CHMM::check_path_derivatives()
 			float64_t deriv_calc=path_derivative_q(i, dim);
 
 			//if (fabs(deriv_calc_old-deriv)>1e-4)
-			SG_DEBUG("dq({}) = {:e}:{:e}\t ({:1.5f}%%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
+			SG_DEBUG("dq({}) = {:e}:{:e}\t ({:1.5f}%)\n", i, deriv_calc, deriv, 100.0*(deriv-deriv_calc)/deriv_calc)
 		} ;
 	}
 	return result;
