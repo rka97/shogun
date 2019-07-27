@@ -985,11 +985,11 @@ void CGraphCut::print_assignment()
 
 		if (get_assignment(i) == SOURCE)
 		{
-			SG_PRINT("\nGCNode %2d: S", node_i->id);
+			SG_PRINT("\nGCNode {:2d}: S", node_i->id);
 		}
 		else
 		{
-			SG_PRINT("\nGCNode %2d: T", node_i->id);
+			SG_PRINT("\nGCNode {:2d}: T", node_i->id);
 		}
 	}
 }

@@ -97,7 +97,7 @@ bool CKNN::train_machine(CFeatures* data)
 	m_min_label=min_class;
 	m_num_classes=max_class-min_class+1;
 
-	SG_INFO("m_num_classes: {} (%+d to %+d) num_train: {}\n", m_num_classes,
+	SG_INFO("m_num_classes: {} ({:+d} to {:+d}) num_train: {}\n", m_num_classes,
 			min_class, max_class, m_train_labels.vlen);
 
 	return true;

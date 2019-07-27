@@ -228,7 +228,7 @@ float64_t* CFKFeatures::set_feature_matrix()
 	for (int32_t x=0; x<num_vectors; x++)
 	{
 		if (!(x % (num_vectors/10+1)))
-			SG_DEBUG("%02d%%.", (int) (100.0*x/num_vectors))
+			SG_DEBUG("{:02d}%%.", (int) (100.0*x/num_vectors))
 		else if (!(x % (num_vectors/200+1)))
 			SG_DEBUG(".")
 

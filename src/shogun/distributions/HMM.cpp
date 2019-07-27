@@ -5559,7 +5559,7 @@ bool CHMM::converged(float64_t x, float64_t y)
 	float64_t diff=y-x;
 	float64_t absdiff=fabs(diff);
 
-	SG_INFO("\n #%03d\tbest result so far: %G (eps: {})", iteration_count, y, diff)
+	SG_INFO("\n #{:03d}\tbest result so far: %G (eps: {})", iteration_count, y, diff)
 
 	if (iteration_count--==0 || (absdiff<epsilon && conv_it<=0))
 	{

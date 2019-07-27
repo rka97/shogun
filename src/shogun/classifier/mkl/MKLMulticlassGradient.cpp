@@ -375,7 +375,7 @@ finalbeta=oldweights;
 
 	for( int32_t p=0; p<num_kernels; ++p )
 	{
-		//SG_PRINT("MKL-direct:  sumw[%3d] = {:e}  ( oldbeta = {:e} )\n", p, sumw[p], old_beta[p] )
+		//SG_PRINT("MKL-direct:  sumw[{:3d}] = {:e}  ( oldbeta = {:e} )\n", p, sumw[p], old_beta[p] )
 		if(  oldweights[p] >= 0.0 )
 		{
 			finalbeta[p] = normsofsubkernels.back()[p] * oldweights[p]*oldweights[p] / pnorm;
@@ -414,7 +414,7 @@ finalbeta=oldweights;
 		for( int32_t p=0; p<num_kernels; ++p )
 		{
 			const float64_t t = CMath::pow( oldweights[p] - finalbeta[p], 2.0 );
-			SG_PRINT("MKL-direct: t[%3d] = {:e}  ( diff = {:e} = {:e} - {:e} )\n", p, t, oldweights[p]-finalbeta[p], oldweights[p], finalbeta[p] )
+			SG_PRINT("MKL-direct: t[{:3d}] = {:e}  ( diff = {:e} = {:e} - {:e} )\n", p, t, oldweights[p]-finalbeta[p], oldweights[p], finalbeta[p] )
 		}
 		SG_PRINT("MKL-direct: preR = {:e}\n", preR )
 		SG_PRINT("MKL-direct: preR/p = {:e}\n", preR/pnorm )

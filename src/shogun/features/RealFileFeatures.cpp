@@ -102,7 +102,7 @@ float64_t* CRealFileFeatures::load_feature_matrix()
 	for (int32_t i=0; i<(int32_t) num_vectors; i++)
 	{
 		if (!(i % (num_vectors/10+1)))
-			SG_PRINT("%02d%%.", (int) (100.0*i/num_vectors))
+			SG_PRINT("{:02d}%%.", (int) (100.0*i/num_vectors))
 		else if (!(i % (num_vectors/200+1)))
 			SG_PRINT(".")
 

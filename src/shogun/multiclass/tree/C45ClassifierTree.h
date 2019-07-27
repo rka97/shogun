@@ -95,7 +95,7 @@ public:
 	/** prune decision tree - uses reduced error pruning algorithm
 	 *
 	 * cf.
-	 * http://en.wikipedia.org/wiki/Pruning_%28decision_trees%29#Reduced_error_pruning
+	 * http://en.wikipedia.org/wiki/Pruning_{:28d}ecision_trees%29#Reduced_error_pruning
 	 *
 	 * At each node, starting from leaf nodes up to the root node, this
 	 * algorithm checks if removing the subtree gives better results (or

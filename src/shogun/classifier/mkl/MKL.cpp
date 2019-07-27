@@ -654,7 +654,7 @@ float64_t CMKL::compute_optimal_betas_elasticnet(
 		for( p=0; p<num_kernels; ++p )
 		{
 			const float64_t t = CMath::pow( beta_local[p] - beta[p], 2.0 );
-			SG_PRINT("MKL-direct: t[%3d] = {:e}  ( diff = {:e} = {:e} - {:e} )\n", p, t, beta_local[p]-beta[p], beta_local[p], beta[p] )
+			SG_PRINT("MKL-direct: t[{:3d}] = {:e}  ( diff = {:e} = {:e} - {:e} )\n", p, t, beta_local[p]-beta[p], beta_local[p], beta[p] )
 		}
 		SG_PRINT("MKL-direct: preR = {:e}\n", preR )
 		SG_PRINT("MKL-direct: preR/p = {:e}\n", preR )
@@ -852,7 +852,7 @@ float64_t CMKL::compute_optimal_betas_directly(
 	nofKernelsGood = num_kernels;
 	for( p=0; p<num_kernels; ++p )
 	{
-		//SG_PRINT("MKL-direct:  sumw[%3d] = {:e}  ( oldbeta = {:e} )\n", p, sumw[p], old_beta[p] )
+		//SG_PRINT("MKL-direct:  sumw[{:3d}] = {:e}  ( oldbeta = {:e} )\n", p, sumw[p], old_beta[p] )
 		if( sumw[p] >= 0.0 && old_beta[p] >= 0.0 )
 		{
 			beta[p] = sumw[p] * old_beta[p]*old_beta[p] / mkl_norm;
@@ -891,7 +891,7 @@ float64_t CMKL::compute_optimal_betas_directly(
 		for( p=0; p<num_kernels; ++p )
 		{
 			const float64_t t = CMath::pow( old_beta[p] - beta[p], 2.0 );
-			SG_PRINT("MKL-direct: t[%3d] = {:e}  ( diff = {:e} = {:e} - {:e} )\n", p, t, old_beta[p]-beta[p], old_beta[p], beta[p] )
+			SG_PRINT("MKL-direct: t[{:3d}] = {:e}  ( diff = {:e} = {:e} - {:e} )\n", p, t, old_beta[p]-beta[p], old_beta[p], beta[p] )
 		}
 		SG_PRINT("MKL-direct: preR = {:e}\n", preR )
 		SG_PRINT("MKL-direct: preR/p = {:e}\n", preR/mkl_norm )

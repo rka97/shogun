@@ -124,7 +124,7 @@ void CLMNN::train(SGMatrix<float64_t> init_transform)
 		// Store statistics for this iteration
 		m_statistics->set(iter-1, obj[iter-1], stepsize, cur_impostors.size());
 
-		SG_DEBUG("iteration={}, objective={:.4f}, #impostors=%4d, stepsize=%.4E\n",
+		SG_DEBUG("iteration={}, objective={:.4f}, #impostors={:4d}, stepsize=%.4E\n",
 				iter, obj[iter-1], cur_impostors.size(), stepsize)
 
 		// Print progress bar iteration
