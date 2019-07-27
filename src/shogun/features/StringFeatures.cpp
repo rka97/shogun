@@ -608,7 +608,7 @@ template<class ST> bool CStringFeatures<ST>::load_fasta_file(const char* fname, 
 
 				ST* str=strings[i].string;
 				int32_t idx=0;
-				SG_DEBUG("'%.*s', len={}, spanned_lines={}\n", (int32_t) id_len, id, (int32_t) len, (int32_t) spanned_lines)
+				SG_DEBUG("'{:{}}', len={}, spanned_lines={}\n", id, (int32_t) id_len, (int32_t) len, (int32_t) spanned_lines)
 
 				for (int32_t j=0; j<fasta_len; j++)
 				{
@@ -621,7 +621,7 @@ template<class ST> bool CStringFeatures<ST>::load_fasta_file(const char* fname, 
 						c=(ST) 'A';
 
 					if (uint64_t(idx)>=len)
-						SG_ERROR("idx={} j={} fasta_len={}, spanned_lines={} str='%.*s'\n", idx, j, fasta_len, spanned_lines, idx, (char*)str)
+						SG_ERROR("idx={} j={} fasta_len={}, spanned_lines={} str='{:{}}'\n", idx, j, fasta_len, spanned_lines, (char*)str, idx)
 					str[idx++]=c;
 				}
 				max_len=CMath::max(max_len, strings[i].slen);

@@ -86,7 +86,7 @@ bool CSVM::load(FILE* modelfl)
 
 	SG_SET_LOCALE_C;
 
-	if (fscanf(modelfl,"%4s\n", char_buffer)==EOF)
+	if (fscanf(modelfl,"{:4}\n", char_buffer)==EOF)
 	{
 		result=false;
 		SG_ERROR("error in svm file, line nr:{}\n", line_number)
@@ -137,7 +137,7 @@ bool CSVM::load(FILE* modelfl)
 
 	set_bias(double_buffer);
 
-	if (fscanf(modelfl,"%8s\n", char_buffer) == EOF)
+	if (fscanf(modelfl,"{:8}\n", char_buffer) == EOF)
 	{
 		result=false;
 		SG_ERROR("error in svm file, line nr:{}\n", line_number)
@@ -171,7 +171,7 @@ bool CSVM::load(FILE* modelfl)
 		set_alpha(i, double_buffer);
 	}
 
-	if (fscanf(modelfl,"%2s", char_buffer) == EOF)
+	if (fscanf(modelfl,"{:2}", char_buffer) == EOF)
 	{
 		result=false;
 		SG_ERROR("error in svm file, line nr:{}\n", line_number)

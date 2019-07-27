@@ -2279,9 +2279,9 @@ void CHMM::output_model(bool verbose)
 					SG_PRINT("\n")
 			}
 			if (fabs(checksum)>1e-5)
-				SG_DEBUG(" checksum % E ******* \n",checksum)
+				SG_DEBUG(" checksum {:E} ******* \n",checksum)
 			else
-				SG_DEBUG(" checksum % E\n",checksum)
+				SG_DEBUG(" checksum {:E}\n",checksum)
 		}
 
 		// distribution of start states p
@@ -2295,9 +2295,9 @@ void CHMM::output_model(bool verbose)
 				SG_PRINT("\n")
 		}
 		if (fabs(checksum)>1e-5)
-			SG_DEBUG(" checksum % E ******* \n",checksum)
+			SG_DEBUG(" checksum {:E} ******* \n",checksum)
 		else
-			SG_DEBUG(" checksum=% E\n", checksum)
+			SG_DEBUG(" checksum={:E}\n", checksum)
 
 		// distribution of terminal states p
 		SG_INFO("\ndistribution of terminal states\n")
@@ -2310,9 +2310,9 @@ void CHMM::output_model(bool verbose)
 				SG_INFO("\n")
 		}
 		if (fabs(checksum)>1e-5)
-			SG_DEBUG(" checksum % E ******* \n",checksum)
+			SG_DEBUG(" checksum {:E} ******* \n",checksum)
 		else
-			SG_DEBUG(" checksum=% E\n", checksum)
+			SG_DEBUG(" checksum={:E}\n", checksum)
 
 		// distribution of observations given the state b
 		SG_INFO("\ndistribution of observations given the state\n")
@@ -2327,9 +2327,9 @@ void CHMM::output_model(bool verbose)
 					SG_PRINT("\n")
 			}
 			if (fabs(checksum)>1e-5)
-				SG_DEBUG(" checksum % E ******* \n",checksum)
+				SG_DEBUG(" checksum {:E} ******* \n",checksum)
 			else
-				SG_DEBUG(" checksum % E\n",checksum)
+				SG_DEBUG(" checksum {:E}\n",checksum)
 		}
 	}
 	SG_PRINT("\n")

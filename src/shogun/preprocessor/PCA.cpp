@@ -201,7 +201,7 @@ void CPCA::init_with_evd(const SGMatrix<float64_t>& feature_matrix, int32_t max_
 			{
 				SG_WARNING(
 				    "Covariance matrix has almost zero Eigenvalue (ie "
-				    "Eigenvalue within a tolerance of %E around 0) at "
+				    "Eigenvalue within a tolerance of {:E} around 0) at "
 				    "dimension {}. Consider reducing its dimension.\n",
 				    m_eigenvalue_zero_tolerance,
 				    i + max_dim_allowed - num_dim + 1)
@@ -275,7 +275,7 @@ void CPCA::init_with_svd(const SGMatrix<float64_t> &feature_matrix, int32_t max_
 			{
 
 				SG_WARNING("Covariance matrix has almost zero Eigenvalue (ie "
-					"Eigenvalue within a tolerance of %E around 0) at "
+					"Eigenvalue within a tolerance of {:E} around 0) at "
 					"dimension {}. Consider reducing its dimension.",
 					m_eigenvalue_zero_tolerance, i + 1)
 

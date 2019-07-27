@@ -109,7 +109,7 @@ bool CMulticlassSVM::load(FILE* modelfl)
 
 	SG_SET_LOCALE_C;
 
-	if (fscanf(modelfl,"%15s\n", char_buffer)==EOF)
+	if (fscanf(modelfl,"{:15}\n", char_buffer)==EOF)
 		SG_ERROR("error in svm file, line nr:{}\n", line_number)
 	else
 	{
@@ -151,7 +151,7 @@ bool CMulticlassSVM::load(FILE* modelfl)
 	for (int32_t n=0; n<m_machines->get_num_elements(); n++)
 	{
 		svm_idx=-1;
-		if (fscanf(modelfl,"\n%4s {} of {}\n", char_buffer, &svm_idx, &int_buffer)==EOF)
+		if (fscanf(modelfl,"\n{:4} {} of {}\n", char_buffer, &svm_idx, &int_buffer)==EOF)
 		{
 			result=false;
 			SG_ERROR("error in svm file, line nr:{}\n", line_number)
@@ -221,7 +221,7 @@ bool CMulticlassSVM::load(FILE* modelfl)
 			svm->set_alpha(i, double_buffer);
 		}
 
-		if (fscanf(modelfl,"%2s", char_buffer) == EOF)
+		if (fscanf(modelfl,"{:2}", char_buffer) == EOF)
 		{
 			result=false;
 			SG_ERROR("error in svm file, line nr:{}\n", line_number)
