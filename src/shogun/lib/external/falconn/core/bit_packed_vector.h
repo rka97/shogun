@@ -60,11 +60,11 @@ class BitPackedVector {
         num_bits_per_package_ - (offset_in_package + item_size_);
     if (remaining_bits >= 0) {
       // Zero out the remaining bits
-      // printf("index %lld  remaining_bits %lld  result %llu\n", index,
+      // printf("index {}  remaining_bits {}  result %llu\n", index,
       //    remaining_bits, result);
       result <<= remaining_bits + offset_in_package;
       result >>= remaining_bits + offset_in_package;
-      // printf("index %lld  remaining_bits %lld  result %llu\n", index,
+      // printf("index {}  remaining_bits {}  result %llu\n", index,
       //    remaining_bits, result);
     } else {
       // printf("get: in else case\n");
@@ -83,11 +83,11 @@ class BitPackedVector {
     int_fast64_t first_package = first_bit / num_bits_per_package_;
     int_fast64_t offset_in_package =
         first_bit - first_package * num_bits_per_package_;
-    /*printf("set index %lld  value %lld  offset_in_package %lld\n", index,
+    /*printf("set index {}  value {}  offset_in_package {}\n", index,
         value, offset_in_package);
-    printf("set index %lld  value %lld  data_[first_package] %llu\n",
+    printf("set index {}  value {}  data_[first_package] %llu\n",
         index, value, data_[first_package]);
-    printf("set index %lld  value %lld  shift %lld  shifted %llu\n",
+    printf("set index {}  value {}  shift {}  shifted %llu\n",
         index, value, num_bits_per_package_ - offset_in_package,
         (data_[first_package] << (num_bits_per_package_ - offset_in_package
             - 1)) << 1);*/
@@ -98,7 +98,7 @@ class BitPackedVector {
                     << (num_bits_per_package_ - offset_in_package);
       new_package >>= (num_bits_per_package_ - offset_in_package);
       tmp = value;
-      /*printf("set index %lld  value %lld  new_package %llu  tmp %llu\n",
+      /*printf("set index {}  value {}  new_package %llu  tmp %llu\n",
           index, value, new_package, tmp);*/
       new_package |= tmp << offset_in_package;
     } else {
@@ -111,10 +111,10 @@ class BitPackedVector {
     new_package >>= (num_bits_per_package_ - offset_in_package - 1);
     new_package >>= 1;
     StorageType tmp = value;*/
-    /*printf("set index %lld  value %lld  new_package %llu  tmp %llu\n",
+    /*printf("set index {}  value {}  new_package %llu  tmp %llu\n",
           index, value, new_package, tmp);*/
     // new_package |= tmp << offset_in_package;
-    /*printf("set index %lld  value %lld  new_package2 %llu  tmp %llu\n",
+    /*printf("set index {}  value {}  new_package2 %llu  tmp %llu\n",
           index, value, new_package, tmp);*/
     int_fast64_t remaining_bits =
         num_bits_per_package_ - (offset_in_package + item_size_);
@@ -122,11 +122,11 @@ class BitPackedVector {
       tmp = data_[first_package];
       tmp >>= (num_bits_per_package_ - remaining_bits);
       tmp <<= (num_bits_per_package_ - remaining_bits);
-      /*printf("set index %lld  value %lld  remaining_bits %lld  tmp %llu\n",
+      /*printf("set index {}  value {}  remaining_bits {}  tmp %llu\n",
           index, value, remaining_bits, tmp);*/
       data_[first_package] = new_package | tmp;
     } else if (remaining_bits == 0) {
-      /*printf("set index %lld  value %lld  remaining_bits %lld  tmp %llu\n",
+      /*printf("set index {}  value {}  remaining_bits {}  tmp %llu\n",
           index, value, remaining_bits, tmp);*/
       data_[first_package] = new_package;
     } else {

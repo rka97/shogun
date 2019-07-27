@@ -256,7 +256,7 @@ class HyperplaneHashBase {
       }
 
       if (cur_probe_counter_ < l_) {
-        // printf("initial probes %lld\n", cur_probe_counter_);
+        // printf("initial probes {}\n", cur_probe_counter_);
         *cur_probe = main_table_probe_[cur_probe_counter_];
         *cur_table = cur_probe_counter_;
         return true;
@@ -280,7 +280,7 @@ class HyperplaneHashBase {
         int_fast32_t next_index =
             sorted_hyperplane_indices_[*cur_table]
                                       [cur_candidate.last_index_ + 1];
-        // printf("cur_mask: %d  cur_index: %d\n", cur_candidate.hash_mask_,
+        // printf("cur_mask: {}  cur_index: {}\n", cur_candidate.hash_mask_,
         //       cur_index);
         HashType next_mask = cur_candidate.hash_mask_ ^
                              (HashType(1) << (k_ - cur_index - 1))  // xor out
@@ -291,8 +291,8 @@ class HyperplaneHashBase {
                          hash_vector[*cur_table * k_ + cur_index]);
         next_score += (hash_vector[*cur_table * k_ + next_index] *
                        hash_vector[*cur_table * k_ + next_index]);
-        // printf("next_mask 1: %d\n", next_mask);
-        // printf("cur_candidate.last_index_: %d\n", cur_candidate.last_index_);
+        // printf("next_mask 1: {}\n", next_mask);
+        // printf("cur_candidate.last_index_: {}\n", cur_candidate.last_index_);
         heap_.insert(next_score, ProbeCandidate(*cur_table, next_mask,
                                                 cur_candidate.last_index_ + 1));
 
@@ -301,7 +301,7 @@ class HyperplaneHashBase {
             cur_candidate.hash_mask_ ^ (HashType(1) << (k_ - next_index - 1));
         next_score = cur_score + (hash_vector[*cur_table * k_ + next_index] *
                                   hash_vector[*cur_table * k_ + next_index]);
-        // printf("next_mask 2: %d\n", next_mask);
+        // printf("next_mask 2: {}\n", next_mask);
         heap_.insert(next_score, ProbeCandidate(*cur_table, next_mask,
                                                 cur_candidate.last_index_ + 1));
       }

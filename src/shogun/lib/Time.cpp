@@ -30,7 +30,7 @@ clock_t CTime::cur_runtime(bool verbose)
 {
 	clock_t cur_time=clock();
 	if (verbose)
-		SG_PRINT("current %ld\n", (int64_t) cur_time)
+		SG_PRINT("current {}\n", (int64_t) cur_time)
 	return cur_time;
 }
 
@@ -38,7 +38,7 @@ clock_t CTime::cur_runtime_diff(bool verbose)
 {
 	clock_t diff=clock()-start_runtime;
 	if (verbose)
-		SG_PRINT("current diff %ld\n", (int64_t) diff)
+		SG_PRINT("current diff {}\n", (int64_t) diff)
 	return diff;
 }
 
@@ -57,7 +57,7 @@ float64_t CTime::start(bool verbose)
 	start_time=get_curtime();
 
 	if (verbose)
-		SG_PRINT("start %ld\n", (int64_t) start_time)
+		SG_PRINT("start {}\n", (int64_t) start_time)
 	return start_time;
 }
 
@@ -84,7 +84,7 @@ float64_t CTime::stop(bool verbose)
 	stop_time=get_curtime();
 
 	if (verbose)
-		SG_PRINT("stop %ld\n", (int64_t) stop_time)
+		SG_PRINT("stop {}\n", (int64_t) stop_time)
 	return stop_time;
 }
 

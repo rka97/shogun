@@ -382,15 +382,15 @@ public:
 			printf("Leaf node; data = [");
 			for(int i = 0; i < size; i++) {
 				ScalarType* point = data + index[i] * QT_NO_DIMS;
-				for(int d = 0; d < QT_NO_DIMS; d++) printf("%f, ", point[d]);
-				printf(" (index = %d)", index[i]);
+				for(int d = 0; d < QT_NO_DIMS; d++) printf("{}, ", point[d]);
+				printf(" (index = {})", index[i]);
 				if(i < size - 1) printf("\n");
 				else printf("]\n");
 			}
 		}
 		else {
 			printf("Intersection node with center-of-mass = [");
-			for(int d = 0; d < QT_NO_DIMS; d++) printf("%f, ", center_of_mass[d]);
+			for(int d = 0; d < QT_NO_DIMS; d++) printf("{}, ", center_of_mass[d]);
 			printf("]; children are:\n");
 			northEast->print();
 			northWest->print();

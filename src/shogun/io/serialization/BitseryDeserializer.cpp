@@ -142,8 +142,8 @@ CSGObject* object_reader(Reader& reader, BitseryReaderVisitor<Reader>* visitor, 
 	}
 	catch(ShogunException& e)
 	{
-		SG_WARNING("Error while deserializeing %s: ShogunException: "
-			"%s\n", obj_name.c_str(), e.what());
+		SG_WARNING("Error while deserializeing {}: ShogunException: "
+			"{}\n", obj_name.c_str(), e.what());
 		SG_UNREF(obj);
 		return nullptr;
 	}

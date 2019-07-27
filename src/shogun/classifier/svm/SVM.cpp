@@ -89,7 +89,7 @@ bool CSVM::load(FILE* modelfl)
 	if (fscanf(modelfl,"%4s\n", char_buffer)==EOF)
 	{
 		result=false;
-		SG_ERROR("error in svm file, line nr:%d\n", line_number)
+		SG_ERROR("error in svm file, line nr:{}\n", line_number)
 	}
 	else
 	{
@@ -97,28 +97,28 @@ bool CSVM::load(FILE* modelfl)
 		if (strcmp("%SVM", char_buffer)!=0)
 		{
 			result=false;
-			SG_ERROR("error in svm file, line nr:%d\n", line_number)
+			SG_ERROR("error in svm file, line nr:{}\n", line_number)
 		}
 		line_number++;
 	}
 
 	int_buffer=0;
-	if (fscanf(modelfl," numsv=%d; \n", &int_buffer) != 1)
+	if (fscanf(modelfl," numsv={}; \n", &int_buffer) != 1)
 	{
 		result=false;
-		SG_ERROR("error in svm file, line nr:%d\n", line_number)
+		SG_ERROR("error in svm file, line nr:{}\n", line_number)
 	}
 
 	if (!feof(modelfl))
 		line_number++;
 
-	SG_INFO("loading %ld support vectors\n",int_buffer)
+	SG_INFO("loading {} support vectors\n",int_buffer)
 	create_new_model(int_buffer);
 
-	if (fscanf(modelfl," kernel='%s'; \n", char_buffer) != 1)
+	if (fscanf(modelfl," kernel='{}'; \n", char_buffer) != 1)
 	{
 		result=false;
-		SG_ERROR("error in svm file, line nr:%d\n", line_number)
+		SG_ERROR("error in svm file, line nr:{}\n", line_number)
 	}
 
 	if (!feof(modelfl))
@@ -126,10 +126,10 @@ bool CSVM::load(FILE* modelfl)
 
 	double_buffer=0;
 
-	if (fscanf(modelfl," b=%lf; \n", &double_buffer) != 1)
+	if (fscanf(modelfl," b={}; \n", &double_buffer) != 1)
 	{
 		result=false;
-		SG_ERROR("error in svm file, line nr:%d\n", line_number)
+		SG_ERROR("error in svm file, line nr:{}\n", line_number)
 	}
 
 	if (!feof(modelfl))
@@ -140,7 +140,7 @@ bool CSVM::load(FILE* modelfl)
 	if (fscanf(modelfl,"%8s\n", char_buffer) == EOF)
 	{
 		result=false;
-		SG_ERROR("error in svm file, line nr:%d\n", line_number)
+		SG_ERROR("error in svm file, line nr:{}\n", line_number)
 	}
 	else
 	{
@@ -148,7 +148,7 @@ bool CSVM::load(FILE* modelfl)
 		if (strcmp("alphas=[", char_buffer)!=0)
 		{
 			result=false;
-			SG_ERROR("error in svm file, line nr:%d\n", line_number)
+			SG_ERROR("error in svm file, line nr:{}\n", line_number)
 		}
 		line_number++;
 	}
@@ -158,10 +158,10 @@ bool CSVM::load(FILE* modelfl)
 		double_buffer=0;
 		int_buffer=0;
 
-		if (fscanf(modelfl," \[%lf,%d]; \n", &double_buffer, &int_buffer) != 2)
+		if (fscanf(modelfl," \[{},{}]; \n", &double_buffer, &int_buffer) != 2)
 		{
 			result=false;
-			SG_ERROR("error in svm file, line nr:%d\n", line_number)
+			SG_ERROR("error in svm file, line nr:{}\n", line_number)
 		}
 
 		if (!feof(modelfl))
@@ -174,7 +174,7 @@ bool CSVM::load(FILE* modelfl)
 	if (fscanf(modelfl,"%2s", char_buffer) == EOF)
 	{
 		result=false;
-		SG_ERROR("error in svm file, line nr:%d\n", line_number)
+		SG_ERROR("error in svm file, line nr:{}\n", line_number)
 	}
 	else
 	{
@@ -182,7 +182,7 @@ bool CSVM::load(FILE* modelfl)
 		if (strcmp("];", char_buffer)!=0)
 		{
 			result=false;
-			SG_ERROR("error in svm file, line nr:%d\n", line_number)
+			SG_ERROR("error in svm file, line nr:{}\n", line_number)
 		}
 		line_number++;
 	}
@@ -201,14 +201,14 @@ bool CSVM::save(FILE* modelfl)
 
 	SG_INFO("Writing model file...")
 	fprintf(modelfl,"%%SVM\n");
-	fprintf(modelfl,"numsv=%d;\n", get_num_support_vectors());
-	fprintf(modelfl,"kernel='%s';\n", kernel->get_name());
+	fprintf(modelfl,"numsv={};\n", get_num_support_vectors());
+	fprintf(modelfl,"kernel='{}';\n", kernel->get_name());
 	fprintf(modelfl,"b=%+10.16e;\n",get_bias());
 
 	fprintf(modelfl, "alphas=\[\n");
 
 	for(int32_t i=0; i<get_num_support_vectors(); i++)
-		fprintf(modelfl,"\t[%+10.16e,%d];\n",
+		fprintf(modelfl,"\t[%+10.16e,{}];\n",
 				CSVM::get_alpha(i), get_support_vector(i));
 
 	fprintf(modelfl, "];\n");
@@ -311,8 +311,8 @@ void CSVM::set_linear_term(const SGVector<float64_t> linear_term)
 
 	if (num_labels != linear_term.vlen)
 	{
-		SG_ERROR("Number of labels (%d) does not match number"
-				"of entries (%d) in linear term \n", num_labels, linear_term.vlen);
+		SG_ERROR("Number of labels ({}) does not match number"
+				"of entries ({}) in linear term \n", num_labels, linear_term.vlen);
 	}
 
 	m_linear_term=linear_term;

@@ -507,7 +507,7 @@ private:
 		std::vector<ScalarType> distances;
 		for(int n = 0; n < N; n++) {
 
-			//if(n % 10000 == 0) printf(" - point %d of %d\n", n, N);
+			//if(n % 10000 == 0) printf(" - point {} of {}\n", n, N);
 
 			// Find nearest neighbors
 			indices.clear();

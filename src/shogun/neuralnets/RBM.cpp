@@ -166,10 +166,10 @@ void CRBM::train(CDenseFeatures<float64_t>* features)
 			if (counter%monitoring_interval == 0)
 			{
 				if (monitoring_method==RBMMM_RECONSTRUCTION_ERROR)
-					SG_INFO("Epoch %i: reconstruction Error = %f\n",i,
+					SG_INFO("Epoch %i: reconstruction Error = {}\n",i,
 						reconstruction_error(inputs_batch, buffer));
 				if (monitoring_method==RBMMM_PSEUDO_LIKELIHOOD)
-					SG_INFO("Epoch %i: Pseudo-log-likelihood = %f\n",i,
+					SG_INFO("Epoch %i: Pseudo-log-likelihood = {}\n",i,
 						pseudo_likelihood(inputs_batch,buffer));
 			}
 			counter ++;

@@ -134,7 +134,7 @@ bool CRealFileFeatures::load_base_data()
 	ASSERT(fread(&num_vec, (uint32_t) intlen, 1, working_file)==1)
 	ASSERT(fread(&num_feat, (uint32_t) intlen, 1, working_file)==1)
 	ASSERT(fread(&preprocd, (uint32_t) intlen, 1, working_file)==1)
-	SG_INFO("detected: intsize=%d, doublesize=%d, num_vec=%d, num_feat=%d, preprocd=%d\n", intlen, doublelen, num_vec, num_feat, preprocd)
+	SG_INFO("detected: intsize={}, doublesize={}, num_vec={}, num_feat={}, preprocd={}\n", intlen, doublelen, num_vec, num_feat, preprocd)
 	filepos=ftell(working_file);
 	set_num_vectors(num_vec);
 	set_num_features(num_feat);

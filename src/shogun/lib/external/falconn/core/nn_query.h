@@ -53,11 +53,11 @@ class NearestNeighborQuery {
       DistanceType best_distance = dst_(q_comp, iter.get_point());
       ++iter;
 
-      // printf("%d %f\n", candidates_[0], best_distance);
+      // printf("{} {}\n", candidates_[0], best_distance);
 
       while (iter.is_valid()) {
         DistanceType cur_distance = dst_(q_comp, iter.get_point());
-        // printf("%d %f\n", iter.get_key(), cur_distance);
+        // printf("{} {}\n", iter.get_key(), cur_distance);
         if (cur_distance < best_distance) {
           best_distance = cur_distance;
           best_key = iter.get_key();

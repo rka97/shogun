@@ -309,7 +309,7 @@ void CDeepBeliefNetwork::train(CDenseFeatures<float64_t>* features)
 
 				error /= m_batch_size;
 
-				SG_INFO("Epoch %i: reconstruction Error = %f\n",i, error);
+				SG_INFO("Epoch %i: reconstruction Error = {}\n",i, error);
 			}
 			counter++;
 		}

@@ -13,6 +13,8 @@
 
 using namespace shogun;
 
+#include <iostream>
+
 const int max_line_length = 1024*1024;
 const int max_num_lines = 100;
 
@@ -21,8 +23,13 @@ TEST(LineReaderTest, constructor)
 	CLineReader* reader;
 	CDelimiterTokenizer* tokenizer;
 
+	SG_INFO(__FILE__);
 	FILE* fin=fopen(__FILE__, "r");
-
+	std::cout << fin << '\n';
+	if(fin == nullptr)
+	{
+		std::cout << "A7A\n";
+	}
 	tokenizer=new CDelimiterTokenizer();
 	tokenizer->delimiters['\n']=1;
 	SG_REF(tokenizer);

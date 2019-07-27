@@ -121,8 +121,8 @@ void COnlineLibLinear::stop_train()
 	v = linalg::dot(m_w, m_w);
 	v += bias*bias;
 
-	SG_INFO("Objective value = %lf\n", v/2)
-	SG_INFO("nSV = %d\n", nSV)
+	SG_INFO("Objective value = {}\n", v/2)
+	SG_INFO("nSV = {}\n", nSV)
 	SG_INFO("gap = %g\n", gap)
 }
 

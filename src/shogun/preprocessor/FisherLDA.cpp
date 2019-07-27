@@ -105,7 +105,7 @@ void CFisherLDA::fit(CFeatures* features, CLabels* labels)
 	REQUIRE(
 	    labels->get_label_type() == LT_MULTICLASS,
 	    "The labels should be of "
-	    "the type MulticlassLabels! you provided %s\n",
+	    "the type MulticlassLabels! you provided {}\n",
 	    labels->get_name());
 
 	auto dense_features = features->as<CDenseFeatures<float64_t>>();
@@ -117,8 +117,8 @@ void CFisherLDA::fit(CFeatures* features, CLabels* labels)
 
 	REQUIRE(
 	    labels->get_num_labels() == num_vectors,
-	    "The number of samples provided (%d)"
-	    " must be equal to the number of labels provided(%d)\n",
+	    "The number of samples provided ({})"
+	    " must be equal to the number of labels provided({})\n",
 	    num_vectors, labels->get_num_labels());
 
 	int32_t num_class = multiclass_labels->get_num_classes();

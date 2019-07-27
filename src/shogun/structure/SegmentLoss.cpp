@@ -48,7 +48,7 @@ void CSegmentLoss::compute_loss(int32_t* all_pos, int32_t len)
 {
 #ifdef DEBUG
 	SG_PRINT("compute loss: len: %i, m_num_segment_types: %i\n", len, m_num_segment_types)
-	SG_PRINT("m_segment_mask->element(0):%f \n", m_segment_mask->element(0))
+	SG_PRINT("m_segment_mask->element(0):{} \n", m_segment_mask->element(0))
 	SG_PRINT("m_segment_ids->element(0):%i \n", m_segment_ids->element(0))
 #endif
 	ASSERT(m_segment_ids->get_dim1()==len)

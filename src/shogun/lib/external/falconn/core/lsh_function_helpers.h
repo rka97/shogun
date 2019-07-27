@@ -115,7 +115,7 @@ class HashObjectQuery {
       if (!multiprobe_.get_next_probe(&cur_probe, &cur_table)) {
         break;
       }
-      // printf("%u %d\n", cur_probe, cur_table);
+      // printf("%u {}\n", cur_probe, cur_table);
       (*probes)[cur_table].push_back(cur_probe);
     }
   }

@@ -276,9 +276,9 @@ bool CNeuralNetwork::train_gradient_descent(SGMatrix<float64_t> inputs,
 		SGMatrix<float64_t> targets)
 {
 	REQUIRE(m_gd_learning_rate>0,
-		"Gradient descent learning rate (%f) must be > 0\n", m_gd_learning_rate);
+		"Gradient descent learning rate ({}) must be > 0\n", m_gd_learning_rate);
 	REQUIRE(m_gd_momentum>=0,
-		"Gradient descent momentum (%f) must be >= 0\n", m_gd_momentum);
+		"Gradient descent momentum ({}) must be >= 0\n", m_gd_momentum);
 
 	int32_t training_set_size = inputs.num_cols;
 	if (m_gd_mini_batch_size==0) m_gd_mini_batch_size = training_set_size;
@@ -327,7 +327,7 @@ bool CNeuralNetwork::train_gradient_descent(SGMatrix<float64_t> inputs,
 				SGVector<float64_t> layer_gradients = get_section(gradients, k);
 				if (layer_gradients.vlen > 0)
 				{
-					SG_INFO("Layer %i (%s), Max Gradient: %g, Mean Gradient: %g.\n", k,get_layer(k)->get_name(),
+					SG_INFO("Layer %i ({}), Max Gradient: %g, Mean Gradient: %g.\n", k,get_layer(k)->get_name(),
 						CMath::max(layer_gradients.vector, layer_gradients.vlen),
 						SGVector<float64_t>::sum(layer_gradients.vector, layer_gradients.vlen)/layer_gradients.vlen);
 				}
@@ -357,7 +357,7 @@ bool CNeuralNetwork::train_gradient_descent(SGMatrix<float64_t> inputs,
 					break;
 				}
 
-				SG_INFO("Epoch %i: Error = %f\n",i, error);
+				SG_INFO("Epoch %i: Error = {}\n",i, error);
 			}
 			error_last_time = error;
 		}
@@ -431,7 +431,7 @@ int CNeuralNetwork::lbfgs_progress(void* instance,
 		const float64_t step,
 		int n, int k, int ls)
 {
-	SG_INFO("Epoch %i: Error = %f\n",k, fx);
+	SG_INFO("Epoch %i: Error = {}\n",k, fx);
 
 	CNeuralNetwork* network = static_cast<CNeuralNetwork*>(instance);
 	SGVector<float64_t> grad_vector(const_cast<float64_t*>(grad), network->get_num_parameters(), false);
@@ -440,7 +440,7 @@ int CNeuralNetwork::lbfgs_progress(void* instance,
 		SGVector<float64_t> layer_gradients = network->get_section(grad_vector, i);
 		if (layer_gradients.vlen > 0)
 		{
-			SG_INFO("Layer %i (%s), Max Gradient: %g, Mean Gradient: %g.\n", i, network->get_layer(i)->get_name(),
+			SG_INFO("Layer %i ({}), Max Gradient: %g, Mean Gradient: %g.\n", i, network->get_layer(i)->get_name(),
 				CMath::max(layer_gradients.vector, layer_gradients.vlen),
 				SGVector<float64_t>::sum(layer_gradients.vector, layer_gradients.vlen)/layer_gradients.vlen);
 		}
@@ -710,12 +710,12 @@ void CNeuralNetwork::set_labels(CLabels* lab)
 {
 	if (lab->get_label_type() == LT_BINARY)
 	{
-		REQUIRE(get_num_outputs() <= 2, "Cannot use %s in a neural network "
+		REQUIRE(get_num_outputs() <= 2, "Cannot use {} in a neural network "
 			"with more that 2 output neurons\n", lab->get_name());
 	}
 	else if (lab->get_label_type() == LT_REGRESSION)
 	{
-		REQUIRE(get_num_outputs() == 1, "Cannot use %s in a neural network "
+		REQUIRE(get_num_outputs() == 1, "Cannot use {} in a neural network "
 			"with more that 1 output neuron\n", lab->get_name());
 	}
 

@@ -454,7 +454,7 @@ class CrossPolytopeHashBase {
       } else {
         sorting_block_size = 8;
       }
-      // printf("sorting block size: %d\n", sorting_block_size_);
+      // printf("sorting block size: {}\n", sorting_block_size_);
 
       // For each CP, we now sort the potential hash values (2 * dim) by their
       // distance to the largest absolute value in the respective CP
@@ -519,8 +519,8 @@ class CrossPolytopeHashBase {
         int_fast32_t cur_sorted_coord_index =
             cur_candidate.cur_sorted_coord_index_;
 
-        /*printf("Current probe: score = %f  hash = %d  table = %d"
-            " cp = %d  sorted_index = %d\n", cur_score,
+        /*printf("Current probe: score = {}  hash = {}  table = {}"
+            " cp = {}  sorted_index = {}\n", cur_score,
             cur_candidate.prev_cps_hash_, cur_table, cur_cp,
             cur_sorted_coord_index);*/
 

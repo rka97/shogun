@@ -216,10 +216,10 @@ float64_t CLocalAlignmentStringKernel::LAkernelcompute(
 	int32_t cl;/* length of a column for the dynamic programming */
 
 	/*
-	printf("now computing pairHMM between %d and %d:\n",nX,nY);
-	for (i=0;i<nX;printf("%d ",aaX[i++]));
+	printf("now computing pairHMM between {} and {}:\n",nX,nY);
+	for (i=0;i<nX;printf("{} ",aaX[i++]));
 	printf("\n and \n");
-	for (i=0;i<nY;printf("%d ",aaY[i++]));
+	for (i=0;i<nY;printf("{} ",aaY[i++]));
 	printf("\n");
 	*/
 
@@ -306,7 +306,7 @@ float64_t CLocalAlignmentStringKernel::LAkernelcompute(
 			logM[curpos]=LOGP(aux, aux2)+scaled_blosum[BINDEX(aaX[i-1], aaY[j-1])];
 
 			/*
-			printf("i=%d , j=%d\nM=%.5f\nX=%.5f\nY=%.5f\nX2=%.5f\nY2=%.5f\n",i,j,logM[curpos],logX[curpos],logY[curpos],logX2[curpos],logY2[curpos]);
+			printf("i={} , j={}\nM=%.5f\nX=%.5f\nY=%.5f\nX2=%.5f\nY2=%.5f\n",i,j,logM[curpos],logX[curpos],logY[curpos],logX2[curpos],logY2[curpos]);
 			*/
 
 		}  /* end of j=1:nY loop */

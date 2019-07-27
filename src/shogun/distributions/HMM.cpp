@@ -2925,7 +2925,7 @@ bool CHMM::get_numbuffer(FILE* file, char* buffer, int32_t length)
 				case '6': case '7': case'8': case '9': case '0': break ;
 				case '.': case 'e': case '-': break ;
 				default:
-											  SG_ERROR("found crap: %i %c (pos:%li)\n",i,value,ftell(file))
+											  SG_ERROR("found crap: %i %c (pos:{})\n",i,value,ftell(file))
 			};
 			buffer[i++]=value;
 		}
@@ -3984,9 +3984,9 @@ bool CHMM::save_model(FILE* file)
 
 	if (file)
 	{
-		fprintf(file,"%s","% HMM - specification\n% N  - number of states\n% M  - number of observation_tokens\n% a is state_transition_matrix\n% size(a)= [N,N]\n%\n% b is observation_per_state_matrix\n% size(b)= [N,M]\n%\n% p is initial distribution\n% size(p)= [1, N]\n\n% q is distribution of end states\n% size(q)= [1, N]\n");
-		fprintf(file,"N=%d;\n",N);
-		fprintf(file,"M=%d;\n",M);
+		fprintf(file,"{}","% HMM - specification\n% N  - number of states\n% M  - number of observation_tokens\n% a is state_transition_matrix\n% size(a)= [N,N]\n%\n% b is observation_per_state_matrix\n% size(b)= [N,M]\n%\n% p is initial distribution\n% size(p)= [1, N]\n\n% q is distribution of end states\n% size(q)= [1, N]\n");
+		fprintf(file,"N={};\n",N);
+		fprintf(file,"M={};\n",M);
 
 		fprintf(file,"p=[");
 		for (i=0; i<N; i++)
@@ -3995,13 +3995,13 @@ bool CHMM::save_model(FILE* file)
 				if (CMath::is_finite(get_p(i)))
 					fprintf(file, "%e,", (double)get_p(i));
 				else
-					fprintf(file, "%f,", NAN_REPLACEMENT);
+					fprintf(file, "{},", NAN_REPLACEMENT);
 			}
 			else {
 				if (CMath::is_finite(get_p(i)))
 					fprintf(file, "%e", (double)get_p(i));
 				else
-					fprintf(file, "%f", NAN_REPLACEMENT);
+					fprintf(file, "{}", NAN_REPLACEMENT);
 			}
 		}
 
@@ -4012,13 +4012,13 @@ bool CHMM::save_model(FILE* file)
 				if (CMath::is_finite(get_q(i)))
 					fprintf(file, "%e,", (double)get_q(i));
 				else
-					fprintf(file, "%f,", NAN_REPLACEMENT);
+					fprintf(file, "{},", NAN_REPLACEMENT);
 			}
 			else {
 				if (CMath::is_finite(get_q(i)))
 					fprintf(file, "%e", (double)get_q(i));
 				else
-					fprintf(file, "%f", NAN_REPLACEMENT);
+					fprintf(file, "{}", NAN_REPLACEMENT);
 			}
 		}
 		fprintf(file,"];\n\na=[");
@@ -4033,13 +4033,13 @@ bool CHMM::save_model(FILE* file)
 					if (CMath::is_finite(get_a(i,j)))
 						fprintf(file, "%e,", (double)get_a(i,j));
 					else
-						fprintf(file, "%f,", NAN_REPLACEMENT);
+						fprintf(file, "{},", NAN_REPLACEMENT);
 				}
 				else {
 					if (CMath::is_finite(get_a(i,j)))
 						fprintf(file, "%e];\n", (double)get_a(i,j));
 					else
-						fprintf(file, "%f];\n", NAN_REPLACEMENT);
+						fprintf(file, "{}];\n", NAN_REPLACEMENT);
 				}
 			}
 		}
@@ -4056,13 +4056,13 @@ bool CHMM::save_model(FILE* file)
 					if (CMath::is_finite(get_b(i,j)))
 						fprintf(file, "%e,",  (double)get_b(i,j));
 					else
-						fprintf(file, "%f,", NAN_REPLACEMENT);
+						fprintf(file, "{},", NAN_REPLACEMENT);
 				}
 				else {
 					if (CMath::is_finite(get_b(i,j)))
 						fprintf(file, "%e];\n", (double)get_b(i,j));
 					else
-						fprintf(file, "%f];\n", NAN_REPLACEMENT);
+						fprintf(file, "{}];\n", NAN_REPLACEMENT);
 				}
 			}
 		}
@@ -4098,8 +4098,8 @@ bool CHMM::save_path(FILE* file)
 	      float64_t prob = best_path(dim);
 	      fprintf(file,"%i. path probability:%e\nstate sequence:\n", dim, prob);
 	      for (int32_t i=0; i<p_observations->get_vector_length(dim)-1; i++)
-		fprintf(file,"%d ", PATH(dim)[i]);
-	      fprintf(file,"%d", PATH(dim)[p_observations->get_vector_length(dim)-1]);
+		fprintf(file,"{} ", PATH(dim)[i]);
+	      fprintf(file,"{}", PATH(dim)[p_observations->get_vector_length(dim)-1]);
 	      fprintf(file,"\n\n") ;
 	    }
 	  SG_DONE()
@@ -4867,14 +4867,14 @@ bool CHMM::append_model(CHMM* app_model)
 	const int32_t num_states=app_model->get_N();
 	int32_t i,j;
 
-	SG_DEBUG("cur N:%d M:%d\n", N, M)
-	SG_DEBUG("old N:%d M:%d\n", app_model->get_N(), app_model->get_M())
+	SG_DEBUG("cur N:{} M:{}\n", N, M)
+	SG_DEBUG("old N:{} M:{}\n", app_model->get_N(), app_model->get_M())
 	if (app_model->get_M() == get_M())
 	{
 		float64_t* n_p=SG_MALLOC(float64_t, N+num_states);
 		float64_t* n_q=SG_MALLOC(float64_t, N+num_states);
 		float64_t* n_a=SG_MALLOC(float64_t, (N+num_states)*(N+num_states));
-		//SG_PRINT("size n_b: %d\n", (N+num_states)*M)
+		//SG_PRINT("size n_b: {}\n", (N+num_states)*M)
 		float64_t* n_b=SG_MALLOC(float64_t, (N+num_states)*M);
 
 		//clear n_x
@@ -4964,7 +4964,7 @@ bool CHMM::append_model(CHMM* app_model, float64_t* cur_out, float64_t* app_out)
 		float64_t* n_p=SG_MALLOC(float64_t, N+num_states);
 		float64_t* n_q=SG_MALLOC(float64_t, N+num_states);
 		float64_t* n_a=SG_MALLOC(float64_t, (N+num_states)*(N+num_states));
-		//SG_PRINT("size n_b: %d\n", (N+num_states)*M)
+		//SG_PRINT("size n_b: {}\n", (N+num_states)*M)
 		float64_t* n_b=SG_MALLOC(float64_t, (N+num_states)*M);
 
 		//clear n_x
@@ -5071,7 +5071,7 @@ void CHMM::add_states(int32_t num_states, float64_t default_value)
 	float64_t* n_p=SG_MALLOC(float64_t, N+num_states);
 	float64_t* n_q=SG_MALLOC(float64_t, N+num_states);
 	float64_t* n_a=SG_MALLOC(float64_t, (N+num_states)*(N+num_states));
-	//SG_PRINT("size n_b: %d\n", (N+num_states)*M)
+	//SG_PRINT("size n_b: {}\n", (N+num_states)*M)
 	float64_t* n_b=SG_MALLOC(float64_t, (N+num_states)*M);
 
 	// warning pay attention to the ordering of
@@ -5275,7 +5275,7 @@ void CHMM::set_observation_nocache(CStringFeatures<uint16_t>* obs)
 
 	if (obs)
 		if (obs->get_num_symbols() > M)
-			SG_ERROR("number of symbols in observation (%ld) larger than M (%d)\n", (long) obs->get_num_symbols(), M)
+			SG_ERROR("number of symbols in observation ({}) larger than M ({})\n", (long) obs->get_num_symbols(), M)
 
 	if (!reused_caches)
 	{
@@ -5321,15 +5321,15 @@ void CHMM::set_observations(CStringFeatures<uint16_t>* obs, CHMM* lambda)
 	SG_REF(obs);
 	features=obs;
 
-	SG_DEBUG("num symbols alphabet: %ld\n", obs->get_alphabet()->get_num_symbols())
-	SG_DEBUG("num symbols: %ld\n", obs->get_num_symbols())
-	SG_DEBUG("M: %d\n", M)
+	SG_DEBUG("num symbols alphabet: {}\n", obs->get_alphabet()->get_num_symbols())
+	SG_DEBUG("num symbols: {}\n", obs->get_num_symbols())
+	SG_DEBUG("M: {}\n", M)
 
 	if (obs)
 	{
 		if (obs->get_num_symbols() > M)
 		{
-			SG_ERROR("number of symbols in observation (%ld) larger than M (%d)\n", (long) obs->get_num_symbols(), M)
+			SG_ERROR("number of symbols in observation ({}) larger than M ({})\n", (long) obs->get_num_symbols(), M)
 		}
 	}
 
@@ -5389,7 +5389,7 @@ void CHMM::set_observations(CStringFeatures<uint16_t>* obs, CHMM* lambda)
 		{
 			this->reused_caches=false;
 #ifdef USE_HMMPARALLEL_STRUCTURES
-			SG_INFO("allocating mem for path-table of size %.2f Megabytes (%d*%d) each:\n", ((float32_t)max_T)*N*sizeof(T_STATES)/(1024*1024), max_T, N)
+			SG_INFO("allocating mem for path-table of size %.2f Megabytes ({}*{}) each:\n", ((float32_t)max_T)*N*sizeof(T_STATES)/(1024*1024), max_T, N)
 			for (int32_t i=0; i<env()->get_num_threads(); i++)
 			{
 				if ((states_per_observation_psi[i]=SG_MALLOC(T_STATES,max_T*N))!=NULL)
@@ -5399,7 +5399,7 @@ void CHMM::set_observations(CStringFeatures<uint16_t>* obs, CHMM* lambda)
 				path[i]=SG_MALLOC(T_STATES, max_T);
 			}
 #else // no USE_HMMPARALLEL_STRUCTURES
-			SG_INFO("allocating mem of size %.2f Megabytes (%d*%d) for path-table ....", ((float32_t)max_T)*N*sizeof(T_STATES)/(1024*1024), max_T, N)
+			SG_INFO("allocating mem of size %.2f Megabytes ({}*{}) for path-table ....", ((float32_t)max_T)*N*sizeof(T_STATES)/(1024*1024), max_T, N)
 			if ((states_per_observation_psi=SG_MALLOC(T_STATES,max_T*N)) != NULL)
 				SG_DONE()
 			else
@@ -5408,7 +5408,7 @@ void CHMM::set_observations(CStringFeatures<uint16_t>* obs, CHMM* lambda)
 			path=SG_MALLOC(T_STATES, max_T);
 #endif // USE_HMMPARALLEL_STRUCTURES
 #ifdef USE_HMMCACHE
-			SG_INFO("allocating mem for caches each of size %.2f Megabytes (%d*%d) ....\n", ((float32_t)max_T)*N*sizeof(T_ALPHA_BETA_TABLE)/(1024*1024), max_T, N)
+			SG_INFO("allocating mem for caches each of size %.2f Megabytes ({}*{}) ....\n", ((float32_t)max_T)*N*sizeof(T_ALPHA_BETA_TABLE)/(1024*1024), max_T, N)
 
 #ifdef USE_HMMPARALLEL_STRUCTURES
 			for (int32_t i=0; i<env()->get_num_threads(); i++)
@@ -5466,10 +5466,10 @@ bool CHMM::permutation_entropy(int32_t window_width, int32_t sequence_number)
 		{
 			min_sequence=0;
 			max_sequence=p_observations->get_num_vectors();
-			SG_INFO("numseq: %d\n", max_sequence)
+			SG_INFO("numseq: {}\n", max_sequence)
 		}
 
-		SG_INFO("min_sequence: %d max_sequence: %d\n", min_sequence, max_sequence)
+		SG_INFO("min_sequence: {} max_sequence: {}\n", min_sequence, max_sequence)
 		for (sequence_number=min_sequence; sequence_number<max_sequence; sequence_number++)
 		{
 			int32_t sequence_length=0;
@@ -5500,7 +5500,7 @@ bool CHMM::permutation_entropy(int32_t window_width, int32_t sequence_number)
 					perm_entropy+=p*log(p);
 				}
 
-				SG_PRINT("%f\n", perm_entropy)
+				SG_PRINT("{}\n", perm_entropy)
 			}
 			p_observations->free_feature_vector(obs, sequence_number, free_vec);
 
@@ -5559,7 +5559,7 @@ bool CHMM::converged(float64_t x, float64_t y)
 	float64_t diff=y-x;
 	float64_t absdiff=fabs(diff);
 
-	SG_INFO("\n #%03d\tbest result so far: %G (eps: %f)", iteration_count, y, diff)
+	SG_INFO("\n #%03d\tbest result so far: %G (eps: {})", iteration_count, y, diff)
 
 	if (iteration_count--==0 || (absdiff<epsilon && conv_it<=0))
 	{

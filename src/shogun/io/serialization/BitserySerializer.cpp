@@ -59,7 +59,7 @@ public:
 	{
 		if (*v)
 		{
-			SG_DEBUG("writing SGObject: %s\n", (*v)->get_name());
+			SG_DEBUG("writing SGObject: {}\n", (*v)->get_name());
 			SG_REF(*v);
 			write_object(writer, this, wrap<CSGObject>(*v));
 		}

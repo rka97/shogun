@@ -56,7 +56,7 @@ bool CShareBoost::train_machine(CFeatures* data)
 	if (m_nonzero_feas <= 0)
 		SG_ERROR("Set a valid (> 0) number of non-zero features to seek before training\n")
 	if (m_nonzero_feas > fea->get_num_features())
-		SG_ERROR("Number of non-zero features (%d) cannot be larger than number of features (%d) in the data\n",
+		SG_ERROR("Number of non-zero features ({}) cannot be larger than number of features ({}) in the data\n",
 				m_nonzero_feas, fea->get_num_features())
 
 	m_fea = fea->get_feature_matrix();

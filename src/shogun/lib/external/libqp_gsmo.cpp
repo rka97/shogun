@@ -121,7 +121,7 @@ libqp_state_T libqp_gsmo_solver(const float64_t* (*get_col)(uint32_t),
 		atx += a[i]*x[i];
 	if (fabs(b-atx)>1e-9)
 	{
-		printf("%f \ne %f\n",b,atx);
+		printf("{} \ne {}\n",b,atx);
 		state.exitflag = -3;
 		goto cleanup;
 	}

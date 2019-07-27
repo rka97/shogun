@@ -64,7 +64,7 @@ CFile::CFile(const char* fname, char rw, const char* name) : CSGObject()
 		if (filename)
 		{
 			if (!(file=fopen((const char*) filename, (const char*) mode)))
-				SG_ERROR("Error opening file '%s'\n", filename)
+				SG_ERROR("Error opening file '{}'\n", filename)
 		}
 	}
 	else

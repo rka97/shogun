@@ -58,7 +58,7 @@ public:
 				char  errmsg[1024];
 				SG_WARNING("Could not open CPLEX environment.\n")
 				CPXgeterrorstring (env, status, errmsg);
-				SG_WARNING("%s", errmsg)
+				SG_WARNING("{}", errmsg)
 				SG_WARNING("retrying in 60 seconds\n")
 				sleep(60);
 			}
@@ -68,14 +68,14 @@ public:
 				status = CPXsetintparam (env, CPX_PARAM_LPMETHOD, CPX_ALG_DUAL);
 				if ( status )
 				{
-	            SG_ERROR("Failure to select dual lp optimization, error %d.\n", status)
+	            SG_ERROR("Failure to select dual lp optimization, error {}.\n", status)
 				}
 				else
 				{
 					status = CPXsetintparam (env, CPX_PARAM_DATACHECK, CPX_ON);
 					if ( status )
 					{
-						SG_ERROR("Failure to turn on data checking, error %d.\n", status)
+						SG_ERROR("Failure to turn on data checking, error {}.\n", status)
 					}
 					else
 					{
@@ -105,7 +105,7 @@ public:
 		//CMath::display_vector(beta, num_kernels, "beta");
 		double const_term = 1-CMath::qsq(beta, num_kernels, mkl_norm);
 
-		//SG_PRINT("const=%f\n", const_term)
+		//SG_PRINT("const={}\n", const_term)
 		ASSERT(CMath::fequal(const_term, 0.0))
 
 		for (int32_t i=0; i<num_kernels; i++)
@@ -157,7 +157,7 @@ public:
 			lp_init = false;
 
 			if (status)
-				SG_WARNING("CPXfreeprob failed, error code %d.\n", status)
+				SG_WARNING("CPXfreeprob failed, error code {}.\n", status)
 			else
 				result = true;
 		}
@@ -172,7 +172,7 @@ public:
 				char  errmsg[1024];
 				SG_WARNING("Could not close CPLEX environment.\n")
 				CPXgeterrorstring (env, status, errmsg);
-				SG_WARNING("%s", errmsg)
+				SG_WARNING("{}", errmsg)
 			}
 			else
 				result = true;
@@ -238,7 +238,7 @@ public:
 
 CMKL::CMKL(CSVM* s) : CSVM()
 {
-	SG_DEBUG("creating MKL object %p\n", fmt::ptr(this))
+	SG_DEBUG("creating MKL object {}\n", fmt::ptr(this))
 	register_params();
 	set_constraint_generator(s);
 	self->init();
@@ -249,7 +249,7 @@ CMKL::~CMKL()
 	// -- Delete beta_local for ElasticnetMKL
 	SG_FREE(beta_local);
 
-	SG_DEBUG("deleting MKL object %p\n", fmt::ptr(this))
+	SG_DEBUG("deleting MKL object {}\n", fmt::ptr(this))
 	if (svm)
 		svm->set_callback_function(NULL, NULL);
 	SG_UNREF(svm);
@@ -341,8 +341,8 @@ bool CMKL::train_machine(CFeatures* data)
 	{
 		if (m_labels->get_num_labels() != data->get_num_vectors())
 		{
-			SG_ERROR("%s::train_machine(): Number of training vectors (%d) does"
-					" not match number of labels (%d)\n", get_name(),
+			SG_ERROR("{}::train_machine(): Number of training vectors ({}) does"
+					" not match number of labels ({})\n", get_name(),
 					data->get_num_vectors(), m_labels->get_num_labels());
 		}
 		kernel->init(data, data);
@@ -356,20 +356,20 @@ bool CMKL::train_machine(CFeatures* data)
 	if (m_labels)
 		num_label = m_labels->get_num_labels();
 
-	SG_INFO("%d trainlabels (%ld)\n", num_label, fmt::ptr(m_labels))
+	SG_INFO("{} trainlabels ({})\n", num_label, fmt::ptr(m_labels))
 	if (mkl_epsilon<=0)
 		mkl_epsilon=1e-2 ;
 
 	SG_INFO("mkl_epsilon = %1.1e\n", mkl_epsilon)
 	SG_INFO("C_mkl = %1.1e\n", C_mkl)
 	SG_INFO("mkl_norm = %1.3e\n", mkl_norm)
-	SG_INFO("solver = %d\n", get_solver_type())
-	SG_INFO("ent_lambda = %f\n", ent_lambda)
-	SG_INFO("mkl_block_norm = %f\n", mkl_block_norm)
+	SG_INFO("solver = {}\n", get_solver_type())
+	SG_INFO("ent_lambda = {}\n", ent_lambda)
+	SG_INFO("mkl_block_norm = {}\n", mkl_block_norm)
 
 	int32_t num_weights = -1;
 	int32_t num_kernels = kernel->get_num_subkernels();
-	SG_INFO("num_kernels = %d\n", num_kernels)
+	SG_INFO("num_kernels = {}\n", num_kernels)
 	const float64_t* beta_const   = kernel->get_subkernel_weights(num_weights);
 	float64_t* beta = SGVector<float64_t>::clone_vector(beta_const, num_weights);
 	ASSERT(num_weights==num_kernels)
@@ -479,7 +479,7 @@ bool CMKL::train_machine(CFeatures* data)
 		{
 			SG_WARNING(
 			    "MKL Algorithm terminates PREMATURELY due to current training "
-			    "time exceeding get_max_train_time ()= %f . It may have not "
+			    "time exceeding get_max_train_time ()= {} . It may have not "
 			    "converged yet!\n",
 			    get_max_train_time())
 		}
@@ -541,7 +541,7 @@ bool CMKL::perform_mkl_step(
 {
 	if((training_time_clock.cur_time_diff()>get_max_train_time ())&&(get_max_train_time ()>0))
 	{
-		SG_WARNING("MKL Algorithm terminates PREMATURELY due to current training time exceeding get_max_train_time ()= %f . It may have not converged yet!\n",get_max_train_time ())
+		SG_WARNING("MKL Algorithm terminates PREMATURELY due to current training time exceeding get_max_train_time ()= {} . It may have not converged yet!\n",get_max_train_time ())
 		return true;
 	}
 
@@ -648,7 +648,7 @@ float64_t CMKL::compute_optimal_betas_elasticnet(
 	if( !( R >= 0 ) )
 	{
 		SG_PRINT("MKL-direct: p = %.3f\n", 1.0 )
-		SG_PRINT("MKL-direct: nofKernelsGood = %d\n", nofKernelsGood )
+		SG_PRINT("MKL-direct: nofKernelsGood = {}\n", nofKernelsGood )
 		SG_PRINT("MKL-direct: Z = %e\n", Z )
 		SG_PRINT("MKL-direct: eps = %e\n", epsRegul )
 		for( p=0; p<num_kernels; ++p )
@@ -756,7 +756,7 @@ float64_t CMKL::compute_elasticnet_dual_objective()
 			nm[k]= CMath::pow(sum, 0.5);
 			del = CMath::max(del, nm[k]);
 
-			// SG_PRINT("nm[%d]=%f\n",k,nm[k])
+			// SG_PRINT("nm[{}]={}\n",k,nm[k])
 			k++;
 
 
@@ -775,7 +775,7 @@ float64_t CMKL::compute_elasticnet_dual_objective()
 			float64_t gg_old = gg;
 			float64_t del_old = del;
 
-			// SG_PRINT("[%d] fval=%f gg=%f del=%f\n", k, ff, gg, del)
+			// SG_PRINT("[{}] fval={} gg={} del={}\n", k, ff, gg, del)
 
 			float64_t step=1.0;
 			do
@@ -885,7 +885,7 @@ float64_t CMKL::compute_optimal_betas_directly(
 	if( !( R >= 0 ) )
 	{
 		SG_PRINT("MKL-direct: p = %.3f\n", mkl_norm )
-		SG_PRINT("MKL-direct: nofKernelsGood = %d\n", nofKernelsGood )
+		SG_PRINT("MKL-direct: nofKernelsGood = {}\n", nofKernelsGood )
 		SG_PRINT("MKL-direct: Z = %e\n", Z )
 		SG_PRINT("MKL-direct: eps = %e\n", epsRegul )
 		for( p=0; p<num_kernels; ++p )
@@ -987,7 +987,7 @@ float64_t CMKL::compute_optimal_betas_newton(float64_t* beta,
 		if ( !( sumw[p] >= 0 ) )
 		{
 			if( !( sumw[p] >= -epsWsq ) )
-				SG_WARNING("sumw[%d] = %e;  treated as 0.  ", p, sumw[p] )
+				SG_WARNING("sumw[{}] = %e;  treated as 0.  ", p, sumw[p] )
 			// should better recompute sumw[] !!!
 		}
 		else
@@ -1042,7 +1042,7 @@ float64_t CMKL::compute_optimal_betas_newton(float64_t* beta,
 				newtDir[p] = ( t1 == 0.0 ) ? 0.0 : ( t1 / t2 );
 			// newtStep += newtDir[p] * grad[p];
 			ASSERT( newtDir[p] == newtDir[p] )
-			//SG_PRINT("newtDir[%d] = %6.3f = %e / %e \n", p, newtDir[p], t1, t2 )
+			//SG_PRINT("newtDir[{}] = %6.3f = %e / %e \n", p, newtDir[p], t1, t2 )
 		}
 		//CMath::display_vector( newtDir, num_kernels, "newton direction  " );
 		//SG_PRINT("Newton step size = %e\n", Z )
@@ -1080,7 +1080,7 @@ float64_t CMKL::compute_optimal_betas_newton(float64_t* beta,
 				newtBeta[p] *= Z;
 				if( newtBeta[p] > 1.0 )
 				{
-					//SG_WARNING("beta[%d] = %e;  set to 1.  ", p, beta[p] )
+					//SG_WARNING("beta[{}] = %e;  set to 1.  ", p, beta[p] )
 					newtBeta[p] = 1.0;
 				}
 				ASSERT( 0.0 <= newtBeta[p] && newtBeta[p] <= 1.0 )
@@ -1156,7 +1156,7 @@ float64_t CMKL::compute_optimal_betas_via_cplex(float64_t* new_beta, const float
 		if ( status ) {
 			char  errmsg[1024];
 			CPXgeterrorstring (self->env, status, errmsg);
-			SG_ERROR("%s", errmsg)
+			SG_ERROR("{}", errmsg)
 		}
 
 		// add constraint sum(w)=1;
@@ -1324,7 +1324,7 @@ float64_t CMKL::compute_optimal_betas_via_cplex(float64_t* new_beta, const float
 			{
 				//int rows=CPXgetnumrows(env, lp_cplex);
 				//int cols=CPXgetnumcols(env, lp_cplex);
-				//SG_PRINT("rows:%d, cols:%d (kernel:%d)\n", rows, cols, num_kernels)
+				//SG_PRINT("rows:{}, cols:{} (kernel:{})\n", rows, cols, num_kernels)
 				CMath::scale_vector(1/CMath::qnorm(beta, num_kernels, mkl_norm), beta, num_kernels);
 
 				set_qnorm_constraints(beta, num_kernels);
@@ -1346,7 +1346,7 @@ float64_t CMKL::compute_optimal_betas_via_cplex(float64_t* new_beta, const float
 
 				CMath::scale_vector(1/CMath::qnorm(beta, num_kernels, mkl_norm), beta, num_kernels);
 
-				//SG_PRINT("[%d] %f (%f)\n", inner_iters, objval, objval_old)
+				//SG_PRINT("[{}] {} ({})\n", inner_iters, objval, objval_old)
 				if ((1-abs(objval/objval_old) < 0.1*mkl_epsilon)) // && (inner_iters>2))
 					break;
 

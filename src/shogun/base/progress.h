@@ -228,13 +228,13 @@ namespace shogun
 			}
 
 			/** Print the actual progress bar to screen **/
-			m_io.message(MSG_MESSAGEONLY, "", "", -1, "%s |", m_prefix.c_str());
+			m_io.message(MSG_MESSAGEONLY, "", "", -1, "{} |", m_prefix.c_str());
 			for (index_t i = 1; i < progress_bar_space; i++)
 			{
 				if (m_current_value.load() - m_min_value > i * size_chunk)
 				{
 					m_io.message(
-					    MSG_MESSAGEONLY, "", "", -1, "%s",
+					    MSG_MESSAGEONLY, "", "", -1, "{}",
 					    get_pb_char().c_str());
 				}
 				else
@@ -328,13 +328,13 @@ namespace shogun
 			}
 
 			/** Print the actual progress bar to screen **/
-			m_io.message(MSG_MESSAGEONLY, "", "", -1, "%s |", m_prefix.c_str());
+			m_io.message(MSG_MESSAGEONLY, "", "", -1, "{} |", m_prefix.c_str());
 			for (index_t i = 1; i < progress_bar_space; i++)
 			{
 				if (m_current_value.load() - min_value > i * size_chunk)
 				{
 					m_io.message(
-					    MSG_MESSAGEONLY, "", "", -1, "%s",
+					    MSG_MESSAGEONLY, "", "", -1, "{}",
 					    get_pb_char().c_str());
 				}
 				else

@@ -211,7 +211,7 @@ CStreamingFile::CStreamingFile(const char* fname, char rw) : CSGObject()
 	{
 		int file = open((const char*) filename, mode);
 		if (file < 0)
-			SG_ERROR("Error opening file '%s'\n", filename)
+			SG_ERROR("Error opening file '{}'\n", filename)
 
 		buf = new CIOBuffer(file);
 		SG_REF(buf);

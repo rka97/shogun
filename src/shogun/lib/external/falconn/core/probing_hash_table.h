@@ -346,7 +346,7 @@ class DynamicLinearProbingHashTable {
     // This rule also re-hashes if the index is already in the table.
     // We accept this sloppiness because re-insertions should never
     // happen in the first place.
-    // printf("In insert for index %d\n", index);
+    // printf("In insert for index {}\n", index);
     // printf("  table size: %lu\n", table_.size());
 
     IndexType cur_loc = hash(key);
@@ -389,7 +389,7 @@ class DynamicLinearProbingHashTable {
   }
 
   void remove(const KeyType& key, const ValueType& value) {
-    // printf("In remove for index %d\n", index);
+    // printf("In remove for index {}\n", index);
     // printf("  table size: %lu\n", table_.size());
     IndexType cur_loc = hash(key);
     while (table_[cur_loc].state == kDeleted ||
@@ -419,7 +419,7 @@ class DynamicLinearProbingHashTable {
   }
 
   std::pair<Iterator, Iterator> retrieve(const KeyType& key) const {
-    // printf("In retrieve %d\n", lsh_hash);
+    // printf("In retrieve {}\n", lsh_hash);
     IndexType cur_loc = hash(key);
     while (table_[cur_loc].state != kEmpty) {
       if (table_[cur_loc].state != kDeleted && table_[cur_loc].key == key) {

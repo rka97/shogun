@@ -171,8 +171,8 @@ namespace shogun
 		    features->get_feature_class() == C_STRING &&
 		        features->get_feature_type() == F_CHAR,
 		    std::invalid_argument, "Given features must be char-based StringFeatures, "
-		                           "provided (%s) have feature class (%d), feature type "
-		                           "(%d) and class name.\n",
+		                           "provided ({}) have feature class ({}), feature type "
+		                           "({}) and class name.\n",
 		                           features->get_name(),
 								   features->get_feature_class(),
 								   features->get_feature_type());
@@ -256,7 +256,7 @@ namespace shogun
 
 		REQUIRE(
 		    dynamic_cast<CCSVFile*>(file),
-		    "Cannot load labels from %s(\"%s\").\n", file->get_name(),
+		    "Cannot load labels from {}(\"{}\").\n", file->get_name(),
 		    file->get_filename());
 
 		// try to interpret as all dense label types, from most restrictive to
@@ -266,10 +266,10 @@ namespace shogun
 		try_labels<CRegressionLabels>(result, labels);
 		REQUIRE(
 		    result,
-		    "Cannot load labels from %s(\"%s\") as any of dense labels.\n",
+		    "Cannot load labels from {}(\"{}\") as any of dense labels.\n",
 		    file->get_name(), file->get_filename());
 		SG_INFO(
-		    "Loaded labels from %s(\"%s\") as %s\n", file->get_name(),
+		    "Loaded labels from {}(\"{}\") as {}\n", file->get_name(),
 		    file->get_filename(), result->get_name())
 
 		return result;
@@ -286,7 +286,7 @@ namespace shogun
 		try_labels<CRegressionLabels>(result, labels);
 		REQUIRE(
 		    result, "Cannot interpret given labels as any of dense labels.\n");
-		SG_INFO("Interpreted labels as %s\n", result->get_name())
+		SG_INFO("Interpreted labels as {}\n", result->get_name())
 		return result;
 	}
 

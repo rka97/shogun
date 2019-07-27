@@ -30,7 +30,7 @@ SG_FORCED_INLINE bool allocation_error(void *p, size_t size, const char* op_str)
 	const size_t buf_len=128;
 	char buf[buf_len];
 	size_t written=snprintf(buf, buf_len,
-		"Out of memory error, tried to allocate %lld bytes using %s.", (long long int) size, op_str);
+		"Out of memory error, tried to allocate {} bytes using {}.", (long long int) size, op_str);
 	if (written<buf_len)
 		throw ShogunException(buf);
 	else

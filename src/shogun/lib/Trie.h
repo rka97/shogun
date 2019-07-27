@@ -922,7 +922,7 @@ bool CTrie<Trie>::compare_traverse(
 	SG_DEBUG("checking nodes %i and %i\n", node, other_node)
 	if (fabs(TreeMem[node].weight-other.TreeMem[other_node].weight)>=1e-5)
 	{
-		SG_DEBUG("CTrie::compare: TreeMem[%i].weight=%f!=other.TreeMem[%i].weight=%f\n", node, TreeMem[node].weight, other_node,other.TreeMem[other_node].weight)
+		SG_DEBUG("CTrie::compare: TreeMem[%i].weight={}!=other.TreeMem[%i].weight={}\n", node, TreeMem[node].weight, other_node,other.TreeMem[other_node].weight)
 		SG_DEBUG(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n")
 		display_node(node) ;
 		SG_DEBUG("============================================================\n")
@@ -1088,11 +1088,11 @@ void CTrie<Trie>::display_node(int32_t node) const
 		char acgt[5]="ACGT" ;
 		SG_PRINT("%c", acgt[branch])
 	}
-	SG_PRINT("\nnode=%i\nweight=%f\nhas_seq=%i\nhas_floats=%i\n", node, TreeMem[node].weight, TreeMem[node].has_seq, TreeMem[node].has_floats)
+	SG_PRINT("\nnode=%i\nweight={}\nhas_seq=%i\nhas_floats=%i\n", node, TreeMem[node].weight, TreeMem[node].has_seq, TreeMem[node].has_floats)
 	if (TreeMem[node].has_floats)
 	{
 		for (int32_t q=0; q<4; q++)
-			SG_PRINT("child_weighs[%i] = %f\n", q, TreeMem[node].child_weights[q])
+			SG_PRINT("child_weighs[%i] = {}\n", q, TreeMem[node].child_weights[q])
 	}
 	if (TreeMem[node].has_seq)
 	{
@@ -1394,7 +1394,7 @@ void CTrie<Trie>::traverse(
 	const int32_t y1 = (k==0) ? 0 : y0 - ( (depth<k) ? 0 : info.nofsKmers[k-1] * x[depth-k] );
 	//const int32_t temp = info.substrs[depth]*num_sym - ( (depth<=k) ? 0 : info.nofsKmers[k] * x[depth-k-1] );
 	//if( !( info.y0 == temp ) ) {
-	//  printf( "\n temp=%d y0=%d k=%d depth=%d \n", temp, info.y0, k, depth );
+	//  printf( "\n temp={} y0={} k={} depth={} \n", temp, info.y0, k, depth );
 	//}
 	//ASSERT( info.y0 == temp )
 	int32_t sym;
@@ -2057,12 +2057,12 @@ float64_t CTrie<Trie>::get_cumulative_score(
 
 	for (int32_t i=pos; i<pos+deg && i<length; i++)
 	{
-		//SG_PRINT("loop %d\n", i)
+		//SG_PRINT("loop {}\n", i)
 		Trie* tree = &TreeMem[trees[i]];
 
 		for (int32_t d=0; d<deg-i+pos; d++)
 		{
-			//SG_PRINT("loop degree %d shit: %d\n", d, (2*(deg-1-d-i+pos)))
+			//SG_PRINT("loop degree {} shit: {}\n", d, (2*(deg-1-d-i+pos)))
 			ASSERT(d-1<degree)
 			int32_t sym = (int32_t) (seq >> (2*(deg-1-d-i+pos)) & 3);
 
@@ -2075,7 +2075,7 @@ float64_t CTrie<Trie>::get_cumulative_score(
 			result+=w*tree->weight;
 		}
 	}
-	//SG_PRINT("cum: %f\n", result)
+	//SG_PRINT("cum: {}\n", result)
 	return result;
 }
 
@@ -2100,7 +2100,7 @@ void CTrie<Trie>::fill_backtracking_table(
 			ConsensusEntry entry=cur->get_element(i);
 			entry.score+=get_cumulative_score(pos+1, entry.string, degree-1, weights);
 			cur->set_element(entry,i);
-			//SG_PRINT("cum: str:0%0llx sc:%f bt:%d\n",entry.string,entry.score,entry.bt)
+			//SG_PRINT("cum: str:0%0llx sc:{} bt:{}\n",entry.string,entry.score,entry.bt)
 		}
 	}
 
@@ -2136,7 +2136,7 @@ void CTrie<Trie>::fill_backtracking_table(
 						bt=j;
 						max_score=sc;
 
-						//SG_PRINT("new_max[%i,%i] = %f\n", j,i, max_score)
+						//SG_PRINT("new_max[%i,%i] = {}\n", j,i, max_score)
 					}
 				}
 			}
@@ -2147,7 +2147,7 @@ void CTrie<Trie>::fill_backtracking_table(
 			entry.score=max_score;
 			entry.string=cur->get_element(i).string;
 			cur->set_element(entry, i);
-			//SG_PRINT("entry[%d]: str:0%0llx sc:%f bt:%d\n",i, entry.string,entry.score,entry.bt)
+			//SG_PRINT("entry[{}]: str:0%0llx sc:{} bt:{}\n",i, entry.string,entry.score,entry.bt)
 		}
 	}
 }

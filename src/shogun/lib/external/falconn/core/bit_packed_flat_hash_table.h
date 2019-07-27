@@ -78,7 +78,7 @@ class BitPackedFlatHashTable {
         num_items_(num_items),
         bucket_start_(num_buckets, log2ceil(num_items)),
         indices_(num_items, log2ceil(num_items)) {
-    // printf("num_buckets = %d  num_items_ = %d\n", num_buckets_, num_items_);
+    // printf("num_buckets = {}  num_items_ = {}\n", num_buckets_, num_items_);
     if (num_buckets_ < 1) {
       throw BitPackedFlatHashTableError(
           "Number of buckets must be at least 1.");
@@ -146,7 +146,7 @@ class BitPackedFlatHashTable {
       end = bucket_start_.get(key + 1);
     }
     // printf("retrieve for key %u\n", key);
-    // printf("  start: %lld  end %lld\n", start, end);
+    // printf("  start: {}  end {}\n", start, end);
     return std::make_pair(Iterator(start, this), Iterator(end, this));
   }
 

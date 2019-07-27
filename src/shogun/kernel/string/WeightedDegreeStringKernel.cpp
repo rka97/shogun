@@ -619,7 +619,7 @@ bool CWeightedDegreeStringKernel::set_weights(SGMatrix<float64_t> new_weights)
 	int32_t len=new_weights.num_cols;
 
 	if (d!=degree || len<0)
-		SG_ERROR("WD: Dimension mismatch (should be (seq_length | 1) x degree) got (%d x %d)\n", len, degree)
+		SG_ERROR("WD: Dimension mismatch (should be (seq_length | 1) x degree) got ({} x {})\n", len, degree)
 
 	degree=d;
 	length=len;
@@ -631,7 +631,7 @@ bool CWeightedDegreeStringKernel::set_weights(SGMatrix<float64_t> new_weights)
 	weights_length=len+max_mismatch;
 
 
-	SG_DEBUG("Creating weights of size %dx%d\n", weights_degree, weights_length)
+	SG_DEBUG("Creating weights of size {}x{}\n", weights_degree, weights_length)
 	int32_t num_weights=weights_degree*weights_length;
 	SG_FREE(weights);
 	weights=SG_MALLOC(float64_t, num_weights);

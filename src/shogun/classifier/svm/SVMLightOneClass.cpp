@@ -84,7 +84,7 @@ bool CSVMLightOneClass::train_machine(CFeatures* data)
         SG_ERROR("SVM_light can not proceed without initialized kernel!\n")
 
 	int32_t num_vec=kernel->get_num_vec_lhs();
-	SG_INFO("num_vec=%d\n", num_vec)
+	SG_INFO("num_vec={}\n", num_vec)
 
 	SG_UNREF(m_labels);
 	m_labels=new CBinaryLabels(num_vec);
@@ -102,7 +102,7 @@ bool CSVMLightOneClass::train_machine(CFeatures* data)
 	SG_DEBUG("kernel->has_property(KP_LINADD) = %i\n", kernel->has_property(KP_LINADD))
 	SG_DEBUG("kernel->has_property(KP_KERNCOMBINATION) = %i\n", kernel->has_property(KP_KERNCOMBINATION))
 	SG_DEBUG("kernel->has_property(KP_BATCHEVALUATION) = %i\n", kernel->has_property(KP_BATCHEVALUATION))
-	SG_DEBUG("kernel->get_optimization_type() = %s\n", kernel->get_optimization_type()==FASTBUTMEMHUNGRY ? "FASTBUTMEMHUNGRY" : "SLOWBUTMEMEFFICIENT" )
+	SG_DEBUG("kernel->get_optimization_type() = {}\n", kernel->get_optimization_type()==FASTBUTMEMHUNGRY ? "FASTBUTMEMHUNGRY" : "SLOWBUTMEMEFFICIENT" )
 	SG_DEBUG("get_solver_type() = %i\n", get_solver_type())
 	SG_DEBUG("get_linadd_enabled() = %i\n", get_linadd_enabled())
 	SG_DEBUG("get_batch_computation_enabled() = %i\n", get_batch_computation_enabled())

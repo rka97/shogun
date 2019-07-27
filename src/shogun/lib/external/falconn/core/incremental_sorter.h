@@ -44,7 +44,7 @@ class IncrementalSorter {
         std::sort(data_->begin() + sorted_to_, data_->begin() + next_sorted_to);
         sorted_to_ = next_sorted_to;
       }
-      // printf("now sorted to %d\n", sorted_to_);
+      // printf("now sorted to {}\n", sorted_to_);
       return (*data_)[index];
     }
   };

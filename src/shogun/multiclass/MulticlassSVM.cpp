@@ -73,12 +73,12 @@ bool CMulticlassSVM::init_machines_for_apply(CFeatures* data)
 
 	CFeatures* lhs=m_kernel->get_lhs();
 	if (!lhs && m_kernel->get_kernel_type()!=K_COMBINED)
-		SG_ERROR("%s: No left hand side specified\n", get_name())
+		SG_ERROR("{}: No left hand side specified\n", get_name())
 
 	if (m_kernel->get_kernel_type()!=K_COMBINED && !lhs->get_num_vectors())
 	{
-		SG_ERROR("%s: No vectors on left hand side (%s). This is probably due to"
-				" an implementation error in %s, where it was forgotten to set "
+		SG_ERROR("{}: No vectors on left hand side ({}). This is probably due to"
+				" an implementation error in {}, where it was forgotten to set "
 				"the data (m_svs) indices\n", get_name(),
 				data->get_name());
 	}
@@ -110,19 +110,19 @@ bool CMulticlassSVM::load(FILE* modelfl)
 	SG_SET_LOCALE_C;
 
 	if (fscanf(modelfl,"%15s\n", char_buffer)==EOF)
-		SG_ERROR("error in svm file, line nr:%d\n", line_number)
+		SG_ERROR("error in svm file, line nr:{}\n", line_number)
 	else
 	{
 		char_buffer[15]='\0';
 		if (strcmp("%MultiClassSVM", char_buffer)!=0)
-			SG_ERROR("error in multiclass svm file, line nr:%d\n", line_number)
+			SG_ERROR("error in multiclass svm file, line nr:{}\n", line_number)
 
 		line_number++;
 	}
 
 	int_buffer=0;
-	if (fscanf(modelfl," num_classes=%d; \n", &int_buffer) != 1)
-		SG_ERROR("error in svm file, line nr:%d\n", line_number)
+	if (fscanf(modelfl," num_classes={}; \n", &int_buffer) != 1)
+		SG_ERROR("error in svm file, line nr:{}\n", line_number)
 
 	if (!feof(modelfl))
 		line_number++;
@@ -133,17 +133,17 @@ bool CMulticlassSVM::load(FILE* modelfl)
 	create_multiclass_svm(int_buffer);
 
 	int_buffer=0;
-	if (fscanf(modelfl," num_svms=%d; \n", &int_buffer) != 1)
-		SG_ERROR("error in svm file, line nr:%d\n", line_number)
+	if (fscanf(modelfl," num_svms={}; \n", &int_buffer) != 1)
+		SG_ERROR("error in svm file, line nr:{}\n", line_number)
 
 	if (!feof(modelfl))
 		line_number++;
 
 	if (m_machines->get_num_elements() != int_buffer)
-		SG_ERROR("Mismatch in number of svms: m_num_svms=%d vs m_num_svms(file)=%d\n", m_machines->get_num_elements(), int_buffer)
+		SG_ERROR("Mismatch in number of svms: m_num_svms={} vs m_num_svms(file)={}\n", m_machines->get_num_elements(), int_buffer)
 
-	if (fscanf(modelfl," kernel='%s'; \n", char_buffer) != 1)
-		SG_ERROR("error in svm file, line nr:%d\n", line_number)
+	if (fscanf(modelfl," kernel='{}'; \n", char_buffer) != 1)
+		SG_ERROR("error in svm file, line nr:{}\n", line_number)
 
 	if (!feof(modelfl))
 		line_number++;
@@ -151,10 +151,10 @@ bool CMulticlassSVM::load(FILE* modelfl)
 	for (int32_t n=0; n<m_machines->get_num_elements(); n++)
 	{
 		svm_idx=-1;
-		if (fscanf(modelfl,"\n%4s %d of %d\n", char_buffer, &svm_idx, &int_buffer)==EOF)
+		if (fscanf(modelfl,"\n%4s {} of {}\n", char_buffer, &svm_idx, &int_buffer)==EOF)
 		{
 			result=false;
-			SG_ERROR("error in svm file, line nr:%d\n", line_number)
+			SG_ERROR("error in svm file, line nr:{}\n", line_number)
 		}
 		else
 		{
@@ -162,46 +162,46 @@ bool CMulticlassSVM::load(FILE* modelfl)
 			if (strncmp("%SVM", char_buffer, 4)!=0)
 			{
 				result=false;
-				SG_ERROR("error in svm file, line nr:%d\n", line_number)
+				SG_ERROR("error in svm file, line nr:{}\n", line_number)
 			}
 
 			if (svm_idx != n)
-				SG_ERROR("svm index mismatch n=%d, n(file)=%d\n", n, svm_idx)
+				SG_ERROR("svm index mismatch n={}, n(file)={}\n", n, svm_idx)
 
 			line_number++;
 		}
 
 		int_buffer=0;
-		if (fscanf(modelfl,"numsv%d=%d;\n", &svm_idx, &int_buffer) != 2)
-			SG_ERROR("error in svm file, line nr:%d\n", line_number)
+		if (fscanf(modelfl,"numsv{}={};\n", &svm_idx, &int_buffer) != 2)
+			SG_ERROR("error in svm file, line nr:{}\n", line_number)
 
 		if (svm_idx != n)
-			SG_ERROR("svm index mismatch n=%d, n(file)=%d\n", n, svm_idx)
+			SG_ERROR("svm index mismatch n={}, n(file)={}\n", n, svm_idx)
 
 		if (!feof(modelfl))
 			line_number++;
 
-		SG_INFO("loading %ld support vectors for svm %d\n",int_buffer, svm_idx)
+		SG_INFO("loading {} support vectors for svm {}\n",int_buffer, svm_idx)
 		CSVM* svm=new CSVM(int_buffer);
 
 		double_buffer=0;
 
-		if (fscanf(modelfl," b%d=%lf; \n", &svm_idx, &double_buffer) != 2)
-			SG_ERROR("error in svm file, line nr:%d\n", line_number)
+		if (fscanf(modelfl," b{}={}; \n", &svm_idx, &double_buffer) != 2)
+			SG_ERROR("error in svm file, line nr:{}\n", line_number)
 
 		if (svm_idx != n)
-			SG_ERROR("svm index mismatch n=%d, n(file)=%d\n", n, svm_idx)
+			SG_ERROR("svm index mismatch n={}, n(file)={}\n", n, svm_idx)
 
 		if (!feof(modelfl))
 			line_number++;
 
 		svm->set_bias(double_buffer);
 
-		if (fscanf(modelfl,"alphas%d=[\n", &svm_idx) != 1)
-			SG_ERROR("error in svm file, line nr:%d\n", line_number)
+		if (fscanf(modelfl,"alphas{}=[\n", &svm_idx) != 1)
+			SG_ERROR("error in svm file, line nr:{}\n", line_number)
 
 		if (svm_idx != n)
-			SG_ERROR("svm index mismatch n=%d, n(file)=%d\n", n, svm_idx)
+			SG_ERROR("svm index mismatch n={}, n(file)={}\n", n, svm_idx)
 
 		if (!feof(modelfl))
 			line_number++;
@@ -211,8 +211,8 @@ bool CMulticlassSVM::load(FILE* modelfl)
 			double_buffer=0;
 			int_buffer=0;
 
-			if (fscanf(modelfl,"\t[%lf,%d]; \n", &double_buffer, &int_buffer) != 2)
-				SG_ERROR("error in svm file, line nr:%d\n", line_number)
+			if (fscanf(modelfl,"\t[{},{}]; \n", &double_buffer, &int_buffer) != 2)
+				SG_ERROR("error in svm file, line nr:{}\n", line_number)
 
 			if (!feof(modelfl))
 				line_number++;
@@ -224,7 +224,7 @@ bool CMulticlassSVM::load(FILE* modelfl)
 		if (fscanf(modelfl,"%2s", char_buffer) == EOF)
 		{
 			result=false;
-			SG_ERROR("error in svm file, line nr:%d\n", line_number)
+			SG_ERROR("error in svm file, line nr:{}\n", line_number)
 		}
 		else
 		{
@@ -232,7 +232,7 @@ bool CMulticlassSVM::load(FILE* modelfl)
 			if (strcmp("];", char_buffer)!=0)
 			{
 				result=false;
-				SG_ERROR("error in svm file, line nr:%d\n", line_number)
+				SG_ERROR("error in svm file, line nr:{}\n", line_number)
 			}
 			line_number++;
 		}
@@ -258,23 +258,23 @@ bool CMulticlassSVM::save(FILE* modelfl)
 
 	SG_INFO("Writing model file...")
 	fprintf(modelfl,"%%MultiClassSVM\n");
-	fprintf(modelfl,"num_classes=%d;\n", m_multiclass_strategy->get_num_classes());
-	fprintf(modelfl,"num_svms=%d;\n", m_machines->get_num_elements());
-	fprintf(modelfl,"kernel='%s';\n", m_kernel->get_name());
+	fprintf(modelfl,"num_classes={};\n", m_multiclass_strategy->get_num_classes());
+	fprintf(modelfl,"num_svms={};\n", m_machines->get_num_elements());
+	fprintf(modelfl,"kernel='{}';\n", m_kernel->get_name());
 
 	for (int32_t i=0; i<m_machines->get_num_elements(); i++)
 	{
 		CSVM* svm=get_svm(i);
 		ASSERT(svm)
-		fprintf(modelfl,"\n%%SVM %d of %d\n", i, m_machines->get_num_elements()-1);
-		fprintf(modelfl,"numsv%d=%d;\n", i, svm->get_num_support_vectors());
-		fprintf(modelfl,"b%d=%+10.16e;\n",i,svm->get_bias());
+		fprintf(modelfl,"\n%%SVM {} of {}\n", i, m_machines->get_num_elements()-1);
+		fprintf(modelfl,"numsv{}={};\n", i, svm->get_num_support_vectors());
+		fprintf(modelfl,"b{}=%+10.16e;\n",i,svm->get_bias());
 
-		fprintf(modelfl, "alphas%d=[\n", i);
+		fprintf(modelfl, "alphas{}=[\n", i);
 
 		for(int32_t j=0; j<svm->get_num_support_vectors(); j++)
 		{
-			fprintf(modelfl,"\t[%+10.16e,%d];\n",
+			fprintf(modelfl,"\t[%+10.16e,{}];\n",
 					svm->get_alpha(j), svm->get_support_vector(j));
 		}
 
