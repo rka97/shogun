@@ -433,7 +433,7 @@ float64_t* CCommWordStringKernel::compute_scoring(
 				{
 //#define DEBUG_COMMSCORING
 #ifdef DEBUG_COMMSCORING
-					SG_PRINT("o={}/{} p={}/{} i=0x%x x=0x%x imask=%x jmask=%x kmask=%x il={} ir={} marg={:g} o_sym:{} m_sym:{} weight(",
+					SG_PRINT("o={}/{} p={}/{} i=0x{:x} x=0x{:x} imask={:x} jmask={:x} kmask={:x} il={} ir={} marg={:g} o_sym:{} m_sym:{} weight(",
 							o,order, p,order, i, x, imer_mask, jmer_mask, kmer_mask, il, ir, marginalizer, o_sym, m_sym);
 
 					SG_PRINT("%c%c%c%c/%c%c%c%c)+={:g}/{:g}\n",
@@ -452,7 +452,7 @@ float64_t* CCommWordStringKernel::compute_scoring(
 						uint32_t c=x | ((j & jmer_mask) << (num_bits*jl));
 #ifdef DEBUG_COMMSCORING
 
-						SG_PRINT("o={}/{} p={}/{} i=0x%x j=0x%x x=0x%x c=0x%x imask=%x jmask=%x kmask=%x il={} ir={} jl={} marg={:g} o_sym:{} m_sym:{} weight(",
+						SG_PRINT("o={}/{} p={}/{} i=0x{:x} j=0x{:x} x=0x{:x} c=0x{:x} imask={:x} jmask={:x} kmask={:x} il={} ir={} jl={} marg={:g} o_sym:{} m_sym:{} weight(",
 								o,order, p,order, i, j, x, c, imer_mask, jmer_mask, kmer_mask, il, ir, jl, marginalizer, o_sym, m_sym);
 						SG_PRINT("%c%c%c%c/%c%c%c%c)+={:g}/{:g}\n",
 								alpha->remap_to_char((c>>(3*num_bits))&0x03), alpha->remap_to_char((c>>(2*num_bits))&0x03),
