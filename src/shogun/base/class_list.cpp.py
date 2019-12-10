@@ -31,6 +31,9 @@
 # either expressed or implied, of the Shogun Development Team.
 
 import os
+import re
+import pprint
+import json
 
 class_str = 'class'
 types = ["BOOL", "CHAR", "INT8", "UINT8", "INT16", "UINT16", "INT32", "UINT32",
@@ -41,32 +44,139 @@ config_tests = ["HAVE_HDF5", "HAVE_LAPACK",
                 "HAVE_NLOPT", "HAVE_PROTOBUF", "HAVE_VIENNACL", "USE_GPL_SHOGUN",
                 "USE_META_INTEGRATION_TESTS", "HAVE_TFLOGGER"]
 # TODO: remove once plugins are working
-class_blacklist = ["SGVector", "SGMatrix", "SGSparseVector", "SGSparseMatrix", 
-        "SGStringList", "SGMatrixList", "SGCachedVector", "SGNDArray",
-        "ObservedValue", "ObservedValueTemplated",
-        "ParameterObserverHistogram", "ParameterObserverScalar", "ParameterObserverTensorBoard",
-        "TBOutputFormat", "Iterator", "Wrapper", "PIterator",
-        "BitPackedFlatHashTableError", "TypedAnyPolicy", "NonOwningAnyPolicy",
-        "PointerValueAnyPolicy", "InvalidStateException", "NotFittedException",
-        "ShogunException", "BitPackedVectorError", "CompositeHashTableError",
-        "DataStorageError", "DataTransformationError", "AugmentedHeap",
-        "HashTableError", "LSHTableError", "LSHFunctionError",
-        "NearestNeighborQueryError", "StaticProbingHashTableError", "DynamicProbingHashTableError",
-        "FalconnError", "LSHNearestNeighborTableError", "LSHNNTableWrapper",
-        "Tag", "LinalgBackendGPUBase", "LinalgBackendEigen", "LinalgBackendViennaCL",
-        "TypeMismatchException", "FlatHashTableError", "SimpleHeap", "LSHNNTableSetupError",
-        "KDTREEKNNSolver", "LDACanVarSolver",
-        "GammaFeatureNumberInit", "StdVectorPrefetcher", "ShogunNotImplementedException",
-        "ToStringVisitor", "BitseryVisitor", "FileSystem", "PosixFileSystem",
-        "WindowsFileSystem", "LocalWindowsFileSystem", "LocalPosixFileSystem",
-        "NullFileSystem", "FilterVisitor", "RandomMixin", "MaxCrossValidation",
-        "StreamingDataFetcher", "MaxMeasure", "MaxTestPower",
-        "MedianHeuristic", "WeightedMaxMeasure", "WeightedMaxTestPower",
-        "Seedable", "ShogunEnv", "ShapeVisitor"]
+class_blacklist = ["SGVector", "SGMatrix", "SGSparseVector", "SGSparseMatrix",
+                   "SGStringList", "SGMatrixList", "SGCachedVector", "SGNDArray",
+                   "ObservedValue", "ObservedValueTemplated",
+                   "ParameterObserverHistogram", "ParameterObserverScalar", "ParameterObserverTensorBoard",
+                   "TBOutputFormat", "Iterator", "Wrapper", "PIterator",
+                   "BitPackedFlatHashTableError", "TypedAnyPolicy", "NonOwningAnyPolicy",
+                   "PointerValueAnyPolicy", "InvalidStateException", "NotFittedException",
+                   "ShogunException", "BitPackedVectorError", "CompositeHashTableError",
+                   "DataStorageError", "DataTransformationError", "AugmentedHeap",
+                   "HashTableError", "LSHTableError", "LSHFunctionError",
+                   "NearestNeighborQueryError", "StaticProbingHashTableError", "DynamicProbingHashTableError",
+                   "FalconnError", "LSHNearestNeighborTableError", "LSHNNTableWrapper",
+                   "Tag", "LinalgBackendGPUBase", "LinalgBackendEigen", "LinalgBackendViennaCL",
+                   "TypeMismatchException", "FlatHashTableError", "SimpleHeap", "LSHNNTableSetupError",
+                   "KDTREEKNNSolver", "LDACanVarSolver",
+                   "GammaFeatureNumberInit", "StdVectorPrefetcher", "ShogunNotImplementedException",
+                   "ToStringVisitor", "BitseryVisitor", "FileSystem", "PosixFileSystem",
+                   "WindowsFileSystem", "LocalWindowsFileSystem", "LocalPosixFileSystem",
+                   "NullFileSystem", "FilterVisitor", "RandomMixin", "MaxCrossValidation",
+                   "StreamingDataFetcher", "MaxMeasure", "MaxTestPower",
+                   "MedianHeuristic", "WeightedMaxMeasure", "WeightedMaxTestPower",
+                   "Seedable", "ShogunEnv", "ShapeVisitor"]
 
 SHOGUN_TEMPLATE_CLASS = "SHOGUN_TEMPLATE_CLASS"
 SHOGUN_BASIC_CLASS = "SHOGUN_BASIC_CLASS"
 
+template_classes = {}
+class_hierarchy = {}
+mixins = ["RandomMixin", "Seedable", "IterativeMachine"]
+
+
+def register_class(file_name, lines, line, line_nr, blacklist):
+    if line is None:
+        line = lines[line_nr]
+    c = line[line.index(class_str)+len(class_str):]
+    c_splitted = c.split()
+    if len(c_splitted) == 0:
+        return None
+    class_name = c_splitted[0]
+    class_name = class_name.strip(':').strip()    
+    if check_is_in_blacklist(class_name, lines, line_nr, blacklist) or (class_name in class_blacklist):
+        return None
+
+    colon_index = -1
+    while True:
+        colon_index = c.find(':')
+        if colon_index != -1 or c.find('{') != -1:
+            break
+        if c.find(';'):
+            return None
+        line_nr += 1
+        if line_nr >= len(lines):
+            break
+        c = lines[line_nr]
+
+    if colon_index == -1:
+        return None
+
+    parent_name = ""
+    c = c[colon_index+1:]
+    inheritance_token_index = -1
+    inheritance_type = ""
+    types = ['public', 'private', 'protected']
+    while inheritance_token_index == -1 and len(types) != 0:
+        inheritance_type = types.pop()
+        inheritance_token_index = c.find(inheritance_type)
+
+    if inheritance_token_index == -1:
+        return None
+
+    c = c[inheritance_token_index+len(inheritance_type):]
+
+    end_idx = -1
+    while True:
+        semicolon_idx = c.find(';')
+        end_idx = c.find('{')
+        if end_idx != -1:
+            if semicolon_idx != -1 and semicolon_idx < end_idx:
+                return None
+            break
+        parent_name += c
+        line_nr += 1
+        if line_nr >= len(lines):
+            return None
+        c = lines[line_nr]
+
+    parent_name += c[:end_idx]
+    parent_name = parent_name.strip()
+    parent_name = parent_name.replace(' ', '')
+    parent_name = parent_name.replace('\t', '')
+    parent_name = parent_name.replace('\n', '')
+
+    template_matcher = re.compile("<(.*)>")
+    class_mixins = []
+    while True:
+        found_mixin = False
+        for m in mixins:
+            if parent_name.startswith(m):
+                class_mixins.append(m)
+                parent_name = template_matcher.search(parent_name).groups()[0]
+                found_mixin = True
+                break
+        if not found_mixin:
+            break
+
+    if not class_name.isalnum() or not parent_name.isalnum():
+        return None
+
+    class_info = {"class_name": class_name, "parent_class": parent_name,
+                  "include_path": get_include_path(file_name),
+                  "inheritance_type": inheritance_type, "mixins": class_mixins, "subclasses": [],
+                  "abstract": False}
+    class_hierarchy[class_name] = class_info
+    return class_info
+
+
+def register_subclasses():
+    for mixin in mixins:
+        class_hierarchy[mixin] = {"class_name": mixin, "parent_class": "",
+                                  "include_path": "",
+                                  "inheritance_type": "", "mixins": "", "subclasses": []}
+
+    for key, value in class_hierarchy.items():
+        parent = value["parent_class"]
+        if parent in class_hierarchy:
+            class_hierarchy[parent]["subclasses"].append(key)
+        for mixin in value["mixins"]:
+            if mixin in class_hierarchy:
+                class_hierarchy[mixin]["subclasses"].append(key)
+
+def serialize_class_hierarchy():
+    with open('../../class_hierarchy.json', 'w') as f:
+        json.dump(class_hierarchy, f)
 
 def check_class(line):
     if not (line.find('public') == -1 and
@@ -125,6 +235,21 @@ def extract_class_name(lines, line_nr, line, blacklist):
     return c
 
 
+def get_include_path(h):
+    # find *last* occurence of "shogun" dir in header
+    shogun_dir = "shogun"
+    assert shogun_dir in h
+    tails = []
+    head, tail = os.path.split(h)
+    while tail != shogun_dir and len(head) > 0:
+        tails += [tail]
+        head, tail = os.path.split(head)
+
+    # construct include path from collected tails
+    tails.reverse()
+    return os.path.join(*([shogun_dir] + tails))
+
+
 def get_includes(classes, headers_absolute_fnames):
     includes = []
     for c in classes:
@@ -133,30 +258,20 @@ def get_includes(classes, headers_absolute_fnames):
 
             # build relative include path from absolute header filename
             if class_from_header in c:
-                # find *last* occurence of "shogun" dir in header
-                shogun_dir = "shogun"
-                assert shogun_dir in h
-                tails = []
-                head, tail = os.path.split(h)
-                while tail != shogun_dir and len(head)>0:
-                    tails += [tail]
-                    head, tail = os.path.split(head)
-
-                # construct include path from collected tails
-                tails.reverse()
-                include = os.path.join(*([shogun_dir] + tails))
 
                 # thats your include header
-                includes.append("#include <%s>" % include)
+                includes.append("#include <%s>" % get_include_path(h))
 
     return includes
+
 
 def get_definitions(classes):
     definitions = []
     definitions.append("#define %s" % SHOGUN_TEMPLATE_CLASS)
     definitions.append("#define %s" % SHOGUN_BASIC_CLASS)
     for c, t in classes:
-        d = "static %s SGObject* __new_%s(EPrimitiveType g) { return g == PT_NOT_GENERIC? new %s(): NULL; }" % (SHOGUN_BASIC_CLASS,c,c)
+        d = "static %s SGObject* __new_%s(EPrimitiveType g) { return g == PT_NOT_GENERIC? new %s(): NULL; }" % (
+            SHOGUN_BASIC_CLASS, c, c)
         definitions.append(d)
     return definitions
 
@@ -218,7 +333,7 @@ def extract_block(c, lines, start_line, stop_line, start_sym, stop_sym):
 
 def check_complex_supported_class(line):
     l = list(filter(lambda y: y if y != '' else None,
-             line.strip().replace('\t', ' ').split(' ')))
+                    line.strip().replace('\t', ' ').split(' ')))
     supported = len(l) == 3 and l[0] == 'typedef' and l[1] == 'bool' \
         and l[2] == 'supports_complex128_t;'
     return supported
@@ -265,7 +380,7 @@ def extract_classes(HEADERS, template, blacklist, supports_complex):
             continue
         try:
             lines = open(fname).readlines()
-        except: # python3 workaround
+        except:  # python3 workaround
             lines = open(fname, encoding='utf-8', errors='ignore').readlines()
         line_nr = 0
         while line_nr < len(lines):
@@ -275,6 +390,7 @@ def extract_classes(HEADERS, template, blacklist, supports_complex):
                 line_nr += 1
                 continue
             c = None
+            class_info = None
             if template:
                 tp = line.find('template')
                 if tp != -1:
@@ -287,11 +403,15 @@ def extract_classes(HEADERS, template, blacklist, supports_complex):
             else:
                 if line.find(class_str) != -1:
                     c = extract_class_name(lines, line_nr, None, blacklist)
+                    class_info = register_class(fname, lines, None, line_nr, blacklist)
             if c:
                 ok, line_nr = test_candidate(c, lines,
                                              line_nr, supports_complex)
                 if ok:
                     classes.append((c, template))
+                else:
+                    if class_info is not None:
+                        class_info["abstract"] = True
                 continue
 
             line_nr += 1
@@ -342,6 +462,7 @@ def get_blacklist():
             blacklist[cfg] = 1
     return blacklist
 
+
 if __name__ == '__main__':
     import sys
     TEMPL_FILE = sys.argv[1]
@@ -359,10 +480,12 @@ if __name__ == '__main__':
     classes = extract_classes(HEADERS, False, blacklist, False)
     template_classes = extract_classes(HEADERS, True, blacklist, False)
     complex_template_classes = extract_classes(HEADERS, True, blacklist, True)
-    includes = get_includes(classes+template_classes+complex_template_classes, HEADERS)
+    includes = get_includes(classes+template_classes +
+                            complex_template_classes, HEADERS)
     definitions = get_definitions(classes)
     template_definitions = get_template_definitions(template_classes, False)
-    complex_template_definitions = get_template_definitions(complex_template_classes, True)
+    complex_template_definitions = get_template_definitions(
+        complex_template_classes, True)
     struct = get_struct(classes+template_classes+complex_template_classes)
     substitutes = {'includes': includes,
                    'definitions': definitions,
@@ -372,3 +495,6 @@ if __name__ == '__main__':
                    }
 
     write_templated_file(TEMPL_FILE, substitutes)
+    register_subclasses()
+    serialize_class_hierarchy()
+    pprint.pprint(class_hierarchy)

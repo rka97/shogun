@@ -54,6 +54,26 @@ ELSE()
     MESSAGE(WARNING "Please install jinja2 for automatic generated tests.")
 ENDIF()
 
+
+SET(EXT_SAD "sad")
+FILE(GLOB_RECURSE SAD_FILES *.${EXT_SAD})
+FOREACH(template ${SAD_FILES})
+  STRING(REGEX REPLACE .${EXT_SAD} "" generated "${template}")
+  STRING(REGEX REPLACE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} generated "${generated}")
+  LIST(APPEND SAD_OUTPUT_FILES "${generated}")
+ENDFOREACH()
+
+
+ADD_CUSTOM_COMMAND(OUTPUT ${SAD_OUTPUT_FILES}
+	COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/class_hierarchy_templates.py
+	${SAD_FILES} ${SAD_OUTPUT_FILES}
+	DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/class_hierarchy_templates.py ${SAD_FILES} 
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    COMMENT "Generating sad files"
+)
+LIST(APPEND TEMPLATE_GENERATED_UNITTEST ${SAD_OUTPUT_FILES})
+
+
 IF(NOT CTAGS_FOUND)
 	MESSAGE("Please install Ctags for trained models serialization tests.")
 ELSEIF(NOT HAVE_HDF5)

@@ -110,6 +110,7 @@ FOREACH(template ${LIBSHOGUN_SRC_TMP})
   target_sources(libshogun PRIVATE ${generated_cpp})
 ENDFOREACH()
 
+
 add_library(shogun SHARED $<TARGET_OBJECTS:libshogun> ${CMAKE_CURRENT_BINARY_DIR}/lib/config.h)
 generate_export_header(shogun)
 set_target_properties(
