@@ -29,7 +29,8 @@ def subclasses_of(class_name):
 	subclasses_names = list(class_info["subclasses"])
 	subclasses = []
 	for subclass_name in subclasses_names:
-		subclasses.append(class_hierarchy[subclass_name])
+		if class_hierarchy[subclass_name]["abstract"] is False:
+			subclasses.append(class_hierarchy[subclass_name])
 		subclasses += subclasses_of(subclass_name)
 	return subclasses
 
@@ -90,6 +91,14 @@ if __name__ == '__main__':
 				output_lines.append(line)
 			line_nr += 1
 
-		with open(output_files[file_idx], 'w') as output_file:
-			output_file.writelines("%s" % l for l in output_lines)
+		output_file = output_files[file_idx]
+		if not os.path.exists(os.path.dirname(output_file)):
+			try:
+				os.makedirs(os.path.dirname(output_file))
+			except OSError as exc:
+				if exc.errno != errno.EEXIST:
+					raise
+
+		with open(output_file, 'w') as f:
+			f.writelines("%s" % l for l in output_lines)
 		file_idx += 1

@@ -75,7 +75,7 @@ class_hierarchy = {}
 mixins = ["RandomMixin", "Seedable", "IterativeMachine"]
 
 
-def register_class(file_name, lines, line, line_nr, blacklist):
+def register_class(file_name, lines, line, line_nr, blacklist, is_template=False):
     if line is None:
         line = lines[line_nr]
     c = line[line.index(class_str)+len(class_str):]
@@ -155,7 +155,7 @@ def register_class(file_name, lines, line, line_nr, blacklist):
     class_info = {"class_name": class_name, "parent_class": parent_name,
                   "include_path": get_include_path(file_name),
                   "inheritance_type": inheritance_type, "mixins": class_mixins, "subclasses": [],
-                  "abstract": False}
+                  "abstract": False, "template": is_template}
     class_hierarchy[class_name] = class_info
     return class_info
 
@@ -400,6 +400,8 @@ def extract_classes(HEADERS, template, blacklist, supports_complex):
                     cp = line.find(class_str)
                     if cp != -1:
                         c = extract_class_name(lines, line_nr, line, blacklist)
+                        class_info = register_class(fname, lines, None, line_nr, blacklist, True)
+
             else:
                 if line.find(class_str) != -1:
                     c = extract_class_name(lines, line_nr, None, blacklist)

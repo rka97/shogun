@@ -1,0 +1,64 @@
+#include "sg_gtest_utilities.h"
+#include <iostream>
+
+%include_subclasses_of(Distance)
+#include <shogun/distance/CustomMahalanobisDistance.h>
+#include <shogun/features/DenseFeatures.h>
+#include <shogun/lib/SGMatrix.h>
+#include <shogun/kernel/GaussianKernel.h>
+
+using namespace shogun;
+
+using Distances = Types<%subclasses_of(Distance)>;
+
+template <typename T>
+class DistancesTest : public ::testing::Test
+{
+};
+
+SG_TYPED_TEST_CASE(DistancesTest, Distances);
+
+TYPED_TEST(DistancesTest, Creation)
+{
+	auto distance = std::make_shared<TypeParam>();
+}
+
+auto get_simple_feats()
+{
+	SGMatrix<float64_t> feat_mat(2,2);
+	feat_mat[0] = 1.0, feat_mat[1] = 1.0;
+	feat_mat[2] = 2.0, feat_mat[3] = 2.0;
+	return std::make_shared<DenseFeatures<float64_t>>(feat_mat);
+}
+
+template<typename TypeParam>
+std::shared_ptr<TypeParam> create_distance()
+{
+	auto feats = get_simple_feats();
+	return std::make_shared<TypeParam>(feats, feats);
+}
+
+template <>
+std::shared_ptr<CustomDistance> create_distance<CustomDistance>()
+{
+	auto euclidean_distance = create_distance<EuclideanDistance>();
+	return std::make_shared<CustomDistance>(euclidean_distance);
+}
+
+template <>
+std::shared_ptr<KernelDistance> create_distance<KernelDistance>()
+{
+	auto gaussian_kernel = std::make_shared<GaussianKernel>();
+	auto feats = get_simple_feats(); 
+	return std::make_shared<KernelDistance>(
+		feats, feats, 0.7, gaussian_kernel);
+}
+
+TYPED_TEST(DistancesTest, CreationWithArgs)
+{
+	auto distance = create_distance<TypeParam>();
+	for (size_t i = 0; i < 2; i++)
+		EXPECT_EQ(distance->distance(i, i), 0);
+}
+
+
