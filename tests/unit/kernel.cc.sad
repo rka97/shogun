@@ -1,0 +1,77 @@
+#include "sg_gtest_utilities.h"
+#include <iostream>
+#include <shogun/mathematics/NormalDistribution.h>
+#include <shogun/lib/common.h>
+#include <shogun/lib/SGVector.h>
+#include <shogun/lib/SGMatrix.h>
+#include <shogun/features/DenseFeatures.h>
+
+%include_subclasses_of(Kernel)
+
+using namespace shogun;
+
+using KernelTypes = Types<%subclasses_of(Kernel)>;
+
+template <typename T>
+class KernelsTest : public ::testing::Test
+{
+};
+
+SG_TYPED_TEST_CASE(KernelsTest, KernelTypes);
+
+TYPED_TEST(KernelsTest, Creation)
+{
+	auto kernel = std::make_shared<TypeParam>();
+	// std::cout << kernel->get_name() << '\n';
+}
+
+template <typename PRNG>
+static SGMatrix<float64_t>
+generate_std_norm_matrix(const index_t num_feats, const index_t dim, PRNG& prng)
+{
+	SGMatrix<float64_t> data(dim, num_feats);
+	NormalDistribution<float64_t> normal_dist;
+	for (index_t i=0; i<num_feats; ++i)
+	{
+		for (index_t j=0; j<dim; ++j)
+			data(j, i)=normal_dist(prng);
+	}
+	return data;
+}
+
+template <typename T>
+std::shared_ptr<T> GetInitializedKernel(index_t num_feat, index_t dim)
+{
+    
+}
+
+TYPED_TEST(KernelsTest, sum_symmetric_block)
+{
+    const index_t num_features = 20;
+    const index_t dim = 3;
+    std::mt19937_64 prng(32);
+
+    auto random_data = generate_std_norm_matrix(num_features, dim, prng);
+    auto feats = std::make_shared<DenseFeatures<float64_t>>(random_data);
+
+    auto kernel = std::make_shared<GaussianKernel>();
+    std::cout << "BEFORE KERNEL INIT.\n";
+    kernel->init(feats, feats);
+    std::cout << "BEFORE KERNEL SUM.\n";
+
+    float64_t sum = kernel->sum_symmetric_block(0, num_features);
+
+    // Check the sum manually
+    std::cout << "CHECKING THE SUM MANUALLY \n";
+    auto kernel_matrix = kernel->get_kernel_matrix();
+    auto kernel_matrix_sum = 0.0f;
+    for (index_t i = 0; i < kernel_matrix.num_rows; i++)
+    {
+        for (auto j = 0; j < kernel_matrix.num_cols; j++)
+        {
+            kernel_matrix_sum += ((i == j) ? 0 : kernel_matrix(i, j));
+        }
+    }
+
+    EXPECT_NEAR(sum, kernel_matrix_sum, 1E-4);
+}
