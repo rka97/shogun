@@ -1,0 +1,204 @@
+// clang-format off
+#include "sg_gtest_utilities.h"
+#include <iostream>
+
+%include_subclasses_of(Transformer) //
+// #include <shogun/distance/CustomMahalanobisDistance.h>
+#include <shogun/features/DenseFeatures.h>
+#include <shogun/lib/SGMatrix.h>
+#include <shogun/features/DataGenerator.h>
+#include <shogun/distance/EuclideanDistance.h>
+
+// #include <shogun/kernel/GaussianKernel.h>
+
+
+using namespace shogun;
+
+using Transformers = Types<%subclasses_of(Transformer)>;
+
+// clang-format on
+template <typename T>
+class TransformersTest : public ::testing::Test
+{
+};
+
+SG_TYPED_TEST_CASE(TransformersTest, Transformers);
+
+TYPED_TEST(TransformersTest, Creation)
+{
+	auto transformer = std::make_shared<TypeParam>();
+	std::cout << "class name is:" << transformer->get_name() << "\n";
+}
+
+auto get_simple_fit_features()
+{
+	SGMatrix<float64_t> feat_mat(2, 2);
+	feat_mat[0] = 1.0, feat_mat[1] = 1.0;
+	feat_mat[2] = 2.0, feat_mat[3] = 2.0;
+	return std::make_shared<DenseFeatures<float64_t>>(feat_mat);
+}
+
+auto get_simple_transform_features()
+{
+	SGMatrix<float64_t> feat_mat(2, 11);
+	feat_mat[0] = 5.0, feat_mat[1] = 6.0;
+	feat_mat[2] = 7.0, feat_mat[3] = 8.0;
+	feat_mat[4] = 4.1, feat_mat[5] = 9.9;
+	feat_mat[6] = 4.2, feat_mat[7] = 9.8;
+	feat_mat[8] = 4.3, feat_mat[9] = 9.7;
+	feat_mat[10] = 4.4, feat_mat[11] = 9.6;
+	feat_mat[12] = 4.5, feat_mat[13] = 9.5;
+	feat_mat[14] = 4.6, feat_mat[15] = 9.4;
+	feat_mat[16] = 4.7, feat_mat[17] = 9.3;
+	feat_mat[18] = 4.8, feat_mat[19] = 9.2;
+	feat_mat[20] = 4.9, feat_mat[11] = 9.1;
+	return std::make_shared<DenseFeatures<float64_t>>(feat_mat);
+}
+
+void check_features_equality(
+    std::shared_ptr<DenseFeatures<float64_t>> features1,
+    std::shared_ptr<DenseFeatures<float64_t>> features2)
+{
+	auto mat1 = features1->get_feature_matrix();
+	auto mat2 = features2->get_feature_matrix();
+	ASSERT_EQ(mat1.size(), mat2.size());
+	for (size_t i = 0; i < mat1.size(); i++){
+		EXPECT_NEAR(mat1[i], mat2[i], 1e-4);
+	}
+}
+
+template <typename TypeParam>
+std::shared_ptr<TypeParam> fit_transformers()
+{
+	auto transformer = std::make_shared<TypeParam>();
+
+	auto fit_feats = get_simple_fit_features();
+
+	transformer->fit(fit_feats);
+	return transformer;
+}
+
+template <>
+std::shared_ptr<Isomap> fit_transformers<Isomap>()
+{
+	return std::make_shared<Isomap>();
+}
+
+// necessary for StochasticProximityEmbedding
+template <typename TypeParam>
+void change_updates(std::shared_ptr<TypeParam> transformer)
+{
+}
+
+template <>
+void change_updates<StochasticProximityEmbedding>(
+    std::shared_ptr<StochasticProximityEmbedding> transformer)
+{
+	transformer->set_nupdates(5);
+}
+
+template <typename TypeParam>
+auto transform_transformers(std::shared_ptr<TypeParam> transformer)
+{
+	auto transform_feats = get_simple_transform_features();
+	auto transformed_feats = transformer->transform(transform_feats);
+	return transformed_feats;
+}
+
+template <>
+auto transform_transformers<TDistributedStochasticNeighborEmbedding>(
+    std::shared_ptr<TDistributedStochasticNeighborEmbedding> embedder)
+{
+	std::mt19937_64 prng(24);
+
+	const index_t n_samples = 15;
+	const index_t n_dimensions = 3;
+	const index_t n_target_dimensions = 2;
+	auto high_dimensional_features = std::make_shared<DenseFeatures<float64_t>>(
+	    DataGenerator::generate_gaussians(n_samples, 1, n_dimensions, prng));
+
+	embedder->set_target_dim(n_target_dimensions);
+	EXPECT_EQ(n_target_dimensions, embedder->get_target_dim());
+
+	/* Set perplexity so that it is in range
+	 * 0<=perplexity<=(n_samples - 1)/3.
+	 */
+	embedder->set_perplexity(n_samples / 5.0);
+
+	auto low_dimensional_features =
+	    embedder->transform(high_dimensional_features)
+	        ->as<DenseFeatures<float64_t>>();
+
+	EXPECT_EQ(
+	    n_target_dimensions, low_dimensional_features->get_dim_feature_space());
+	EXPECT_EQ(
+	    high_dimensional_features->get_num_vectors(),
+	    low_dimensional_features->get_num_vectors());
+	return low_dimensional_features;
+}
+
+template <>
+auto transform_transformers<Isomap>(std::shared_ptr<Isomap> isomap_converter)
+{
+	std::mt19937_64 prng(24);
+
+	const index_t n_samples = 5;
+	const index_t n_gaussians = 5;
+	const index_t n_dimensions = 5;
+	auto high_dimensional_features = std::make_shared<DenseFeatures<float64_t>>(
+	    DataGenerator::generate_gaussians(
+	        n_samples, n_gaussians, n_dimensions, prng));
+
+	auto euclidean_distance = std::make_shared<EuclideanDistance>(
+	    high_dimensional_features, high_dimensional_features);
+
+	isomap_converter->set_target_dim(n_dimensions);
+	EXPECT_EQ(n_dimensions, isomap_converter->get_target_dim());
+
+	isomap_converter->set_k(n_samples * n_gaussians - 1);
+	EXPECT_EQ(n_samples * n_gaussians - 1, isomap_converter->get_k());
+
+	auto low_dimensional_features =
+	    isomap_converter->embed_distance(euclidean_distance);
+	EXPECT_EQ(n_dimensions, low_dimensional_features->get_dim_feature_space());
+	EXPECT_EQ(
+	    high_dimensional_features->get_num_vectors(),
+	    low_dimensional_features->get_num_vectors());
+	return low_dimensional_features;
+}
+
+TYPED_TEST(TransformersTest, CreationWithFit)
+{
+	auto transformer = fit_transformers<TypeParam>();
+	std::cout << "Data fitted to transformer class: " << transformer->get_name()
+	          << "\n";
+}
+
+TYPED_TEST(TransformersTest, CreationWithFitTransform)
+{
+	auto transformer = fit_transformers<TypeParam>();
+	change_updates(transformer);
+	auto transformed_feats = transform_transformers(transformer);
+	std::cout << "Data transformed using transformer class: "
+	          << transformer->get_name() << "\n";
+}
+
+TYPED_TEST(TransformersTest, CreationWithFitTransformInverseTransform)
+{
+	auto transformer = fit_transformers<TypeParam>();
+	change_updates(transformer);
+	auto transformed_feats = transform_transformers(transformer);
+
+	try
+	{
+
+		auto inverse_transform_feats =
+		    std::dynamic_pointer_cast<DenseFeatures<float64_t>>(
+		        transformer->inverse_transform(transformed_feats));
+		check_features_equality(get_simple_transform_features(), inverse_transform_feats);
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+}
