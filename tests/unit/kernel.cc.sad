@@ -5,12 +5,16 @@
 #include <shogun/lib/SGVector.h>
 #include <shogun/lib/SGMatrix.h>
 #include <shogun/features/DenseFeatures.h>
+#include <shogun/distance/EuclideanDistance.h>
+#include <shogun/lib/sg_types.h>
 
 %include_subclasses_of(Kernel)
 
 using namespace shogun;
 
-using KernelTypes = Types<%subclasses_of(Kernel)>;
+using ignore_list = Types<AUCKernel, ProductKernel, CombinedKernel, PyramidChi2, TensorProductPairKernel, GaussianShortRealKernel>;
+
+using KernelTypes = popTypesByTypes<Types<%subclasses_of(Kernel)>, ignore_list>::type;
 
 template <typename T>
 class KernelsTest : public ::testing::Test
@@ -22,8 +26,9 @@ SG_TYPED_TEST_CASE(KernelsTest, KernelTypes);
 TYPED_TEST(KernelsTest, Creation)
 {
 	auto kernel = std::make_shared<TypeParam>();
-	// std::cout << kernel->get_name() << '\n';
+	std::cout << kernel->get_name() << '\n';
 }
+
 
 template <typename PRNG>
 static SGMatrix<float64_t>
@@ -39,10 +44,238 @@ generate_std_norm_matrix(const index_t num_feats, const index_t dim, PRNG& prng)
 	return data;
 }
 
-template <typename T>
-std::shared_ptr<T> GetInitializedKernel(index_t num_feat, index_t dim)
+template <typename TypeParam>
+std::shared_ptr<TypeParam> GetInitializedKernel(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
 {
-    
+    return std::make_shared<TypeParam>(feats1, feats2);
+
+}
+
+template <>
+std::shared_ptr<ANOVAKernel> GetInitializedKernel<ANOVAKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    return std::make_shared<ANOVAKernel>(feats1, feats2, 1, 1);
+}
+
+template <>
+std::shared_ptr<BesselKernel> GetInitializedKernel<BesselKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    // order, width, degree -> user-identifies params, check if these cause a problem
+    auto dist = std::make_shared<EuclideanDistance>(feats1,feats2);
+    return std::make_shared<BesselKernel>(feats1, feats2,
+				1, 1, 1,
+				dist);
+}
+
+template <>
+std::shared_ptr<CauchyKernel> GetInitializedKernel<CauchyKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+	auto dist = std::make_shared<EuclideanDistance>(feats1,feats2);
+    return std::make_shared<CauchyKernel>(feats1, feats2, 1, dist);
+}
+
+template <>
+std::shared_ptr<CircularKernel> GetInitializedKernel<CircularKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    //sigma
+    auto dist = std::make_shared<EuclideanDistance>(feats1,feats2);
+    return std::make_shared<CircularKernel>(feats1, feats2, 1, dist);
+}
+
+template <>
+std::shared_ptr<Chi2Kernel> GetInitializedKernel<Chi2Kernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    return std::make_shared<Chi2Kernel>(feats1, feats2, 1000);
+}
+
+
+template <>
+std::shared_ptr<ConstKernel> GetInitializedKernel<ConstKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    return std::make_shared<ConstKernel>(feats1, feats2, 1);
+}
+
+template <>
+std::shared_ptr<CustomKernel> GetInitializedKernel<CustomKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    auto kernel = std::make_shared<GaussianKernel>(feats1, feats2, 2);
+    return std::make_shared<CustomKernel>(kernel);
+}
+
+////////////Can i try all distances here too using templates?
+template <>
+std::shared_ptr<DistanceKernel> GetInitializedKernel<DistanceKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    //width
+	auto dist = std::make_shared<EuclideanDistance>(feats1,feats2);
+    return std::make_shared<DistanceKernel>(feats1, feats2, 1, dist);
+}
+
+template <>
+std::shared_ptr<ExponentialKernel> GetInitializedKernel<ExponentialKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    //width, distnace, size
+	auto dist = std::make_shared<EuclideanDistance>(feats1,feats2);
+    return std::make_shared<ExponentialKernel>(feats1, feats2, 1, dist, 10);
+}
+
+// template <>
+// std::shared_ptr<HistogramIntersectionKernel> GetInitializedKernel<HistogramIntersectionKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats)
+// {
+//     //width, distnace, size
+// 	auto dist = std::make_shared<EuclideanDistance>(feats,feats);
+//     return std::make_shared<HistogramIntersectionKernel>(feats, feats);
+// }
+
+template <>
+std::shared_ptr<GaussianKernel> GetInitializedKernel<GaussianKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    //width, max_shift, shift_step
+    return std::make_shared<GaussianKernel> (feats1, feats2, 2);
+}
+
+template <>
+std::shared_ptr<GaussianCompactKernel> GetInitializedKernel<GaussianCompactKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    //width
+    return std::make_shared<GaussianCompactKernel>(feats1, feats2,1);
+}
+
+template <>
+std::shared_ptr<GaussianShiftKernel> GetInitializedKernel<GaussianShiftKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    //width, max_shift, shift_step
+    return std::make_shared<GaussianShiftKernel> (feats1, feats2,1, 0, 0);
+}
+
+// template <>
+// std::shared_ptr<GaussianShortRealKernel> GetInitializedKernel<GaussianShortRealKernel>(std::shared_ptr<shogun::DenseFeatures<float32_t> >& feats)
+// {
+//     return std::make_shared<GaussianShortRealKernel>(feats, feats, 1);
+// }
+
+template <>
+std::shared_ptr<InverseMultiQuadricKernel> GetInitializedKernel<InverseMultiQuadricKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    auto dist = std::make_shared<EuclideanDistance>(feats1,feats2);
+    return std::make_shared<InverseMultiQuadricKernel>(feats1, feats2, 0.0001, dist);
+}
+
+template <>
+std::shared_ptr<JensenShannonKernel> GetInitializedKernel<JensenShannonKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    return std::make_shared<JensenShannonKernel>(
+			feats1,feats2);
+}
+
+// template <>
+// std::shared_ptr<LinearKernel> GetInitializedKernel<LinearKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats)
+// {
+//     return std::make_shared<LinearKernel>(feats, feats);
+// }
+
+template <>
+std::shared_ptr<LogKernel> GetInitializedKernel<LogKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    //degree
+    auto dist = std::make_shared<EuclideanDistance>(feats1,feats2);
+    return std::make_shared<LogKernel>(feats1, feats2, 1, dist);
+}
+
+template <>
+std::shared_ptr<MultiquadricKernel> GetInitializedKernel<MultiquadricKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    auto dist = std::make_shared<EuclideanDistance>(feats1,feats2);
+    return std::make_shared<MultiquadricKernel>(feats1, feats2, 0.0001, dist);
+}
+
+template <>
+std::shared_ptr<PeriodicKernel> GetInitializedKernel<PeriodicKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    //length_scale, period  --> again, i used arbitrary values that made sense at the time
+    return std::make_shared<PeriodicKernel>(feats1, feats2, 1, 1);
+}
+
+template <>
+std::shared_ptr<PolyKernel> GetInitializedKernel<PolyKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    //length_scale, period  --> again, i used arbitrary values that made sense at the time
+    return std::make_shared<PolyKernel>(feats1, feats2, 1, 1, 1);
+}
+
+template <>
+std::shared_ptr<PowerKernel> GetInitializedKernel<PowerKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    //degree
+    auto dist = std::make_shared<EuclideanDistance>(feats1,feats2);
+    return std::make_shared<PowerKernel>(feats1, feats2, 0.1, dist);
+}
+
+template <>
+std::shared_ptr<RationalQuadraticKernel> GetInitializedKernel<RationalQuadraticKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    //c, dist
+    auto dist = std::make_shared<EuclideanDistance>(feats1,feats2);
+    return std::make_shared<RationalQuadraticKernel>(feats1, feats2, 1, dist);
+}
+
+// template <>
+// std::shared_ptr<ProductKernel> GetInitializedKernel<ProductKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats)
+// {
+//     //size --> how to add the features here????
+//     return std::make_shared<ProductKernel>(10);
+// }
+
+template <>
+std::shared_ptr<SigmoidKernel> GetInitializedKernel<SigmoidKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    //size, gamma, coef0
+    return std::make_shared<SigmoidKernel>(feats1, feats2, 10, 1, 0);
+}
+
+template <>
+std::shared_ptr<SphericalKernel> GetInitializedKernel<SphericalKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    //sigma
+    auto dist = std::make_shared<EuclideanDistance>(feats1,feats2);
+    return std::make_shared<SphericalKernel>(feats1, feats2, 1, dist);
+}
+
+// template <>
+// std::shared_ptr<SplineKernel> GetInitializedKernel<SplineKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats)
+// {
+//     //dot_feats = static_cast<feats>
+//     return std::make_shared<SplineKernel>(feats, feats);
+// }
+
+template <>
+std::shared_ptr<TStudentKernel> GetInitializedKernel<TStudentKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    // degree
+    auto dist = std::make_shared<EuclideanDistance>(feats1,feats2);
+    return std::make_shared<TStudentKernel>(feats1, feats2, 1, dist);
+}
+
+template <>
+std::shared_ptr<WaveKernel> GetInitializedKernel<WaveKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    // theta
+    auto dist = std::make_shared<EuclideanDistance>(feats1,feats2);
+    return std::make_shared<WaveKernel>(feats1, feats2, 1, dist);
+}
+
+template <>
+std::shared_ptr<WaveletKernel> GetInitializedKernel<WaveletKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    // size, dilation, translation
+    return std::make_shared<WaveletKernel>(feats1, feats2, 10, 0, 0);
+}
+
+template <>
+std::shared_ptr<WeightedDegreeRBFKernel> GetInitializedKernel<WeightedDegreeRBFKernel>(std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats1, std::shared_ptr<shogun::DenseFeatures<float64_t> >& feats2)
+{
+    // weight, degree, nof_prop
+    return std::make_shared<WeightedDegreeRBFKernel>(feats1, feats2, 1, 1, 1);
 }
 
 TYPED_TEST(KernelsTest, sum_symmetric_block)
@@ -50,15 +283,11 @@ TYPED_TEST(KernelsTest, sum_symmetric_block)
     const index_t num_features = 20;
     const index_t dim = 3;
     std::mt19937_64 prng(32);
-
     auto random_data = generate_std_norm_matrix(num_features, dim, prng);
     auto feats = std::make_shared<DenseFeatures<float64_t>>(random_data);
-
-    auto kernel = std::make_shared<GaussianKernel>();
     std::cout << "BEFORE KERNEL INIT.\n";
-    kernel->init(feats, feats);
+    auto kernel = GetInitializedKernel<TypeParam>(feats, feats);
     std::cout << "BEFORE KERNEL SUM.\n";
-
     float64_t sum = kernel->sum_symmetric_block(0, num_features);
 
     // Check the sum manually
@@ -73,5 +302,37 @@ TYPED_TEST(KernelsTest, sum_symmetric_block)
         }
     }
 
-    EXPECT_NEAR(sum, kernel_matrix_sum, 1E-4);
+    EXPECT_NEAR(sum, kernel_matrix_sum, 1E-3);
+}
+
+TYPED_TEST(KernelsTest, sum_symmetric_block_with_diag)
+{
+    const index_t num_feats_1=10;
+	const index_t num_feats_2=20;
+	const index_t dim=3;
+
+	// create random data
+	std::mt19937_64 prng(100);
+
+	SGMatrix<float64_t> data_1 = generate_std_norm_matrix(num_feats_1, dim, prng);
+	SGMatrix<float64_t> data_2 = generate_std_norm_matrix(num_feats_2, dim, prng);
+	auto feats_1=std::make_shared<DenseFeatures<float64_t>>(data_1);
+	auto feats_2=std::make_shared<DenseFeatures<float64_t>>(data_2);
+    std::cout << "BEFORE KERNEL INIT.\n";
+    auto kernel = GetInitializedKernel<TypeParam>(feats_1, feats_2);
+    std::cout << "BEFORE KERNEL SUM.\n";
+	// initialize a Gaussian kernel of width 1
+	float64_t sum=kernel->sum_block(0, 0, num_feats_1, num_feats_2);
+
+	    // Check the sum manually
+    std::cout << "CHECKING THE SUM MANUALLY \n";
+	SGMatrix<float64_t> kernel_matrix = kernel->get_kernel_matrix();
+	float64_t kernel_matrix_sum = 0.0;
+	for (index_t i=0; i<kernel_matrix.num_rows; i++)
+	{
+		for (index_t j=0; j<kernel_matrix.num_cols; ++j)
+			kernel_matrix_sum += kernel_matrix(i, j);
+	}
+
+	EXPECT_NEAR(sum, kernel_matrix_sum, 1E-3);
 }
