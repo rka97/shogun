@@ -19,17 +19,16 @@ using namespace shogun;
 using DescendUpdaters = Types<%subclasses_of(DescendUpdater)>;
 
 template <typename T>
-class DescendUpdatersTest : public ::testing::Test
+class MetaDescendUpdatersTest : public ::testing::Test
 {
     public:
 };
 
-SG_TYPED_TEST_CASE(DescendUpdatersTest, DescendUpdaters);
+SG_TYPED_TEST_CASE(MetaDescendUpdatersTest, DescendUpdaters);
 
-TYPED_TEST(DescendUpdatersTest, Creation)
+TYPED_TEST(MetaDescendUpdatersTest, Creation)
 {
 	auto updater = std::make_shared<TypeParam>();
-    std::cout << updater->get_name() << "\n";
 }
 
 template <typename T>
@@ -61,46 +60,96 @@ std::shared_ptr<AdamUpdater> get_fixed_updater<AdamUpdater>(std::shared_ptr<SGDM
 }
 
 template<typename T>
-float64_t get_expected_cost_run1()
+float64_t expected_cost_classification()
+{
+    return 0;
+}
+template<>
+float64_t expected_cost_classification<AdaDeltaUpdater>()
+{
+    return 0.6920;
+}
+
+template<>
+float64_t expected_cost_classification<AdaGradUpdater>()
+{
+    return 0.2210;
+}
+
+template<>
+float64_t expected_cost_classification<AdamUpdater>()
+{
+    return 0.6452;
+}
+
+template<>
+float64_t expected_cost_classification<GradientDescendUpdater>()
+{
+    return 0.6789;
+}
+
+
+template<>
+float64_t expected_cost_classification<RmsPropUpdater>()
+{
+    return 0.1245;
+}
+
+TYPED_TEST(MetaDescendUpdatersTest, Classification)
+{
+    ClassificationFixture data;
+    auto cost_function = std::make_shared<ClassificationForTestCostFunction2>();
+    cost_function->set_data(data.x, data.y);
+    std::shared_ptr<SGDMinimizer> opt = std::make_shared<SGDMinimizer>(cost_function);
+    auto updater = get_fixed_updater<TypeParam>(opt);
+    opt->set_gradient_updater(updater);
+
+    int32_t num_passes = 1;
+    opt->set_number_passes(num_passes);
+
+    float64_t cost = opt->minimize() / data.y.vlen;
+    EXPECT_NEAR(cost, expected_cost_classification<TypeParam>(), 1e-4);
+}
+
+template<typename T>
+float64_t expected_cost_regression()
 {
     return 0;
 }
 
 template<>
-float64_t get_expected_cost_run1<AdaDeltaUpdater>()
+float64_t expected_cost_regression<AdaDeltaUpdater>()
 {
-    return 218.543;
+    return 218.543; // Divergent for the hyperparameter choice.
 }
 
 template<>
-float64_t get_expected_cost_run1<AdaGradUpdater>()
+float64_t expected_cost_regression<AdaGradUpdater>()
 {
     return 0.383751;
 }
 
 template<>
-float64_t get_expected_cost_run1<AdamUpdater>()
+float64_t expected_cost_regression<AdamUpdater>()
 {
-    return 30.7901;
+    return 30.7901; // Divergent for the hyperparameter choice.
 }
 
 template<>
-float64_t get_expected_cost_run1<GradientDescendUpdater>()
+float64_t expected_cost_regression<GradientDescendUpdater>()
 {
     return 0.491198;
 }
 
 
 template<>
-float64_t get_expected_cost_run1<RmsPropUpdater>()
+float64_t expected_cost_regression<RmsPropUpdater>()
 {
-    return 32.5234;
+    return 32.5234; // Divergent for the hyperparameter choice.
 }
 
-
-
-
-TYPED_TEST(DescendUpdatersTest, UpdateAlgorithms1)
+// This tests descent algorithms with the SGD Minimizer.
+TYPED_TEST(MetaDescendUpdatersTest, Regression)
 {
     // Construct training vector
     SGVector<float64_t> weights(3);
@@ -125,6 +174,6 @@ TYPED_TEST(DescendUpdatersTest, UpdateAlgorithms1)
 
     float64_t cost = opt->minimize() / data.y.vlen;
 
-    auto expected_cost = get_expected_cost_run1<TypeParam>();
+    auto expected_cost = expected_cost_regression<TypeParam>();
     EXPECT_NEAR(expected_cost, cost, 1e-3);
 }

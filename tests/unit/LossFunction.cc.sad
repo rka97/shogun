@@ -14,7 +14,7 @@ using namespace shogun;
 using LossFunctions = Types<%subclasses_of(LossFunction)>;
 
 template <typename T>
-class LossFunctionsTest : public ::testing::Test
+class MetaLossFunctionsTest : public ::testing::Test
 {
     public:
     static constexpr uint32_t NUM_DATA_POINTS = 1;
@@ -33,9 +33,9 @@ class LossFunctionsTest : public ::testing::Test
     }
 };
 
-SG_TYPED_TEST_CASE(LossFunctionsTest, LossFunctions);
+SG_TYPED_TEST_CASE(MetaLossFunctionsTest, LossFunctions);
 
-TYPED_TEST(LossFunctionsTest, Creation)
+TYPED_TEST(MetaLossFunctionsTest, Creation)
 {
 	auto loss_function = std::make_shared<TypeParam>();
 }
@@ -43,6 +43,7 @@ TYPED_TEST(LossFunctionsTest, Creation)
 template<typename T>
 float64_t get_expected_loss_difference(std::shared_ptr<T> loss_function, float64_t prediction, float64_t label)
 {
+    std::cout << loss_function->get_name() << "\n";
     std::shared_ptr<LossFunction> base_loss_function = std::static_pointer_cast<LossFunction>(loss_function);
     return loss_function->loss(prediction * label) - base_loss_function->loss(prediction, label);
 }
@@ -65,12 +66,12 @@ float64_t get_expected_loss_difference<SquaredLoss>(std::shared_ptr<SquaredLoss>
     return loss_function->loss(prediction - label) - loss_function->loss(prediction, label);
 }
 
-TYPED_TEST(LossFunctionsTest, PredictionsAndLabels)
+TYPED_TEST(MetaLossFunctionsTest, PredictionsAndLabels)
 {
-    auto NUM_DATA_POINTS = LossFunctionsTest<TypeParam>::NUM_DATA_POINTS;
+    auto NUM_DATA_POINTS = MetaLossFunctionsTest<TypeParam>::NUM_DATA_POINTS;
 
-    auto inputs = LossFunctionsTest<TypeParam>::generate_std_norm_vector();
-    auto labels = LossFunctionsTest<TypeParam>::generate_std_norm_vector();
+    auto inputs = MetaLossFunctionsTest<TypeParam>::generate_std_norm_vector();
+    auto labels = MetaLossFunctionsTest<TypeParam>::generate_std_norm_vector();
     
 	std::shared_ptr<TypeParam> loss_function = std::make_shared<TypeParam>();
 
@@ -84,11 +85,11 @@ TYPED_TEST(LossFunctionsTest, PredictionsAndLabels)
 }
 
 
-TYPED_TEST(LossFunctionsTest, FirstDerivatives)
+TYPED_TEST(MetaLossFunctionsTest, FirstDerivatives)
 {
-    auto NUM_DATA_POINTS = LossFunctionsTest<TypeParam>::NUM_DATA_POINTS;
+    auto NUM_DATA_POINTS = MetaLossFunctionsTest<TypeParam>::NUM_DATA_POINTS;
 
-    auto inputs = LossFunctionsTest<TypeParam>::generate_std_norm_vector();
+    auto inputs = MetaLossFunctionsTest<TypeParam>::generate_std_norm_vector();
 
 	auto loss_function = std::make_shared<TypeParam>();
 
@@ -106,11 +107,11 @@ TYPED_TEST(LossFunctionsTest, FirstDerivatives)
     }
 }
 
-TYPED_TEST(LossFunctionsTest, SecondDerivatives)
+TYPED_TEST(MetaLossFunctionsTest, SecondDerivatives)
 {
-    auto NUM_DATA_POINTS = LossFunctionsTest<TypeParam>::NUM_DATA_POINTS;
+    auto NUM_DATA_POINTS = MetaLossFunctionsTest<TypeParam>::NUM_DATA_POINTS;
 
-    auto inputs = LossFunctionsTest<TypeParam>::generate_std_norm_vector();
+    auto inputs = MetaLossFunctionsTest<TypeParam>::generate_std_norm_vector();
 
 	auto loss_function = std::make_shared<TypeParam>();
 
@@ -128,11 +129,11 @@ TYPED_TEST(LossFunctionsTest, SecondDerivatives)
     }
 }
 
-TYPED_TEST(LossFunctionsTest, SquaredGradients)
+TYPED_TEST(MetaLossFunctionsTest, SquaredGradients)
 {
-    auto NUM_DATA_POINTS = LossFunctionsTest<TypeParam>::NUM_DATA_POINTS;
+    auto NUM_DATA_POINTS = MetaLossFunctionsTest<TypeParam>::NUM_DATA_POINTS;
 
-    auto inputs = LossFunctionsTest<TypeParam>::generate_std_norm_vector();
+    auto inputs = MetaLossFunctionsTest<TypeParam>::generate_std_norm_vector();
 
 	auto loss_function = std::make_shared<TypeParam>();
 
@@ -146,6 +147,3 @@ TYPED_TEST(LossFunctionsTest, SquaredGradients)
         EXPECT_NEAR(squared_gradient, est_sq_grad, epsilon);
     }
 }
-
-/* TODO: Loss Function tests that need specific data (Should it be done?). */
-/* TODO: comment the code. */
