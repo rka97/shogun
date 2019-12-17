@@ -43,6 +43,7 @@ TYPED_TEST(MetaLossFunctionsTest, Creation)
 template<typename T>
 float64_t get_expected_loss_difference(std::shared_ptr<T> loss_function, float64_t prediction, float64_t label)
 {
+    std::cout << loss_function->get_name() << "\n";
     std::shared_ptr<LossFunction> base_loss_function = std::static_pointer_cast<LossFunction>(loss_function);
     return loss_function->loss(prediction * label) - base_loss_function->loss(prediction, label);
 }
@@ -146,6 +147,3 @@ TYPED_TEST(MetaLossFunctionsTest, SquaredGradients)
         EXPECT_NEAR(squared_gradient, est_sq_grad, epsilon);
     }
 }
-
-/* TODO: Loss Function tests that need specific data (Should it be done?). */
-/* TODO: comment the code. */
