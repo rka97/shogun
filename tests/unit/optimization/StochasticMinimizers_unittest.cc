@@ -343,14 +343,6 @@ bool ClassificationForTestCostFunction2::next_sample()
 	return true;
 }
 
-struct ClassificationFixture
-{
-	ClassificationFixture(){init();}
-	SGVector<float64_t> y;
-	SGMatrix<float64_t> x;
-	void init();
-};
-
 void ClassificationFixture::init()
 {
 	y=SGVector<float64_t>(20);
@@ -396,15 +388,6 @@ void ClassificationFixture::init()
 	y[18]=-1;
 	y[19]=-1;
 }
-
-
-struct RegressionFixture
-{
-	RegressionFixture() {init();}
-	SGVector<float64_t> y;
-	SGMatrix<float64_t> x;
-	void init();
-};
 
 void RegressionFixture::init()
 {

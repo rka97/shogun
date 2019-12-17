@@ -119,4 +119,23 @@ private:
 	SGVector<float64_t> m_y;
 	void init();
 };
+
+
+struct RegressionFixture
+{
+	RegressionFixture() {init();}
+	SGVector<float64_t> y;
+	SGMatrix<float64_t> x;
+	void init();
+};
+
+struct ClassificationFixture
+{
+	ClassificationFixture(){init();}
+	SGVector<float64_t> y;
+	SGMatrix<float64_t> x;
+	void init();
+};
+
+
 #endif

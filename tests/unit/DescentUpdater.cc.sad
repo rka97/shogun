@@ -1,0 +1,130 @@
+#include "optimization/StochasticMinimizers_unittest.h"
+#include <shogun/lib/config.h>
+#include <shogun/optimization/FirstOrderSAGCostFunction.h>
+#include <shogun/lib/SGMatrix.h>
+#include <shogun/lib/SGVector.h>
+#include <shogun/base/SGObject.h>
+#include <iostream>
+#include "sg_gtest_utilities.h"
+#include <shogun/optimization/ConstLearningRate.h>
+#include <shogun/optimization/SGDMinimizer.h>
+#include <shogun/optimization/StandardMomentumCorrection.h>
+#include <shogun/optimization/NesterovMomentumCorrection.h>
+#include <shogun/optimization/AdaptMomentumCorrection.h>
+
+%include_subclasses_of(DescendUpdater)
+
+using namespace shogun;
+
+using DescendUpdaters = Types<%subclasses_of(DescendUpdater)>;
+
+template <typename T>
+class DescendUpdatersTest : public ::testing::Test
+{
+    public:
+};
+
+SG_TYPED_TEST_CASE(DescendUpdatersTest, DescendUpdaters);
+
+TYPED_TEST(DescendUpdatersTest, Creation)
+{
+	auto updater = std::make_shared<TypeParam>();
+    std::cout << updater->get_name() << "\n";
+}
+
+template <typename T>
+std::shared_ptr<T> get_fixed_updater(std::shared_ptr<SGDMinimizer> opt)
+{
+    std::shared_ptr<ConstLearningRate> rate = std::make_shared<ConstLearningRate>();
+    rate->set_const_learning_rate(1e-2);
+    auto updater = std::make_shared<T>();
+    opt->set_gradient_updater(updater);
+    opt->set_learning_rate(rate);
+    return updater;
+}
+
+template<>
+std::shared_ptr<AdaDeltaUpdater> get_fixed_updater<AdaDeltaUpdater>(std::shared_ptr<SGDMinimizer> opt)
+{
+    auto updater = std::make_shared<AdaDeltaUpdater>(1e-2, 1e-6, 0.95);
+	auto momentum_correction=std::make_shared<NesterovMomentumCorrection>();
+	momentum_correction->set_correction_weight(0.99);
+	updater->set_descend_correction(momentum_correction);
+    return updater;
+}
+
+template<>
+std::shared_ptr<AdamUpdater> get_fixed_updater<AdamUpdater>(std::shared_ptr<SGDMinimizer> opt)
+{
+    auto updater = std::make_shared<AdamUpdater>(1e-2, 1e-8, 0.9, 0.999);
+    return updater;
+}
+
+template<typename T>
+float64_t get_expected_cost_run1()
+{
+    return 0;
+}
+
+template<>
+float64_t get_expected_cost_run1<AdaDeltaUpdater>()
+{
+    return 218.543;
+}
+
+template<>
+float64_t get_expected_cost_run1<AdaGradUpdater>()
+{
+    return 0.383751;
+}
+
+template<>
+float64_t get_expected_cost_run1<AdamUpdater>()
+{
+    return 30.7901;
+}
+
+template<>
+float64_t get_expected_cost_run1<GradientDescendUpdater>()
+{
+    return 0.491198;
+}
+
+
+template<>
+float64_t get_expected_cost_run1<RmsPropUpdater>()
+{
+    return 32.5234;
+}
+
+
+
+
+TYPED_TEST(DescendUpdatersTest, UpdateAlgorithms1)
+{
+    // Construct training vector
+    SGVector<float64_t> weights(3);
+    weights.set_const(0.0);
+
+    RegressionFixture data;
+    auto example = std::make_shared<CRegressionExample>();
+
+    example->set_x(data.x);
+    example->set_y(data.y);
+    example->set_init_w(weights);
+
+    auto cost_function = std::make_shared<RegressionForTestCostFunction>();
+    cost_function->set_target(example);
+
+    auto opt = std::make_shared<SGDMinimizer>(cost_function);
+    auto updater = get_fixed_updater<TypeParam>(opt);
+    opt->set_gradient_updater(updater);
+
+    int32_t num_passes = 20;
+    opt->set_number_passes(num_passes);
+
+    float64_t cost = opt->minimize() / data.y.vlen;
+
+    auto expected_cost = get_expected_cost_run1<TypeParam>();
+    EXPECT_NEAR(expected_cost, cost, 1e-3);
+}
