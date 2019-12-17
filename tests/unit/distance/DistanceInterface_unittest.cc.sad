@@ -12,13 +12,13 @@ using namespace shogun;
 using Distances = Types<%subclasses_of(Distance)>;
 
 template <typename T>
-class DistancesTest : public ::testing::Test
+class MetaDistancesTest : public ::testing::Test
 {
 };
 
-SG_TYPED_TEST_CASE(DistancesTest, Distances);
+SG_TYPED_TEST_CASE(MetaDistancesTest, Distances);
 
-TYPED_TEST(DistancesTest, Creation)
+TYPED_TEST(MetaDistancesTest, Creation)
 {
 	auto distance = std::make_shared<TypeParam>();
 }
@@ -54,7 +54,7 @@ std::shared_ptr<KernelDistance> create_distance<KernelDistance>()
 		feats, feats, 0.7, gaussian_kernel);
 }
 
-TYPED_TEST(DistancesTest, CreationWithArgs)
+TYPED_TEST(MetaDistancesTest, CreationWithArgs)
 {
 	auto distance = create_distance<TypeParam>();
 	for (size_t i = 0; i < 2; i++)

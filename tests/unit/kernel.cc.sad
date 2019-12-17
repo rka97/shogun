@@ -17,13 +17,13 @@ using ignore_list = Types<AUCKernel, ProductKernel, CombinedKernel, PyramidChi2,
 using KernelTypes = popTypesByTypes<Types<%subclasses_of(Kernel)>, ignore_list>::type;
 
 template <typename T>
-class KernelsTest : public ::testing::Test
+class MetaKernelsTest : public ::testing::Test
 {
 };
 
-SG_TYPED_TEST_CASE(KernelsTest, KernelTypes);
+SG_TYPED_TEST_CASE(MetaKernelsTest, KernelTypes);
 
-TYPED_TEST(KernelsTest, Creation)
+TYPED_TEST(MetaKernelsTest, Creation)
 {
 	auto kernel = std::make_shared<TypeParam>();
 	std::cout << kernel->get_name() << '\n';
@@ -278,7 +278,7 @@ std::shared_ptr<WeightedDegreeRBFKernel> GetInitializedKernel<WeightedDegreeRBFK
     return std::make_shared<WeightedDegreeRBFKernel>(feats1, feats2, 1, 1, 1);
 }
 
-TYPED_TEST(KernelsTest, sum_symmetric_block)
+TYPED_TEST(MetaKernelsTest, sum_symmetric_block)
 {
     const index_t num_features = 20;
     const index_t dim = 3;
@@ -305,7 +305,7 @@ TYPED_TEST(KernelsTest, sum_symmetric_block)
     EXPECT_NEAR(sum, kernel_matrix_sum, 1E-3);
 }
 
-TYPED_TEST(KernelsTest, sum_symmetric_block_with_diag)
+TYPED_TEST(MetaKernelsTest, sum_symmetric_block_with_diag)
 {
     const index_t num_feats_1=10;
 	const index_t num_feats_2=20;

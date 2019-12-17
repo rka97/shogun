@@ -19,14 +19,14 @@ using namespace shogun;
 using DescendUpdaters = Types<%subclasses_of(DescendUpdater)>;
 
 template <typename T>
-class DescendUpdatersTest : public ::testing::Test
+class MetaDescendUpdatersTest : public ::testing::Test
 {
     public:
 };
 
-SG_TYPED_TEST_CASE(DescendUpdatersTest, DescendUpdaters);
+SG_TYPED_TEST_CASE(MetaDescendUpdatersTest, DescendUpdaters);
 
-TYPED_TEST(DescendUpdatersTest, Creation)
+TYPED_TEST(MetaDescendUpdatersTest, Creation)
 {
 	auto updater = std::make_shared<TypeParam>();
     std::cout << updater->get_name() << "\n";
@@ -100,7 +100,7 @@ float64_t get_expected_cost_run1<RmsPropUpdater>()
 
 
 
-TYPED_TEST(DescendUpdatersTest, UpdateAlgorithms1)
+TYPED_TEST(MetaDescendUpdatersTest, UpdateAlgorithms1)
 {
     // Construct training vector
     SGVector<float64_t> weights(3);
