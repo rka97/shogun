@@ -1,0 +1,151 @@
+#include "sg_gtest_utilities.h"
+#include <iostream>
+#include <shogun/mathematics/NormalDistribution.h>
+#include <shogun/lib/common.h>
+#include <shogun/lib/SGVector.h>
+#include <shogun/lib/SGMatrix.h>
+#include <shogun/features/DenseFeatures.h>
+#include <shogun/loss/LossFunction.h>
+
+%include_subclasses_of(LossFunction)
+
+using namespace shogun;
+
+using LossFunctions = Types<%subclasses_of(LossFunction)>;
+
+template <typename T>
+class LossFunctionsTest : public ::testing::Test
+{
+    public:
+    static constexpr uint32_t NUM_DATA_POINTS = 1;
+    static constexpr uint32_t SEED = 30;
+
+    static SGVector<float64_t> generate_std_norm_vector()
+    {
+        std::mt19937_64 prng(SEED);
+        SGVector<float64_t> data (NUM_DATA_POINTS);
+        NormalDistribution<float64_t> normal_dist;
+        for (uint32_t i = 0; i < NUM_DATA_POINTS; i++)
+        {
+            data[i] = normal_dist(prng);
+        }
+        return data;
+    }
+};
+
+SG_TYPED_TEST_CASE(LossFunctionsTest, LossFunctions);
+
+TYPED_TEST(LossFunctionsTest, Creation)
+{
+	auto loss_function = std::make_shared<TypeParam>();
+}
+
+template<typename T>
+float64_t get_expected_loss_difference(std::shared_ptr<T> loss_function, float64_t prediction, float64_t label)
+{
+    std::shared_ptr<LossFunction> base_loss_function = std::static_pointer_cast<LossFunction>(loss_function);
+    return loss_function->loss(prediction * label) - base_loss_function->loss(prediction, label);
+}
+
+template <>
+float64_t get_expected_loss_difference<AbsoluteDeviationLoss>(std::shared_ptr<AbsoluteDeviationLoss> loss_function, float64_t prediction, float64_t label)
+{
+    return loss_function->loss(prediction - label) - loss_function->loss(prediction, label);
+}
+
+template <>
+float64_t get_expected_loss_difference<HingeLoss>(std::shared_ptr<HingeLoss> loss_function, float64_t prediction, float64_t label)
+{
+    return loss_function->loss( 1 - prediction * label) - loss_function->loss(prediction, label);
+}
+
+template <>
+float64_t get_expected_loss_difference<SquaredLoss>(std::shared_ptr<SquaredLoss> loss_function, float64_t prediction, float64_t label)
+{
+    return loss_function->loss(prediction - label) - loss_function->loss(prediction, label);
+}
+
+TYPED_TEST(LossFunctionsTest, PredictionsAndLabels)
+{
+    auto NUM_DATA_POINTS = LossFunctionsTest<TypeParam>::NUM_DATA_POINTS;
+
+    auto inputs = LossFunctionsTest<TypeParam>::generate_std_norm_vector();
+    auto labels = LossFunctionsTest<TypeParam>::generate_std_norm_vector();
+    
+	std::shared_ptr<TypeParam> loss_function = std::make_shared<TypeParam>();
+
+    float64_t epsilon = 1e-5;
+    for (uint32_t i = 0; i < NUM_DATA_POINTS; i++)
+    {
+        auto loss_value = get_expected_loss_difference(loss_function, inputs[i], labels[i]);
+
+        EXPECT_NEAR(loss_value, 0.0, epsilon);
+    }
+}
+
+
+TYPED_TEST(LossFunctionsTest, FirstDerivatives)
+{
+    auto NUM_DATA_POINTS = LossFunctionsTest<TypeParam>::NUM_DATA_POINTS;
+
+    auto inputs = LossFunctionsTest<TypeParam>::generate_std_norm_vector();
+
+	auto loss_function = std::make_shared<TypeParam>();
+
+    constexpr float64_t step = 0.0001;
+    constexpr float64_t epsilon = 1e-4;
+    for (uint32_t i = 0; i < NUM_DATA_POINTS; i++)
+    {
+        auto first_derivative = loss_function->first_derivative(inputs[i]);
+        // Estimate the first derivative
+        auto look_ahead = inputs[i] + step;
+        auto look_behind = inputs[i] - step;
+        auto est_first_derivative = (loss_function->loss(look_ahead) - loss_function->loss(look_behind)) / (2 * step);
+
+        EXPECT_NEAR(first_derivative, est_first_derivative, epsilon);
+    }
+}
+
+TYPED_TEST(LossFunctionsTest, SecondDerivatives)
+{
+    auto NUM_DATA_POINTS = LossFunctionsTest<TypeParam>::NUM_DATA_POINTS;
+
+    auto inputs = LossFunctionsTest<TypeParam>::generate_std_norm_vector();
+
+	auto loss_function = std::make_shared<TypeParam>();
+
+    constexpr float64_t step = 1e-5;
+    constexpr float64_t epsilon = 1e-4;
+    for (uint32_t i = 0; i < NUM_DATA_POINTS; i++)
+    {
+        auto second_derivative = loss_function->second_derivative(inputs[i]);
+        // Estimate the first derivative
+        auto look_ahead = inputs[i] + step;
+        auto look_behind = inputs[i] - step;
+        auto est_second_derivative = (loss_function->first_derivative(look_ahead) - loss_function->first_derivative(look_behind)) / (2 * step);
+
+        EXPECT_NEAR(second_derivative, est_second_derivative, epsilon);
+    }
+}
+
+TYPED_TEST(LossFunctionsTest, SquaredGradients)
+{
+    auto NUM_DATA_POINTS = LossFunctionsTest<TypeParam>::NUM_DATA_POINTS;
+
+    auto inputs = LossFunctionsTest<TypeParam>::generate_std_norm_vector();
+
+	auto loss_function = std::make_shared<TypeParam>();
+
+    constexpr float64_t epsilon = 1e-4;
+    for (uint32_t i = 0; i < NUM_DATA_POINTS; i++)
+    {
+        auto squared_gradient = loss_function->get_square_grad(inputs[i], 1);
+        float64_t est_first_derivative = loss_function->first_derivative(inputs[i]);
+        float64_t est_sq_grad = est_first_derivative * est_first_derivative;
+
+        EXPECT_NEAR(squared_gradient, est_sq_grad, epsilon);
+    }
+}
+
+/* TODO: Loss Function tests that need specific data (Should it be done?). */
+/* TODO: comment the code. */
